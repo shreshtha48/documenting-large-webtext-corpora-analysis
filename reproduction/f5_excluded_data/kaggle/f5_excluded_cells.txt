@@ -1,0 +1,755 @@
+Paste each block into its own Kaggle cell (markdown blocks into markdown cells).
+Do not paste the '# ===== CELL' separator lines.
+
+# ======================= CELL 0 (markdown) =======================
+# Dodge et al. 2021 §5: what the blocklist excluded from C4 (Kaggle, CPU)
+
+| Paper | What it reports | Output |
+|---|---|---|
+| §5.1, A.6, **Fig. 6** | k-means (k=50) of 100,000 excluded docs; 16 of 50 clusters "largely sexual", 31% of docs | `fig6_clusters.png`, `clusters.csv` |
+| §5.2, **Fig. 5**, **Table 6** | PMI between 22 identity regexes and exclusion | `fig5_pmi.png`, `fig5_pmi.csv`, `table6.md` |
+| §5.2 manual check | 22% ("lesbian") / 36% ("gay") of 50 excluded docs are non-offensive or non-sexual | `inspect_lesbian_gay.csv` (to label by hand) |
+| §5.3 | removal by dialect: AAE 42%, Hispanic 32%, WAE 6.2%, other 7.2%; C4.EN 97.8% WAE, 0.07% AAE, 0.09% Hispanic | `fig_dialects.png`, `dialects.csv` |
+
+**Settings:** Accelerator **None** (CPU), Internet **on**. Then **Save Version -> Save & Run All**; the browser can be
+closed. About 1-1.5 h with 4 workers (12 shards, each ~400 MB download + ~15 min CPU). When it finishes, download
+`f5_S1_results.zip` from the Output tab.
+
+The method, and what is ours rather than the paper's, is in the folder's README.md. A one-shard run (S0) already
+reproduces all three parts; this is the 12-shard run (S1).
+
+**Content warning:** excluded documents include pornographic and hateful text (the clustering sample and the
+inspection sheet contain it).
+
+# ======================= CELL 1 (markdown) =======================
+## 1. Setup: copy the dataset into a writable folder
+
+# ======================= CELL 2 (code) =======================
+%%bash
+SRC=$(dirname "$(dirname "$(find /kaggle/input -path '*scripts/scan_noblocklist.py' | head -1)")")
+echo "project folder: $SRC"
+test -f "$SRC/data/ldnoobw_en_25e679f.txt" || { echo "data/ldnoobw_en_25e679f.txt not found under $SRC"; exit 1; }
+mkdir -p /kaggle/working/f5
+cp -rn "$SRC"/. /kaggle/working/f5/          # -n: never overwrite results already in /kaggle/working
+pip install -q huggingface_hub
+nproc; df -h /kaggle/working | tail -1
+
+# ======================= CELL 3 (markdown) =======================
+## 2. Scripts (embedded from the repo, so the notebook runs the current code)
+
+# ======================= CELL 4 (code) =======================
+%%writefile /kaggle/working/f5/scripts/dialect.py
+"""Blodgett, Green and O'Connor (2016) demographic dialect model ("TwitterAAE"), ported to Python 3.
+
+Dodge et al. 2021 §5.3 use it to give each document a posterior over four dialect "topics" and assign the argmax.
+The model files come from github.com/slanglab/twitteraae at a pinned commit (MIT licence) and are downloaded once.
+
+Two inference routines:
+- exact(): a line-by-line port of the repo's predict.py (collapsed variational Bayes, CVB0, sequential token
+  updates, alpha=1, 5 passes; None if no token, or fewer than 20% of tokens, are in the vocabulary).
+- fast(): the same model and gates, but each pass updates all tokens at once (Jacobi instead of Gauss-Seidel)
+  and identical words are updated together. It is about 100x faster, which a free-tier CPU needs for millions of
+  documents. scan_noblocklist.py runs both on the first documents of every shard and records how often the
+  argmax agrees, so the approximation is measured, not assumed.
+
+Assumptions (the paper does not say): the whole document is scored; tokens are lowercased runs of letters and
+digits with internal apostrophes (the repo used a tweet tokenizer, twokenize, on tweets); documents the model
+cannot score are reported as "unassigned".
+"""
+import os, re, urllib.request
+
+import numpy as np
+
+SHA = "db4d6d126ca26b9bb9a70d7ce18bdd5833077523"
+URL = f"https://raw.githubusercontent.com/slanglab/twitteraae/{SHA}/model/"
+FILES = ["model_count_table.txt", "model_vocab.txt"]
+# repo order: African-American, Hispanic, Asian, White. Dodge et al. call the third "other"; the repo README notes
+# that only the AA and White topics were validated.
+LABELS = ["AAE", "Hispanic", "Other", "WAE"]
+TOKEN = re.compile(r"[a-z0-9]+(?:'[a-z]+)*")
+
+
+def ensure_files(model_dir):
+    os.makedirs(model_dir, exist_ok=True)
+    for f in FILES:
+        p = os.path.join(model_dir, f)
+        if not os.path.exists(p):
+            urllib.request.urlretrieve(URL + f, p + ".tmp")
+            os.replace(p + ".tmp", p)
+
+
+class DialectModel:
+    def __init__(self, model_dir):
+        ensure_files(model_dir)
+        n_wk = np.loadtxt(os.path.join(model_dir, "model_count_table.txt"))
+        self.wordprobs = (n_wk + 1) / n_wk.sum(0)             # as in predict.py
+        with open(os.path.join(model_dir, "model_vocab.txt"), encoding="utf-8") as f:
+            vocab = [line.split("\t")[-1].strip() for line in f]
+        assert len(vocab) == n_wk.shape[0]
+        self.w2num = {w: i for i, w in enumerate(vocab)}
+        self.K = n_wk.shape[1]
+
+    def tokens(self, text):
+        return TOKEN.findall(text.lower())
+
+    def _gate(self, toks, thresh1, thresh2):
+        ids = [self.w2num[w] for w in toks if w in self.w2num]
+        if len(ids) < thresh1 or len(ids) / max(1, len(toks)) < thresh2:
+            return None
+        return ids
+
+    def exact(self, toks, alpha=1, numpasses=5, thresh1=1, thresh2=0.2):
+        """Port of predict.predict / infer_cvb0 (sequential updates)."""
+        ids = self._gate(toks, thresh1, thresh2)
+        if ids is None:
+            return None
+        qs = self.wordprobs[ids].copy()
+        qs /= qs.sum(1, keepdims=True)
+        lik = qs.copy()
+        q_k = qs.sum(0)
+        for _ in range(1, numpasses):
+            for i in range(len(ids)):
+                q_k -= qs[i]
+                qs[i] = lik[i] * (q_k + alpha)
+                qs[i] /= qs[i].sum()
+                q_k += qs[i]
+        return q_k / q_k.sum()
+
+    def fast(self, toks, alpha=1, numpasses=5, thresh1=1, thresh2=0.2):
+        """Same model and gates; all tokens updated at once per pass, identical words grouped."""
+        ids = self._gate(toks, thresh1, thresh2)
+        if ids is None:
+            return None
+        u, c = np.unique(ids, return_counts=True)
+        lik = self.wordprobs[u]
+        lik = lik / lik.sum(1, keepdims=True)
+        qs = lik.copy()
+        q_k = c @ qs
+        for _ in range(1, numpasses):
+            qs = lik * (q_k - qs + alpha)
+            qs /= qs.sum(1, keepdims=True)
+            q_k = c @ qs
+        return q_k / q_k.sum()
+
+# ======================= CELL 5 (code) =======================
+%%writefile /kaggle/working/f5/scripts/scan_noblocklist.py
+"""Dodge et al. 2021 §5: one pass over C4.EN.NOBLOCKLIST shards for every §5 analysis.
+
+The excluded set: §5 compares C4.EN.NOBLOCKLIST with C4.EN. The documents the blocklist removed are the
+noblocklist documents that match the TFDS v3.0.1 bad-words regex (the filter is the last step of C4's pipeline;
+see research-empirical-methods/README.md §1; the one-shard pilot matched the released C4.EN for 99.4% of
+documents). So each document is classified with that regex, exactly as TFDS does: on the lowercased text,
+LDNOOBW list at commit 25e679f, joined without escaping.
+
+Per document, the scan records:
+- excluded or kept (the blocklist regex);
+- which of the 22 identity regexes of Table 6 it matches (§5.2; case-insensitive, with word boundaries);
+- its dialect: the argmax of the Blodgett et al. (2016) model (§5.3; see dialect.py), or "unassigned".
+
+These are summed per web domain (URL host), so the analysis can bootstrap over domains, which are not
+independent. Also saved per shard:
+- a random sample of excluded documents for the clustering (§5.1, Fig. 6);
+- excluded documents that mention "lesbian" or "gay", for the paper's manual check (§5.2);
+- the agreement between the fast and the exact dialect inference on the first documents.
+
+Outputs per shard, in --out_dir:
+- counts_<shard>.npz: host list and a hosts x columns count matrix (columns in COLUMNS);
+- excluded_sample_<shard>.jsonl.gz, inspect_<shard>.jsonl.gz;
+- stats_<shard>.json, written last, which marks the shard as done.
+
+Free tier: about 400 MB download and a few minutes of CPU per shard; --workers scans shards in parallel;
+--range splits a large scan across sessions into the same --out_dir (e.g. on Google Drive).
+
+Usage:
+    python scripts/scan_noblocklist.py --n 12 --seed 0 --workers 2 --out_dir results/S1_noblocklist_12_shards
+    python scripts/scan_noblocklist.py --files /path/c4-train.00000-of-01024.json.gz --out_dir ...
+"""
+import argparse, gzip, json, os, random, re, time
+from collections import defaultdict
+from concurrent.futures import ProcessPoolExecutor, as_completed
+from urllib.parse import urlparse
+
+import numpy as np
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(HERE)
+BADWORDS = os.path.join(ROOT, "data", "ldnoobw_en_25e679f.txt")
+MODEL_DIR = os.path.join(ROOT, "data", "twitteraae_model")
+N_SHARDS = 1024
+
+# Table 6, in the order printed; the label is the one Fig. 5 uses
+IDENTITY = [
+    ("homosexual", r"homosexuals?"), ("gay", r"gays?"), ("non-binary", r"non[ -]?binary"),
+    ("trans", r"trans(?:|\+|gender)"), ("lesbian", r"lesbians?"), ("black", r"blacks?"),
+    ("african american", r"african[ -]americans?"), ("latina / latino", r"latin[oax]s?"),
+    ("asian", r"asian(?:[ -]american)?s?"), ("muslim", r"muslims?"), ("jewish", r"jew(?:|s|ish)"),
+    ("women", r"wom[ae]n"), ("female", r"females?"), ("man", r"m[ae]n"), ("male", r"males?"),
+    ("straight", r"straights?"), ("heterosexual", r"heterosexuals?"), ("bisexual", r"bi-?sexuals?"),
+    ("white", r"whites?"), ("caucasian", r"caucasians?"), ("european", r"european(?:[ -]american)?s?"),
+    ("christian", r"christians?"),
+]
+DIALECTS = ["AAE", "Hispanic", "Other", "WAE", "unassigned"]
+# per host: docs, excluded | per identity term: docs, excluded | per dialect: docs, excluded
+COLUMNS = (["docs", "excluded"] + [f"{t}|{k}" for t, _ in IDENTITY for k in ("docs", "excluded")]
+           + [f"dialect:{d}|{k}" for d in DIALECTS for k in ("docs", "excluded")])
+INSPECT = {"lesbian": re.compile(r"\blesbians?\b", re.I), "gay": re.compile(r"\bgays?\b", re.I)}
+
+
+def badwords_regex():
+    words = [w.strip() for w in open(BADWORDS, encoding="utf-8") if w.strip()]
+    return re.compile(r"(?:\W|^)({})(?:\W|$)".format("|".join(words)))   # TFDS v3.0.1: not escaped
+
+
+def identity_regex():
+    """All 22 regexes in one pass; the named group that matched tells which term."""
+    return re.compile("|".join(rf"\b(?P<g{i}>{p})\b" for i, (_, p) in enumerate(IDENTITY)), re.I)
+
+
+def shard_name(i):
+    return f"c4-train.{i:05d}-of-{N_SHARDS:05d}"
+
+
+def scan_file(path, shard, args):
+    from dialect import DialectModel
+    bad, ident = badwords_regex(), identity_regex()
+    model = DialectModel(MODEL_DIR)
+    rng = random.Random(f"{args.seed}-{shard}")
+    T = len(IDENTITY)
+    col = {c: i for i, c in enumerate(COLUMNS)}
+    per_host = defaultdict(lambda: np.zeros(len(COLUMNS), dtype=np.int64))
+    excluded_pool, inspect = [], {k: [] for k in INSPECT}
+    agree = n_val = 0
+    n = n_ex = 0
+    with gzip.open(path, "rt", encoding="utf-8") as f:
+        for line in f:
+            d = json.loads(line)
+            text, url = d["text"], d["url"]
+            n += 1
+            ex = bad.search(text.lower()) is not None
+            n_ex += ex
+            row = per_host[urlparse(url).netloc]
+            row[0] += 1
+            row[1] += ex
+            hit = {int(m.lastgroup[1:]) for m in ident.finditer(text)}
+            for i in hit:
+                row[2 + 2 * i] += 1
+                row[3 + 2 * i] += ex
+            toks = model.tokens(text)
+            post = model.fast(toks)
+            dl = DIALECTS[int(np.argmax(post))] if post is not None else "unassigned"
+            if n_val < args.validate_dialect:
+                ref = model.exact(toks)
+                agree += (DIALECTS[int(np.argmax(ref))] if ref is not None else "unassigned") == dl
+                n_val += 1
+            row[col[f"dialect:{dl}|docs"]] += 1
+            row[col[f"dialect:{dl}|excluded"]] += ex
+            if ex:
+                excluded_pool.append({"url": url, "text": text, "dialect": dl})
+                for k, r in INSPECT.items():
+                    if len(inspect[k]) < args.inspect_cap and r.search(text):
+                        inspect[k].append({"term": k, "url": url, "text": text,
+                                           "blocklist_words": sorted({m.strip() for m in bad.findall(text.lower())})})
+    sample = rng.sample(excluded_pool, min(args.sample_excluded, len(excluded_pool)))
+    for name, rows in (("excluded_sample", sample), ("inspect", [r for v in inspect.values() for r in v])):
+        tmp = os.path.join(args.out_dir, f"{name}_{shard}.jsonl.gz.tmp")
+        with gzip.open(tmp, "wt", encoding="utf-8") as g:
+            for r in rows:
+                g.write(json.dumps(r, ensure_ascii=False) + "\n")
+        os.replace(tmp, tmp[:-4])
+    hosts = list(per_host)
+    np.savez_compressed(os.path.join(args.out_dir, f"counts_{shard}.npz"), hosts=np.array(hosts, dtype=str),
+                        counts=np.stack([per_host[h] for h in hosts]), columns=np.array(COLUMNS))
+    stats = {"shard": shard, "documents": n, "excluded": n_ex, "excluded_rate": n_ex / max(1, n),
+             "hosts": len(hosts), "excluded_sampled": len(sample),
+             "inspect_docs": {k: len(v) for k, v in inspect.items()},
+             "dialect_fast_vs_exact_agreement": agree / max(1, n_val), "dialect_validated_docs": n_val}
+    with open(os.path.join(args.out_dir, f"stats_{shard}.json"), "w") as f:   # written last = shard done
+        json.dump(stats, f, indent=1)
+    return stats
+
+
+def process(shard, path, args):
+    import sys
+    sys.path.insert(0, HERE)
+    t0 = time.time()
+    downloaded = False
+    if path is None:
+        from huggingface_hub import hf_hub_download
+        path = hf_hub_download("allenai/c4", f"en.noblocklist/{shard}.json.gz", repo_type="dataset",
+                               cache_dir=args.cache_dir)
+        downloaded = True
+    s = scan_file(path, shard, args)
+    if downloaded and not args.keep_shards:
+        os.remove(os.path.realpath(path))
+    return (f"{shard}: {s['documents']} docs, {100 * s['excluded_rate']:.2f}% excluded, dialect fast/exact "
+            f"agreement {100 * s['dialect_fast_vs_exact_agreement']:.1f}%, {time.time() - t0:.0f}s")
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--out_dir", required=True)
+    ap.add_argument("--shards", type=int, nargs="*")
+    ap.add_argument("--range", type=int, nargs=2, metavar=("START", "END"))
+    ap.add_argument("--n", type=int, default=12)
+    ap.add_argument("--seed", type=int, default=0, help="shard choice (seed 0 = Arm B's B1 shard indices)")
+    ap.add_argument("--files", nargs="*", help="local noblocklist shard files instead of downloading")
+    ap.add_argument("--workers", type=int, default=1)
+    ap.add_argument("--sample_excluded", type=int, default=10000, help="excluded docs kept per shard for Fig. 6")
+    ap.add_argument("--inspect_cap", type=int, default=500, help="excluded lesbian / gay docs kept per shard and term")
+    ap.add_argument("--validate_dialect", type=int, default=1000, help="docs per shard also scored with exact CVB0")
+    ap.add_argument("--keep_shards", action="store_true")
+    ap.add_argument("--cache_dir", default=None)
+    args = ap.parse_args()
+    os.makedirs(args.out_dir, exist_ok=True)
+    import sys
+    sys.path.insert(0, HERE)
+    from dialect import ensure_files
+    ensure_files(MODEL_DIR)                      # download once, before workers start
+
+    if args.files:
+        jobs = [(re.search(r"c4-train\.\d{5}-of-\d{5}", os.path.basename(p)).group(0), p) for p in args.files]
+    else:
+        if args.shards:
+            idx = args.shards
+        elif args.range:
+            idx = list(range(max(0, args.range[0]), min(N_SHARDS, args.range[1])))
+        else:
+            idx = sorted(random.Random(args.seed).sample(range(N_SHARDS), args.n))
+        jobs = [(shard_name(i), None) for i in idx]
+    meta_path = os.path.join(args.out_dir, "shards.json")
+    meta = json.load(open(meta_path)) if os.path.exists(meta_path) else {"shards": []}
+    meta["shards"] = sorted(set(meta["shards"]) | {s for s, _ in jobs})
+    meta["config"] = "en.noblocklist"
+    with open(meta_path, "w") as f:
+        json.dump(meta, f, indent=1)
+
+    todo = [(s, p) for s, p in jobs if not os.path.exists(os.path.join(args.out_dir, f"stats_{s}.json"))]
+    print(f"{len(jobs)} shards requested, {len(jobs) - len(todo)} done already, {len(todo)} to scan", flush=True)
+    t_all = time.time()
+    if args.workers <= 1:
+        for s, p in todo:
+            print(process(s, p, args), flush=True)
+    else:
+        with ProcessPoolExecutor(args.workers) as ex:
+            futs = [ex.submit(process, s, p, args) for s, p in todo]
+            for i, fu in enumerate(as_completed(futs), 1):
+                print(f"[{i}/{len(todo)}, {(time.time() - t_all) / 60:.0f} min] {fu.result()}", flush=True)
+
+
+if __name__ == "__main__":
+    main()
+
+# ======================= CELL 6 (code) =======================
+%%writefile /kaggle/working/f5/scripts/analyze_excluded.py
+"""Dodge et al. 2021 §5: what the blocklist excluded. Reads the output of scan_noblocklist.py.
+
+§5.2 Figure 5 and Table 6: PMI between each of the 22 identity regexes and a document being excluded,
+    PMI = ln[ P(term, excluded) / (P(term) P(excluded)) ] over en.noblocklist documents (natural log; the paper's
+    axis runs 0-2.5, which fits ln). The paper prints no numbers, so its bars are read off the figure (±0.05) and
+    compared by rank.
+§5.2 manual check: 50 random excluded documents mentioning "lesbian" and 50 mentioning "gay", as a CSV to label.
+    Paper: 22% (lesbian) and 36% (gay) are non-offensive or non-sexual.
+§5.3 dialects: removal rate per dialect (paper: AAE 42%, Hispanic 32%, WAE 6.2%, other 7.2%) and the dialect mix
+    of the kept documents, i.e. C4.EN (paper: WAE 97.8%, AAE 0.07%, Hispanic 0.09%).
+§5.1 / A.6 Figure 6: 100,000 sampled excluded documents -> TF-IDF -> k-means (k=50) -> 5,000 shown in a t-SNE of a
+    50-d PCA (truncated SVD) projection, legend = top 5 terms per cluster. The paper labelled 16 of 50 clusters
+    (31% of documents) as "largely sexual" by hand. We label automatically (a cluster is sexual if at least 2 of
+    its top 10 terms are blocklist words), repeat k-means over several seeds, and leave a column for hand labels.
+
+Uncertainty: rates and PMIs get 95% CIs from a bootstrap over web domains (Poisson weights, B=200 by default),
+because documents from one site are not independent.
+
+TF-IDF settings, seeds and the labelling rule are not given by the paper: ours are max_features=50,000,
+English stop words, min_df=5, sublinear tf; documents truncated to 20,000 characters.
+
+Usage:
+    python scripts/analyze_excluded.py --scan results/S1_noblocklist_12_shards --out_dir results/S1_noblocklist_12_shards/analysis
+"""
+import argparse, glob, gzip, json, os, random
+
+import numpy as np
+import pandas as pd
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(HERE)
+BADWORDS = os.path.join(ROOT, "data", "ldnoobw_en_25e679f.txt")
+
+# Fig. 5 read off the paper's figure (no numbers are printed); label -> approximate PMI
+PAPER_FIG5 = {"european": 0.84, "white": 1.12, "straight": 1.27, "christian": 1.37, "black": 1.43,
+              "african american": 1.44, "jewish": 1.47, "muslim": 1.50, "man": 1.65, "caucasian": 1.68,
+              "asian": 1.72, "women": 1.73, "trans": 1.75, "female": 1.82, "non-binary": 1.84, "male": 1.90,
+              "latina / latino": 1.92, "bisexual": 2.24, "homosexual": 2.30, "heterosexual": 2.34, "gay": 2.34,
+              "lesbian": 2.44}
+CATEGORY = {"sexual orientation": ["lesbian", "gay", "homosexual", "bisexual", "heterosexual", "straight"],
+            "gender identity": ["non-binary", "trans", "women", "man", "female", "male"],
+            "race / ethnicity": ["black", "african american", "latina / latino", "asian", "white", "caucasian",
+                                 "european"],
+            "religion": ["jewish", "muslim", "christian"]}
+PAPER_DIALECT = {"removal_%": {"AAE": 42.0, "Hispanic": 32.0, "WAE": 6.2, "Other": 7.2},
+                 "share_of_C4.EN_%": {"WAE": 97.8, "AAE": 0.07, "Hispanic": 0.09}}
+PAPER_CLUSTERS = {"k": 50, "sexual_clusters": 16, "sexual_share_%": 31.0}
+
+INK, INK2, MUTED, GRID, SURFACE = "#0b0b0b", "#52514e", "#898781", "#e1e0d9", "#fcfcfb"
+C_CAT = {"sexual orientation": "#2a78d6", "gender identity": "#eb6834", "race / ethnicity": "#1baf7a",
+         "religion": "#6250d6"}
+C_DIAL = {"AAE": "#e34948", "Hispanic": "#eb6834", "Other": "#6250d6", "WAE": "#2a78d6", "unassigned": MUTED}
+
+
+# ---------- loading and bootstrap ----------
+
+def load_counts(scan_dir):
+    files = sorted(glob.glob(os.path.join(scan_dir, "stats_*.json")))
+    if not files:
+        raise SystemExit(f"no finished shards (stats_*.json) in {scan_dir}")
+    stats = [json.load(open(p)) for p in files]
+    frames, columns = [], None
+    for s in stats:
+        z = np.load(os.path.join(scan_dir, f"counts_{s['shard']}.npz"))
+        columns = list(z["columns"])
+        frames.append(pd.DataFrame(z["counts"], index=z["hosts"], columns=columns))
+    df = pd.concat(frames).groupby(level=0).sum()           # one row per web domain, over all shards
+    return df, columns, stats
+
+
+def bootstrap(X, B, seed, batch=10):
+    """Domain bootstrap with Poisson(1) weights: returns B x columns resampled totals (sparse, so it fits free RAM)."""
+    from scipy import sparse
+    Xs = sparse.csr_matrix(X.astype(np.float64)).T.tocsr()      # columns x hosts
+    rng = np.random.default_rng(seed)
+    out = []
+    for b0 in range(0, B, batch):
+        W = rng.poisson(1.0, size=(X.shape[0], min(batch, B - b0))).astype(np.float32)
+        out.append(np.asarray(Xs @ W).T)
+    return np.concatenate(out)
+
+
+def ci(a):
+    return np.nanpercentile(a, [2.5, 97.5], axis=0)
+
+
+def style(ax):
+    ax.set_facecolor(SURFACE)
+    for s in ("top", "right", "left"):
+        ax.spines[s].set_visible(False)
+    ax.spines["bottom"].set_color(GRID)
+    ax.tick_params(colors=INK2, length=0)
+    ax.grid(axis="x", color=GRID, linewidth=0.8)
+    ax.set_axisbelow(True)
+
+
+def md_table(df):
+    lines = ["| " + " | ".join(df.columns) + " |", "|" + "---|" * len(df.columns)]
+    lines += ["| " + " | ".join(str(v) for v in r) + " |" for r in df.itertuples(index=False)]
+    return "\n".join(lines) + "\n"
+
+
+# ---------- §5.2: identity PMI (Fig. 5, Table 6) ----------
+
+def identity_pmi(df, boot, columns):
+    c = {k: i for i, k in enumerate(columns)}
+    n, F = df["docs"].sum(), df["excluded"].sum()
+    bn, bF = boot[:, c["docs"]], boot[:, c["excluded"]]
+    rows = []
+    from scan_noblocklist import IDENTITY
+    for label, regex in IDENTITY:
+        nt, ft = df[f"{label}|docs"].sum(), df[f"{label}|excluded"].sum()
+        with np.errstate(divide="ignore", invalid="ignore"):
+            pmi = np.log(ft * n / (nt * F)) if ft else np.nan
+            b = np.log(boot[:, c[f"{label}|excluded"]] * bn / (boot[:, c[f"{label}|docs"]] * bF))
+        lo, hi = ci(b[np.isfinite(b)]) if np.isfinite(b).sum() > 10 else (np.nan, np.nan)
+        rows.append({"term": label, "regex (Table 6)": regex, "docs": int(nt), "excluded": int(ft),
+                     "excluded_%": 100 * ft / nt if nt else np.nan, "pmi": pmi, "ci_lo": lo, "ci_hi": hi,
+                     "paper_pmi_read_off_fig5": PAPER_FIG5.get(label),
+                     "category": next(k for k, v in CATEGORY.items() if label in v)})
+    return pd.DataFrame(rows).sort_values("pmi").reset_index(drop=True)
+
+
+def fig5(t, n_docs, n_shards, out, dpi, plt):
+    from matplotlib.lines import Line2D
+    from matplotlib.patches import Patch
+    y = np.arange(len(t))
+    fig, ax = plt.subplots(figsize=(9, 7.5), facecolor=SURFACE)
+    style(ax)
+    ax.barh(y, t["pmi"], height=0.66, color=[C_CAT[c] for c in t["category"]], edgecolor=SURFACE, zorder=2)
+    ax.errorbar(t["pmi"], y, xerr=[t["pmi"] - t["ci_lo"], t["ci_hi"] - t["pmi"]], fmt="none", ecolor=INK2,
+                elinewidth=1.1, capsize=2.5, zorder=3)
+    ax.scatter(t["paper_pmi_read_off_fig5"], y, s=40, marker="D", facecolor=SURFACE, edgecolor=INK, linewidth=1.3,
+               zorder=4)
+    for yi, r in zip(y, t.to_dict("records")):
+        ax.text(max(r["ci_hi"], r["paper_pmi_read_off_fig5"] or 0) + 0.04, yi,
+                f"{r['pmi']:.2f}  ({r['excluded_%']:.0f}% of {r['docs']:,} docs excluded)", va="center",
+                fontsize=7.5, color=INK2)
+    ax.set_yticks(y, t["term"], color=INK)
+    ax.set_xlim(0, max(3.6, np.nanmax(t["ci_hi"]) + 1.2))
+    ax.set_xlabel("PMI(identity term; excluded by blocklist), natural log", color=INK2)
+    rho = t["pmi"].rank().corr(t["paper_pmi_read_off_fig5"].rank())
+    ax.legend(handles=[Patch(color=c, label=k) for k, c in C_CAT.items()] +
+              [Line2D([], [], marker="D", color=INK, markerfacecolor=SURFACE, linestyle="none",
+                      label="Dodge et al. 2021 (read off Fig. 5)")],
+              loc="lower left", bbox_to_anchor=(0, 1.0), ncol=3, frameon=False, fontsize=8.5, labelcolor=INK2)
+    ax.set_title(f"Figure 5 reproduction: identity mentions vs blocklist exclusion (Spearman with paper {rho:.2f})\n"
+                 f"C4 en.noblocklist, {n_shards} shards ({n_docs:,} docs); 95% CI: domain bootstrap",
+                 color=INK, loc="left", fontsize=11, pad=48)
+    fig.tight_layout()
+    fig.savefig(os.path.join(out, "fig5_pmi.png"), dpi=dpi, facecolor=SURFACE, bbox_inches="tight")
+    plt.close(fig)
+    return rho
+
+
+# ---------- §5.3: dialects ----------
+
+def dialects(df, boot, columns):
+    from scan_noblocklist import DIALECTS
+    c = {k: i for i, k in enumerate(columns)}
+    kept_all = df["docs"].sum() - df["excluded"].sum()
+    b_kept_all = boot[:, c["docs"]] - boot[:, c["excluded"]]
+    rows = []
+    for d in DIALECTS:
+        n, e = df[f"dialect:{d}|docs"].sum(), df[f"dialect:{d}|excluded"].sum()
+        bn, be = boot[:, c[f"dialect:{d}|docs"]], boot[:, c[f"dialect:{d}|excluded"]]
+        with np.errstate(divide="ignore", invalid="ignore"):
+            rem_lo, rem_hi = ci(100 * be / bn)
+            sh_lo, sh_hi = ci(100 * (bn - be) / b_kept_all)
+        rows.append({"dialect": d, "docs_noblocklist": int(n), "excluded": int(e),
+                     "removal_%": 100 * e / n if n else np.nan, "removal_ci_lo": rem_lo, "removal_ci_hi": rem_hi,
+                     "paper_removal_%": PAPER_DIALECT["removal_%"].get(d),
+                     "share_of_kept_%": 100 * (n - e) / kept_all, "share_ci_lo": sh_lo, "share_ci_hi": sh_hi,
+                     "paper_share_of_C4.EN_%": PAPER_DIALECT["share_of_C4.EN_%"].get(d)})
+    return pd.DataFrame(rows)
+
+
+def fig_dialects(t, out, dpi, plt):
+    from matplotlib.lines import Line2D
+    t = t[t["dialect"] != "unassigned"].iloc[::-1]
+    y = np.arange(len(t))
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(12, 3.8), facecolor=SURFACE)
+    for ax, col, lo, hi, paper, xlabel, log in (
+            (a1, "removal_%", "removal_ci_lo", "removal_ci_hi", "paper_removal_%",
+             "Documents removed by the blocklist (%)", False),
+            (a2, "share_of_kept_%", "share_ci_lo", "share_ci_hi", "paper_share_of_C4.EN_%",
+             "Share of the kept documents, i.e. C4.EN (%, log scale)", True)):
+        style(ax)
+        v = t[col].to_numpy()
+        ax.barh(y, v, height=0.6, color=[C_DIAL[d] for d in t["dialect"]], edgecolor=SURFACE, zorder=2)
+        ax.errorbar(v, y, xerr=[v - t[lo], t[hi] - v], fmt="none", ecolor=INK2, elinewidth=1.2, capsize=3, zorder=3)
+        ax.scatter(t[paper], y, s=46, marker="D", facecolor=SURFACE, edgecolor=INK, linewidth=1.4, zorder=4)
+        for yi, vi in zip(y, v):
+            ax.annotate(f"{vi:.3g}%", (vi, yi), xytext=(6, -11), textcoords="offset points", fontsize=8, color=INK2)
+        if log:
+            ax.set_xscale("log")
+        ax.set_yticks(y, t["dialect"], color=INK)
+        ax.set_xlabel(xlabel, color=INK2)
+    a1.legend(handles=[Line2D([], [], marker="D", color=INK, markerfacecolor=SURFACE, linestyle="none",
+                              label="Dodge et al. 2021"),
+                       Line2D([], [], color=INK2, marker="|", markersize=8, label="95% CI (domain bootstrap)")],
+              loc="lower left", bbox_to_anchor=(0, 1.0), ncol=2, frameon=False, fontsize=8.5, labelcolor=INK2)
+    fig.suptitle("§5.3 reproduction: which dialects the blocklist removes (argmax of Blodgett et al. 2016)",
+                 color=INK, x=0.01, ha="left", fontsize=11, y=1.08)
+    fig.tight_layout()
+    fig.savefig(os.path.join(out, "fig_dialects.png"), dpi=dpi, facecolor=SURFACE, bbox_inches="tight")
+    plt.close(fig)
+
+
+# ---------- §5.2 manual check ----------
+
+def inspection_sheet(scan_dir, out, seed, n=50):
+    rows = []
+    for p in sorted(glob.glob(os.path.join(scan_dir, "inspect_*.jsonl.gz"))):
+        rows += [json.loads(l) for l in gzip.open(p, "rt", encoding="utf-8")]
+    df = pd.DataFrame(rows)
+    if df.empty:
+        return 0
+    rng = random.Random(seed)
+    picked = []
+    for term in ("lesbian", "gay"):
+        d = df[df["term"] == term]
+        picked.append(d.iloc[sorted(rng.sample(range(len(d)), min(n, len(d))))])
+    s = pd.concat(picked)
+    s = s.assign(blocklist_words=s["blocklist_words"].map(", ".join), text=s["text"].str.slice(0, 1500),
+                 label="", notes="")
+    s[["term", "url", "blocklist_words", "label", "notes", "text"]].to_csv(
+        os.path.join(out, "inspect_lesbian_gay.csv"), index=False)
+    return len(s)
+
+
+# ---------- §5.1: clustering (Fig. 6) ----------
+
+def clusters(scan_dir, out, args, plt):
+    from sklearn.cluster import KMeans
+    from sklearn.decomposition import TruncatedSVD
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.manifold import TSNE
+    docs = []
+    for p in sorted(glob.glob(os.path.join(scan_dir, "excluded_sample_*.jsonl.gz"))):
+        docs += [json.loads(l)["text"][:20000] for l in gzip.open(p, "rt", encoding="utf-8")]
+    rng = random.Random(args.seed)
+    docs = rng.sample(docs, min(args.n_cluster_docs, len(docs)))
+    print(f"clustering {len(docs):,} excluded documents (paper: 100,000)", flush=True)
+    vec = TfidfVectorizer(max_features=50000, stop_words="english", min_df=5, sublinear_tf=True)
+    X = vec.fit_transform(docs)
+    terms = np.array(vec.get_feature_names_out())
+    bad = {w.strip() for w in open(BADWORDS, encoding="utf-8") if w.strip() and " " not in w.strip()}
+    rows, labels0 = [], None
+    for s in args.cluster_seeds:
+        km = KMeans(n_clusters=args.k, n_init=1, random_state=s).fit(X)
+        size = np.bincount(km.labels_, minlength=args.k)
+        for k in range(args.k):
+            top = terms[np.argsort(-km.cluster_centers_[k])[:10]]
+            rows.append({"seed": s, "cluster": k, "docs": int(size[k]), "share_%": 100 * size[k] / len(docs),
+                         "top10": " ".join(top), "blocklist_words_in_top10": int(sum(t in bad for t in top)),
+                         "auto_sexual": bool(sum(t in bad for t in top) >= 2), "manual_label": ""})
+        if labels0 is None:
+            labels0, top5 = km.labels_, [" ".join(r["top10"].split()[:5]) for r in rows[-args.k:]]
+        print(f"  seed {s}: {sum(r['auto_sexual'] for r in rows[-args.k:])} sexual clusters "
+              f"({sum(r['share_%'] for r in rows[-args.k:] if r['auto_sexual']):.1f}% of docs)", flush=True)
+    cl = pd.DataFrame(rows)
+    cl.round(3).to_csv(os.path.join(out, "clusters.csv"), index=False)
+    summ = pd.DataFrame([{"seed": s, "sexual_clusters": int(g["auto_sexual"].sum()),
+                          "sexual_share_%": g.loc[g["auto_sexual"], "share_%"].sum()}
+                         for s, g in cl.groupby("seed")]).set_index("seed")
+
+    # Fig. 6: t-SNE of a 50-d SVD projection, 5,000 docs, coloured by the first seed's clusters
+    idx = np.array(sorted(rng.sample(range(X.shape[0]), min(args.tsne_n, X.shape[0]))))
+    Z = TruncatedSVD(50, random_state=0).fit_transform(X[idx])
+    E = TSNE(2, init="pca", random_state=0, perplexity=30).fit_transform(Z)
+    cmap = [plt.get_cmap(m)(i) for m in ("tab20", "tab20b", "tab20c") for i in range(20)]
+    markers = ["o", "^", "s", "v", "D", "P", "X", "*"]
+    fig, ax = plt.subplots(figsize=(15, 8.5), facecolor=SURFACE)
+    ax.set_facecolor(SURFACE)
+    for k in range(args.k):
+        m = labels0[idx] == k
+        ax.scatter(E[m, 0], E[m, 1], s=7, color=cmap[k % 60], marker=markers[k % len(markers)], linewidths=0,
+                   label=top5[k] + ("  [sexual]" if cl.loc[(cl.seed == args.cluster_seeds[0]) & (cl.cluster == k),
+                                                          "auto_sexual"].iloc[0] else ""))
+    ax.set_xticks([]); ax.set_yticks([])
+    for s in ax.spines.values():
+        s.set_color(GRID)
+    ax.legend(loc="center left", bbox_to_anchor=(1.01, 0.5), fontsize=6.3, markerscale=2, frameon=False,
+              labelcolor=INK2, ncol=1)
+    first = summ.iloc[0]
+    ax.set_title(f"Figure 6 reproduction: k-means (k={args.k}) of {len(docs):,} excluded documents, TF-IDF; "
+                 f"t-SNE of {len(idx):,} shown\nAuto-labelled sexual clusters (seed {args.cluster_seeds[0]}): "
+                 f"{int(first['sexual_clusters'])} of {args.k}, {first['sexual_share_%']:.0f}% of documents "
+                 f"(paper, by hand: 16 of 50, 31%)", color=INK, loc="left", fontsize=11)
+    fig.tight_layout()
+    fig.savefig(os.path.join(out, "fig6_clusters.png"), dpi=args.dpi, facecolor=SURFACE, bbox_inches="tight")
+    plt.close(fig)
+    return summ.reset_index(), len(docs)
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--scan", required=True, help="folder written by scan_noblocklist.py")
+    ap.add_argument("--out_dir", required=True)
+    ap.add_argument("--B", type=int, default=200)
+    ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--k", type=int, default=50)
+    ap.add_argument("--cluster_seeds", type=int, nargs="+", default=[0, 1, 2])
+    ap.add_argument("--n_cluster_docs", type=int, default=100000)
+    ap.add_argument("--tsne_n", type=int, default=5000)
+    ap.add_argument("--skip_clusters", action="store_true")
+    ap.add_argument("--dpi", type=int, default=300)
+    args = ap.parse_args()
+    import sys
+    sys.path.insert(0, HERE)
+    os.makedirs(args.out_dir, exist_ok=True)
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    df, columns, stats = load_counts(args.scan)
+    n_docs, n_ex = int(df["docs"].sum()), int(df["excluded"].sum())
+    boot = bootstrap(df[columns].to_numpy(), args.B, args.seed)
+    print(f"{len(stats)} shards, {n_docs:,} docs, {len(df):,} domains, {100 * n_ex / n_docs:.2f}% excluded", flush=True)
+
+    pmi = identity_pmi(df, boot, columns)
+    pmi.round(4).to_csv(os.path.join(args.out_dir, "fig5_pmi.csv"), index=False)
+    rho = fig5(pmi, n_docs, len(stats), args.out_dir, args.dpi, plt)
+    t6 = pmi.iloc[::-1][["term", "regex (Table 6)", "docs", "excluded", "excluded_%"]].round(1)
+    with open(os.path.join(args.out_dir, "table6.md"), "w", encoding="utf-8") as f:
+        f.write("# Table 6: identity regexes (case-insensitive, word boundaries), with counts\n\n" + md_table(t6))
+
+    dia = dialects(df, boot, columns)
+    dia.round(4).to_csv(os.path.join(args.out_dir, "dialects.csv"), index=False)
+    fig_dialects(dia, args.out_dir, args.dpi, plt)
+
+    n_inspect = inspection_sheet(args.scan, args.out_dir, args.seed)
+    clu, n_clu = (None, 0) if args.skip_clusters else clusters(args.scan, args.out_dir, args, plt)
+
+    agree = np.average([s["dialect_fast_vs_exact_agreement"] for s in stats],
+                       weights=[s["dialect_validated_docs"] for s in stats])
+    with open(os.path.join(args.out_dir, "summary.md"), "w", encoding="utf-8") as f:
+        f.write(f"# §5 reproduction: {len(stats)} shards of en.noblocklist, {n_docs:,} documents, {len(df):,} domains\n\n"
+                f"- Excluded by the blocklist: {100 * n_ex / n_docs:.2f}% (expected about 7.6% from 395M vs 365M docs)\n"
+                f"- Dialect inference: fast vs exact CVB0 argmax agreement {100 * agree:.2f}% "
+                f"on {sum(s['dialect_validated_docs'] for s in stats):,} documents\n"
+                f"- Figure 5: Spearman with the paper's bars (read off the figure) = {rho:.3f}\n"
+                f"- Manual-check sheet: {n_inspect} documents in inspect_lesbian_gay.csv (label them; paper: 22% / 36% "
+                "non-offensive or non-sexual)\n\n")
+        f.write("## §5.2 identity PMI (Fig. 5)\n\n" + md_table(pmi.iloc[::-1].drop(columns="regex (Table 6)").round(3)) + "\n")
+        f.write("## §5.3 dialects\n\n" + md_table(dia.round(3)) + "\n")
+        if clu is not None:
+            f.write(f"## §5.1 clusters ({n_clu:,} docs, k={args.k}; paper: 16 sexual clusters, 31%)\n\n"
+                    + md_table(clu.round(1)) + "\n")
+    print(open(os.path.join(args.out_dir, "summary.md"), encoding="utf-8").read())
+
+
+if __name__ == "__main__":
+    main()
+
+# ======================= CELL 7 (markdown) =======================
+## 3. Scan 12 shards of `en.noblocklist`
+
+The same shard indices as Arm B's reproduction (seed 0). Each line reports the share excluded (about 7% expected)
+and the fast-vs-exact dialect agreement (above 99% expected).
+
+# ======================= CELL 8 (code) =======================
+%%bash
+cd /kaggle/working/f5
+python scripts/scan_noblocklist.py --n 12 --seed 0 --workers 4 --cache_dir /kaggle/tmp/hf_cache \
+    --out_dir /kaggle/working/f5/results/S1_noblocklist_12_shards 2>&1 | grep -v -i warning
+
+# ======================= CELL 9 (markdown) =======================
+## 4. Analysis: Fig. 5 + Table 6, §5.3 dialects, Fig. 6 clusters (about 15 min)
+
+# ======================= CELL 10 (code) =======================
+%%bash
+cd /kaggle/working/f5
+export LOKY_MAX_CPU_COUNT=4
+python scripts/analyze_excluded.py --scan /kaggle/working/f5/results/S1_noblocklist_12_shards --out_dir /kaggle/working/f5/results/S1_noblocklist_12_shards/analysis 2>&1 | grep -v -i warning
+
+# ======================= CELL 11 (markdown) =======================
+## 5. Results
+
+# ======================= CELL 12 (code) =======================
+import os
+import pandas as pd
+from IPython.display import Image, Markdown, display
+A = "/kaggle/working/f5/results/S1_noblocklist_12_shards/analysis"
+show = lambda p, w=900: display(Image(p, width=w)) if os.path.exists(p) else print("missing:", p)
+if os.path.exists(f"{A}/summary.md"):
+    display(Markdown(open(f"{A}/summary.md").read().split("## ")[0]))
+    show(f"{A}/fig5_pmi.png"); display(Markdown(open(f"{A}/table6.md").read()))
+    display(pd.read_csv(f"{A}/dialects.csv").round(3)); show(f"{A}/fig_dialects.png", 1100)
+    show(f"{A}/fig6_clusters.png", 1200)
+    if os.path.exists(f"{A}/clusters.csv"):
+        c = pd.read_csv(f"{A}/clusters.csv")
+        display(pd.DataFrame([{"seed": s, "sexual clusters": int(g.auto_sexual.sum()),
+                               "share of docs %": g.loc[g.auto_sexual, "share_%"].sum()} for s, g in c.groupby("seed")]))
+else:
+    print("analysis missing: check the output of sections 3 and 4")
+
+# ======================= CELL 13 (markdown) =======================
+## 6. Download
+
+`f5_S1_results.zip` (Output tab) holds the analysis, the per-shard counts and stats, and the manual-check sheet. The
+excluded-document samples (large, explicit) are left out of the zip; they stay in this version's output folder.
+
+**Manual check (§5.2):** open `analysis/inspect_lesbian_gay.csv` and fill `label` with `offensive`, `sexual` or
+`neither` for each row. Send it back, and the share labelled `neither` is computed with a 95% CI (paper: 22% / 36%).
+
+# ======================= CELL 14 (code) =======================
+%%bash
+cd /kaggle/working/f5/results/S1_noblocklist_12_shards
+zip -qr /kaggle/working/f5_S1_results.zip analysis counts_*.npz stats_*.json shards.json
+ls -la /kaggle/working/f5_S1_results.zip

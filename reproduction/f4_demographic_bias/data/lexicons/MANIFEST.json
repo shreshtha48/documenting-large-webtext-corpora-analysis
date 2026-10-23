@@ -1,0 +1,58 @@
+{
+ "socialsent": {
+  "source": "shifterator@8d74d74a94b5a046928f99ba076ff4fac74dd2c4 SocialSent-Reddit",
+  "subreddit_lexicons": 250,
+  "words_in_>=40_lexicons": 6442,
+  "ethnic_terms_removed": [
+   "african",
+   "american",
+   "americans",
+   "asian",
+   "australian",
+   "black",
+   "blacks",
+   "british",
+   "canadian",
+   "chinese",
+   "christian",
+   "christians",
+   "dutch",
+   "english",
+   "european",
+   "french",
+   "german",
+   "germans",
+   "greek",
+   "indian",
+   "irish",
+   "islam",
+   "italian",
+   "japanese",
+   "jewish",
+   "jews",
+   "korean",
+   "mexican",
+   "muslim",
+   "muslims",
+   "native",
+   "polish",
+   "russian",
+   "swedish",
+   "white",
+   "whites"
+  ],
+  "pos": 250,
+  "neg": 250
+ },
+ "vader": {
+  "source": "vaderSentiment@44fc044cd877310ee8278a0eadf34bcd50d41d06",
+  "threshold": 1.0,
+  "pos": 2474,
+  "neg": 3092
+ },
+ "unqover": {
+  "source": "third_party/unqover word_lists/activities/biased_ethnicity (our reconstruction, sign-checked against VADER / SocialSent aggregate)",
+  "pos": 33,
+  "neg": 25
+ }
+}

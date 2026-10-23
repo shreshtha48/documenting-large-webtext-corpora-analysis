@@ -1,0 +1,10 @@
+# reproduction/f4_demographic_bias (tested with Python 3.11)
+numpy
+pandas
+matplotlib
+torch            # Arm A scoring (GPU recommended; UnifiedQA-3B needs ~12 GB)
+transformers     # tested with 4.56
+sentencepiece    # T5 tokenizer
+huggingface_hub  # C4 shard downloads (Arm B, §5)
+scikit-learn     # §5.1 TF-IDF, k-means, t-SNE
+scipy            # §5 domain bootstrap (sparse)

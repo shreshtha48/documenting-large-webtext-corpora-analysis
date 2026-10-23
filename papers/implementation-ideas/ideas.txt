@@ -1,0 +1,29 @@
+langdetect is used to detect the English documents-what about the bias for the same
+
+the rule based hierarchy system filters out the offensive words, bad language and statements but what about the  ones that dont contiant the words explicitly but are still harmful
+
+machine generated text has been increasing and so does the bias with them then are we able to see if the machine generated text acts as an echo chamber for the bias or does that exist more in the non machine generated one
+
+finetuning a model which was not previously trained on c4 data with c4 to see if it affects the bias or vie versa fine tuning a model which was trained on c4 with a dataset not in c4 to see if it has any effect on the bias, here we could do for a specific topic eg eval
+
+why does most of the c4 data come from patent and how does it affect the copyright, and has this distribution changed overtime?
+
+how has the dialect or the language changed with the evoluation of the c4 dataset
+
+checking and finding out what percentage of documents were machine generated
+
+representation and the bias showing up in machine generated text vs normal text and the differences
+
+measuring the exact matches to stufy data contamintation and how does it affect the  evals that we use today 
+
+how do design evals which aren't a part of c4
+
+ethnic, racial and gender bias
+
+bias against teens and women, maybe we can get access to the checkpoints of the models and then compare between then and now
+
+PII data and langid, can find biases, whose PII gets protected and whose gets ignored
+
+false information, toxicitiy, fake news etc and what proportion of the data is that? how do we check and remove the same?
+
+what percentage of the most common AI safety evals are already found in c4?

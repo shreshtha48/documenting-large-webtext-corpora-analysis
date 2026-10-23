@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# Interrupted writes from score_unifiedqa.py / scan_c4_paragraphs.py
+*.tmp
+
+# Downloaded C4 shards and model caches (re-downloadable)
+*.json.gz.part
+hf_cache/
+c4-train.*.json.gz
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Run outputs: kept on disk, added to git later on purpose (Kaggle / Colab results, plots)
+reproduction/**/results/
+reproduction/paper_figures/*.png
+logs_*.txt
+
+# Upload bundles for Colab / Kaggle (rebuilt from the folders)
+*.zip
+
+# Downloaded at run time from slanglab/twitteraae (pinned commit, see scripts/dialect.py)
+reproduction/f5_excluded_data/data/twitteraae_model/
