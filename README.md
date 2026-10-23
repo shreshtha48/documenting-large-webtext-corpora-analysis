@@ -24,8 +24,7 @@ Run outputs (`results/` folders, plots) are not in git yet; see `.gitignore`.
 | `reproduction/f5_excluded_data/` | §5 reproduction: code, Kaggle and Colab notebooks. Start with its README |
 | `reproduction/f4_demographic_bias/ARM_A_REPORT.md` | Write-up of Arm A |
 | `reproduction/paper_figures/` | Replication of the paper's Figure 5 (§5.2) |
-| `findings.md` | The paper's findings, each checked against the paper and its code |
-| `paper-ideas-extension.md`, `papers/implementation-ideas/` | Follow-up work since 2021 and extension ideas |
+| `papers/implementation-ideas/` | Follow-up work since 2021 and extension ideas |
 | `papers/citing-papers/citing_papers.csv` | 829 papers citing Dodge et al. (Semantic Scholar + OpenAlex) |
 | `research-empirical-methods/` | Method notes per analysis, with reference code (TFDS C4, WIMBD, TwitterAAE) |
 | `pilots/` | Early one-shard pilots (blocklist check, identity PMI, filters on machine-generated text) |

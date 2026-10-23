@@ -21,7 +21,7 @@ TF-IDF appears only in the descriptive clustering of removed documents (§5.1: k
 
 ### 1.3 Don't presuppose the outcome
 
-"We discovered that all the claims are true" can't be written before running anything. The brief rewards reporting discrepancies, and two are already documented in [../../findings.md](../../findings.md):
+"We discovered that all the claims are true" can't be written before running anything. The brief rewards reporting discrepancies, and two are already documented in the project's findings notes (kept locally, not in the repo):
 - Dodge §2 swaps the C4 thresholds: it says 3 words and 5 sentences, where the code and the T5 paper say 5 words per line and 3 sentences.
 - Blocklist removal of AAE: **37.2%**, computed from Deas et al. 2025's counts, vs Dodge's **42%**.
 

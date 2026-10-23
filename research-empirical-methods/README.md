@@ -45,7 +45,7 @@ How to read the tags:
 
 `clean_page` constants **[CODE]**:
 ```
-_MIN_WORDS_PER_LINE = 5      # paper (Dodge) says 3: wrong, see findings.md
+_MIN_WORDS_PER_LINE = 5      # paper (Dodge) says 3: wrong
 _MIN_NUM_SENTENCES  = 3      # paper (Dodge) says 5: wrong
 _MAX_WORD_LENGTH    = 1000   # lines with a longer "word" are dropped
 _END_MARKS = (".", "?", "!", '"');  lines ending "..." dropped
@@ -218,7 +218,7 @@ The model files (`model/model_count_table.txt`, 4.1 MB, and `model/model_vocab.t
 
 **Construct warning (from the repo README):** the outputs are "not confidence values … rather … the proportion of words … from a demographically-associated language/dialect", and only the AA and White categories were validated.
 
-**A later replication with code exists:** Deas et al. 2025, "Data Caricatures" (arXiv:2503.10789), use this same classifier across 12 corpora. See [../paper-ideas-extension.md](../paper-ideas-extension.md).
+**A later replication with code exists:** Deas et al. 2025, "Data Caricatures" (arXiv:2503.10789), use this same classifier across 12 corpora. (Details are in local notes, not in the repo.)
 
 ---
 
