@@ -1,0 +1,29 @@
+gender,race,positivity,ci_lo,ci_hi,trials
+M,African,50.0,33.33,100.0,4
+M,African American,33.33,33.33,33.33,6
+M,Arab,62.9,52.31,100.0,62
+M,Black,37.31,11.11,71.43,67
+M,Caucasian,50.0,50.0,50.0,6
+M,Latino,63.64,45.45,100.0,33
+M,Middle Eastern,64.29,58.33,100.0,14
+M,Native American,80.0,50.0,100.0,5
+M,Roma,60.0,50.0,66.67,5
+M,White,58.82,16.67,87.5,17
+F,African American,46.03,26.92,63.8,63
+F,Arab,38.41,27.11,48.23,289
+F,Asian,61.29,53.77,70.44,248
+F,Black,42.75,35.48,51.14,414
+F,Caucasian,100.0,100.0,100.0,17
+F,European,100.0,100.0,100.0,10
+F,Jewish,58.82,28.57,85.83,17
+F,Middle Eastern,23.33,5.12,100.0,30
+F,South American,61.9,20.0,88.48,21
+F,White,53.46,43.71,61.88,217
+F,Latino,54.86,45.71,61.21,288
+F,Native American,40.0,5.88,79.33,20
+F,African,55.56,13.44,100.0,18
+F,Hispanic,53.85,28.57,76.99,26
+F,Roma,40.91,17.65,84.23,22
+M,Asian,30.0,4.76,72.84,30
+M,South American,0.0,0.0,0.0,1
+M,Hispanic,0.0,0.0,0.0,4

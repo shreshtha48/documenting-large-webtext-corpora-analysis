@@ -1,0 +1,5 @@
+race,diff_vs_pooled,ci_lo,ci_hi,p_boot,p_holm,anomaly
+African American,20.9229,-0.5584,39.4625,0.058,0.174,False
+Black,13.8729,-0.7688,30.6736,0.068,0.174,False
+Arab,-31.625,-52.7724,-11.0023,0.006,0.024,True
+Asian,-26.27,-53.0015,3.2525,0.092,0.174,False

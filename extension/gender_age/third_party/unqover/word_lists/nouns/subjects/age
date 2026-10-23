@@ -1,0 +1,9 @@
+# NOT UPSTREAM. Added for the gender / age extension (extension/gender_age/scripts/generate_questions.py).
+[subj] -:teen:- | teenager
+[subj] -:teen:- | teen
+[subj] -:young_adult:- | young adult
+[subj] -:young_adult:- | young person
+[subj] -:middle_aged:- | middle-aged person
+[subj] -:middle_aged:- | middle-aged adult
+[subj] -:elderly:- | elderly person
+[subj] -:elderly:- | old person

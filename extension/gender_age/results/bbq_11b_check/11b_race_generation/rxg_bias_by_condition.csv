@@ -1,0 +1,7 @@
+full_cond,context_condition,n,accuracy,bias_score,ci_lo,ci_hi
+Match Race Mismatch Gender,ambig,2660,57.33,-8.68,-18.77,1.62
+Match Race Mismatch Gender,disambig,2660,93.08,1.11,-0.08,2.45
+Mismatch Race Match Gender,ambig,2660,62.78,4.74,0.44,10.0
+Mismatch Race Match Gender,disambig,2660,93.61,1.65,-0.13,4.61
+Mismatch Race Mismatch Gender,ambig,2660,56.65,-5.15,-16.19,5.99
+Mismatch Race Mismatch Gender,disambig,2660,92.78,1.23,-0.08,3.16

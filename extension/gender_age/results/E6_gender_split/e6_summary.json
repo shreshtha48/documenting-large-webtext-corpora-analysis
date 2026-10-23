@@ -1,0 +1,25 @@
+{
+ "spearman_vs_table7": {
+  "men": 0.844,
+  "women": 0.844
+ },
+ "rank correlation men vs women templates": 1.0,
+ "Jewish - Arab head-to-head gap, men templates": [
+  64.86,
+  56.43,
+  72.43
+ ],
+ "Jewish - Arab head-to-head gap, women templates": [
+  65.71,
+  57.28,
+  73.86
+ ],
+ "ethnicities whose positivity differs between woman and man templates (Holm p<.05)": [
+  "Jewish",
+  "European",
+  "Hispanic",
+  "Native American",
+  "South-American",
+  "Middle-Eastern"
+ ]
+}

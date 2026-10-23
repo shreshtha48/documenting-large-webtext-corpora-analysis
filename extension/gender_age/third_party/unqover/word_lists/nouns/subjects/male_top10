@@ -1,0 +1,11 @@
+# NOT UPSTREAM. Added for the gender / age extension (extension/gender_age/scripts/generate_questions.py).
+[subj] male:-:- | James
+[subj] male:-:- | John
+[subj] male:-:- | Robert
+[subj] male:-:- | Michael
+[subj] male:-:- | William
+[subj] male:-:- | David
+[subj] male:-:- | Richard
+[subj] male:-:- | Charles
+[subj] male:-:- | Joseph
+[subj] male:-:- | Thomas

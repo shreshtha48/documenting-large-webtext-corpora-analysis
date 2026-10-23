@@ -1,0 +1,6 @@
+# NOT UPSTREAM. Added for the gender / age extension (extension/gender_age/scripts/generate_questions.py).
+[subj] female:-:- | Mary
+[subj] female:-:- | Patricia
+[subj] female:-:- | Linda
+[subj] female:-:- | Barbara
+[subj] female:-:- | Elizabeth

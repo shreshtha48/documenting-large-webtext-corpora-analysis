@@ -1,0 +1,14 @@
+race,women_minus_men,ci_lo,ci_hi,p_boot,p_holm,anomaly
+African,2.744,-72.8139,66.6667,0.9786,1.0,False
+African American,12.5,-5.4264,27.6423,0.2189,1.0,False
+Arab,-25.1279,-61.0021,-9.8635,0.0,0.0,True
+Asian,29.5161,-11.695,58.0246,0.1806,1.0,False
+Black,6.0814,-28.2154,31.1683,0.4459,1.0,False
+Caucasian,50.0,50.0,50.0,0.0,0.0,True
+Hispanic,53.8462,28.5714,83.3333,0.0,0.0,True
+Latino,-9.6014,-48.2647,8.8603,0.3919,1.0,False
+Middle Eastern,-43.4524,-88.8889,30.5556,0.242,1.0,False
+Native American,-40.0,-87.5,16.6667,0.2064,1.0,False
+Roma,-16.6667,-45.8369,18.2035,0.3929,1.0,False
+South American,60.0,23.0769,90.183,0.0,0.0,True
+White,-5.2308,-31.5227,35.8706,0.7933,1.0,False

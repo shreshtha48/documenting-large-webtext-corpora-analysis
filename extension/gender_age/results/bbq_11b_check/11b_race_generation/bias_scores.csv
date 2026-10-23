@@ -1,0 +1,11 @@
+cat,context_condition,n,accuracy,bias_score,ci_lo,ci_hi,paper_fig3
+Age,ambig,1840,54.67,29.78,15.25,45.55,29.8
+Age,disambig,1840,93.48,1.16,0.06,2.51,1.2
+Gender_identity,ambig,328,65.55,14.94,-7.76,37.87,32.3
+Gender_identity,disambig,328,78.35,2.33,-1.58,8.11,0.1
+Gender_identity (names),ambig,2500,55.28,33.04,25.48,40.36,2.4
+Gender_identity (names),disambig,2500,92.04,1.17,0.04,2.81,-5.8
+Race_x_gender,ambig,2280,63.29,-2.59,-14.17,9.28,
+Race_x_gender,disambig,2280,94.47,0.96,-0.3,2.73,
+Race_x_gender (names),ambig,5700,57.18,-3.21,-12.99,6.25,
+Race_x_gender (names),disambig,5700,92.63,1.48,-0.02,3.63,

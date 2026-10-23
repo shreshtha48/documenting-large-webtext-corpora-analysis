@@ -1,0 +1,17 @@
+{
+ "shards": [
+  "c4-train.00082-of-01024",
+  "c4-train.00285-of-01024",
+  "c4-train.00447-of-01024",
+  "c4-train.00530-of-01024",
+  "c4-train.00577-of-01024",
+  "c4-train.00621-of-01024",
+  "c4-train.00733-of-01024",
+  "c4-train.00788-of-01024",
+  "c4-train.00829-of-01024",
+  "c4-train.00861-of-01024",
+  "c4-train.00976-of-01024",
+  "c4-train.00995-of-01024"
+ ],
+ "config": "en.noblocklist"
+}

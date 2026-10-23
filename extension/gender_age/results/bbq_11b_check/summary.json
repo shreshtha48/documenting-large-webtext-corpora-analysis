@@ -1,0 +1,122 @@
+{
+ "Race_x_gender items without group labels (excluded from group analyses)": 344,
+ "11b_race_generation": {
+  "races too sparse to test (female, same-race pairs)": [
+   "Hispanic",
+   "Latino",
+   "Middle Eastern",
+   "Native American",
+   "Roma",
+   "White"
+  ],
+  "female positivity, same-race pairs (pooled)": [
+   59.87,
+   46.45,
+   71.34
+  ],
+  "races whose female positivity differs from pooled (Holm p<.05)": [
+   "Arab"
+  ],
+  "races too sparse to compare women vs men": [
+   "African",
+   "African American",
+   "Arab",
+   "Asian",
+   "Black",
+   "Caucasian",
+   "European",
+   "Hispanic",
+   "Jewish",
+   "Latino",
+   "Middle Eastern",
+   "Native American",
+   "Roma",
+   "South American",
+   "White"
+  ]
+ },
+ "bias scores": {
+  "11b_race_generation": [
+   {
+    "cat": "Age",
+    "context_condition": "ambig",
+    "accuracy": 54.7,
+    "bias_score": 29.8,
+    "ci_lo": 15.3,
+    "ci_hi": 45.5
+   },
+   {
+    "cat": "Age",
+    "context_condition": "disambig",
+    "accuracy": 93.5,
+    "bias_score": 1.2,
+    "ci_lo": 0.1,
+    "ci_hi": 2.5
+   },
+   {
+    "cat": "Gender_identity",
+    "context_condition": "ambig",
+    "accuracy": 65.5,
+    "bias_score": 14.9,
+    "ci_lo": -7.8,
+    "ci_hi": 37.9
+   },
+   {
+    "cat": "Gender_identity",
+    "context_condition": "disambig",
+    "accuracy": 78.4,
+    "bias_score": 2.3,
+    "ci_lo": -1.6,
+    "ci_hi": 8.1
+   },
+   {
+    "cat": "Gender_identity (names)",
+    "context_condition": "ambig",
+    "accuracy": 55.3,
+    "bias_score": 33.0,
+    "ci_lo": 25.5,
+    "ci_hi": 40.4
+   },
+   {
+    "cat": "Gender_identity (names)",
+    "context_condition": "disambig",
+    "accuracy": 92.0,
+    "bias_score": 1.2,
+    "ci_lo": 0.0,
+    "ci_hi": 2.8
+   },
+   {
+    "cat": "Race_x_gender",
+    "context_condition": "ambig",
+    "accuracy": 63.3,
+    "bias_score": -2.6,
+    "ci_lo": -14.2,
+    "ci_hi": 9.3
+   },
+   {
+    "cat": "Race_x_gender",
+    "context_condition": "disambig",
+    "accuracy": 94.5,
+    "bias_score": 1.0,
+    "ci_lo": -0.3,
+    "ci_hi": 2.7
+   },
+   {
+    "cat": "Race_x_gender (names)",
+    "context_condition": "ambig",
+    "accuracy": 57.2,
+    "bias_score": -3.2,
+    "ci_lo": -13.0,
+    "ci_hi": 6.2
+   },
+   {
+    "cat": "Race_x_gender (names)",
+    "context_condition": "disambig",
+    "accuracy": 92.6,
+    "bias_score": 1.5,
+    "ci_lo": -0.0,
+    "ci_hi": 3.6
+   }
+  ]
+ }
+}

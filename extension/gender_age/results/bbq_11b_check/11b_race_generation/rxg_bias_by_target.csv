@@ -1,0 +1,61 @@
+target_gender,target_race,context_condition,n,accuracy,bias_score,ci_lo,ci_hi
+F,African,ambig,30,63.33,3.33,-28.57,36.69
+F,African,disambig,30,90.0,11.11,-12.5,39.13
+F,African American,ambig,256,53.91,-15.62,-29.57,0.01
+F,African American,disambig,256,99.22,0.79,-2.31,3.36
+F,Arab,ambig,662,51.96,27.79,8.19,39.44
+F,Arab,disambig,662,94.71,-0.16,-2.46,1.55
+F,Asian,ambig,790,65.7,17.85,2.25,37.93
+F,Asian,disambig,790,91.39,5.11,0.0,11.77
+F,Black,ambig,1504,50.53,-24.07,-33.82,-13.64
+F,Black,disambig,1504,99.6,0.27,0.0,1.02
+F,Caucasian,ambig,26,57.69,19.23,-11.54,50.0
+F,Caucasian,disambig,26,100.0,0.0,0.0,0.0
+F,European,ambig,24,75.0,25.0,8.33,50.0
+F,European,disambig,24,87.5,4.76,0.0,17.65
+F,Hispanic,ambig,112,66.07,-21.43,-55.82,3.64
+F,Hispanic,disambig,112,100.0,0.0,0.0,0.0
+F,Jewish,ambig,20,55.0,-15.0,-45.0,15.04
+F,Jewish,disambig,20,100.0,0.0,0.0,0.0
+F,Latino,ambig,680,60.0,-14.71,-38.48,5.35
+F,Latino,disambig,680,97.5,0.0,-1.03,1.08
+F,Middle Eastern,ambig,80,35.0,55.0,3.85,71.77
+F,Middle Eastern,disambig,80,97.5,0.0,0.0,0.0
+F,Native American,ambig,92,84.78,0.0,-7.82,26.19
+F,Native American,disambig,92,97.83,0.0,0.0,0.0
+F,Roma,ambig,58,79.31,3.45,-10.0,16.68
+F,Roma,disambig,58,96.55,0.0,-7.16,6.67
+F,South American,ambig,28,67.86,10.71,-15.38,43.33
+F,South American,disambig,28,82.14,4.35,0.0,15.79
+F,White,ambig,428,44.39,5.61,-4.44,11.56
+F,White,disambig,428,95.79,-1.69,-6.11,0.0
+M,African,ambig,30,76.67,-10.0,-33.33,9.38
+M,African,disambig,30,90.0,11.11,0.0,30.83
+M,African American,ambig,126,79.37,-4.76,-23.64,9.84
+M,African American,disambig,126,88.1,-5.36,-18.37,0.0
+M,Arab,ambig,504,68.45,-3.77,-14.87,3.97
+M,Arab,disambig,504,95.24,-0.42,-2.69,1.1
+M,Asian,ambig,570,69.47,-2.11,-13.34,5.66
+M,Asian,disambig,570,64.21,6.18,0.22,12.81
+M,Black,ambig,764,68.46,-0.13,-11.2,9.17
+M,Black,disambig,764,89.66,3.19,0.21,9.27
+M,Caucasian,ambig,26,57.69,3.85,-23.08,26.92
+M,Caucasian,disambig,26,96.15,-4.0,-13.04,0.0
+M,European,ambig,24,62.5,29.17,8.33,54.17
+M,European,disambig,24,87.5,4.76,0.0,17.65
+M,Hispanic,ambig,52,42.31,-15.38,-53.34,28.57
+M,Hispanic,disambig,52,100.0,0.0,0.0,0.0
+M,Jewish,ambig,20,60.0,0.0,-27.27,33.33
+M,Jewish,disambig,20,100.0,0.0,0.0,0.0
+M,Latino,ambig,408,51.23,-8.09,-27.05,8.95
+M,Latino,disambig,408,95.34,1.78,-1.02,6.67
+M,Middle Eastern,ambig,62,58.06,12.9,4.51,30.43
+M,Middle Eastern,disambig,62,96.77,0.0,0.0,0.0
+M,Native American,ambig,52,61.54,15.38,-2.78,34.49
+M,Native American,disambig,52,94.23,4.0,0.0,15.01
+M,Roma,ambig,40,57.5,2.5,-21.43,36.67
+M,Roma,disambig,40,97.5,-2.56,-10.36,0.0
+M,South American,ambig,28,64.29,0.0,-37.5,33.33
+M,South American,disambig,28,82.14,8.33,0.0,28.61
+M,White,ambig,312,53.53,-9.29,-34.63,16.67
+M,White,disambig,312,93.27,1.69,-1.83,7.91
