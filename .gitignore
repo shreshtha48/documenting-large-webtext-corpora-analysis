@@ -40,3 +40,6 @@ reproduction/f3_contamination/data/
 PWT_Research.pdf
 findings.md
 paper-ideas-extension.md
+
+# WIMBD Elasticsearch keys (secret)
+es_config.yml

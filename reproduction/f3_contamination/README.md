@@ -49,7 +49,22 @@ contaminated if it occurs at least once.
 The paper's Table 5 lists 10 XSum summaries that it found in C4. `analyze_contamination.py` finds each one in our
 XSum test file and queries it. All 10 should be found; if they are not, the matching is broken.
 
-## Running
+## Preferred source once keys arrive: WIMBD
+
+AI2's WIMBD Elasticsearch index (Elazar et al. 2023) holds C4 with a `subset` field. Its phrase search lowercases and
+drops punctuation, which is the paper's own normalization, so it gives the paper's measure rather than a lower bound.
+It also batches queries, so every field at full size takes minutes. The keys come from a form
+(https://forms.gle/yMz7uTFhd1dKNYTk7). Put them in `es_config.yml` here (git-ignored), then:
+
+```bash
+pip install wimbd
+python scripts/query_wimbd.py --out_dir results/W1_wimbd_full --sample 0
+python scripts/analyze_contamination.py --counts results/W1_wimbd_full
+```
+
+`query_wimbd.py` has not been run yet, because we have no keys. Its output format matches the infini-gram script's.
+
+## Running (infini-gram)
 
 **Kaggle (recommended):** zip this folder (you can leave out `data/`, which is re-downloaded) and upload it as a
 dataset. Import `kaggle/f3_contamination_kaggle.ipynb`, set Accelerator **None** and Internet **on**, then
