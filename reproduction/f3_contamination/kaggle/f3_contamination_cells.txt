@@ -11,8 +11,9 @@ bounds**. A positive control re-finds the paper's own Table 5 XSum examples: 8 o
 other 2 differ only in punctuation), so exact matching recovers roughly 80% of the paper's matches.
 
 **Settings:** Accelerator **None** (no GPU needed), Internet **on**. Then **Save Version -> Save & Run All**; the
-browser can be closed. About 35-40 min: the 6 fields behind the paper's headline claims, 300 texts each
-(about 1,800 API calls at one per second):
+browser can be closed. About 1.5 h: the 6 fields behind the paper's headline claims, 300 texts each. Texts are
+tested in OR-groups (absent texts are resolved several at a time), so about 950 API calls at one per 5 s, a pace
+that stays under the API's block threshold:
 
 | Field | Paper | Why |
 |---|---|---|
@@ -23,7 +24,7 @@ browser can be closed. About 35-40 min: the 6 fields behind the paper's headline
 
 95% CIs: about ±5 points for the high rates, about ±1.5 for the low ones. Other fields can be added later by
 re-running section 4 with more `--fields` (finished texts are kept). The API blocks
-IPs that query too fast, so please keep `--rate 1`.
+IPs that query too fast, so please keep the default pace.
 
 When it finishes, download `f3_results.zip` from the Output tab.
 
@@ -230,25 +231,35 @@ Each field is a random sample of --sample texts (seed 0; all texts if fewer), so
 Results append to <out_dir>/counts_<field>.jsonl, so an interrupted run resumes.
 
 Politeness: the API is a free shared service behind an AWS gateway that answers HTTP 403 when one IP sends too
-many requests (we hit it at ~6 requests/s). So requests go one at a time at --rate per second (default 1), with an
-identifying User-Agent; a 403 / 429 pauses the run for --block_pause seconds and retries the same text, instead of
-recording an error.
+many requests (in practice after ~50-65 requests at one per second). Requests go one at a time at --rate per second
+(default 0.2), with an identifying User-Agent; a 403 / 429 pauses the run for --block_pause seconds, slows the pace
+by 1.5x, and retries the same query instead of recording an error.
+
+Group testing (default; --no_group turns it off): the count query accepts "A OR B OR ...", and pure OR counts are
+exact (the API only subsamples AND queries). Most benchmark texts are absent, so several texts are tested in one
+request; a group with count 0 resolves all its texts at once, and a group with a hit is split in halves until single
+texts remain. The result per text is identical to querying it alone. The group size comes from the paper's rate
+for the field (1/sqrt(rate), at most 8; no grouping above 30%). A text's case variants go into the same query.
+Texts containing the words AND / OR in capitals cannot be sent as plain strings (the API reads them as operators)
+and are recorded as errors.
 
 Usage:
     python scripts/query_infinigram.py --out_dir results/C1_infinigram_2000 --sample 2000
     python scripts/query_infinigram.py --fields xsum cola --sample 0 ...     # 0 = every text
 """
-import argparse, glob, gzip, json, os, random, re, threading, time
+import argparse, glob, gzip, json, os, random, re, sys, threading, time
 import urllib.error, urllib.request
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 BENCH = os.path.join(ROOT, "data", "benchmarks")
+sys.path.insert(0, HERE)
 API = "https://api.infini-gram.io/"
 INDEX = "v4_c4train_llama"
 TRAIL = re.compile(r"[\s.!?,;:'\"”’)\]]+$")
 UA = "c4-documentation-reproduction (Dodge et al. 2021 Table 2; research use)"
-PACE = {"interval": 1.0, "next": 0.0, "block_pause": 600, "lock": threading.Lock()}
+PACE = {"interval": 5.0, "next": 0.0, "block_pause": 600, "lock": threading.Lock(), "requests": 0}
+OPERATOR = re.compile(r"\b(?:AND|OR)\b")
 
 
 def wait_turn():
@@ -257,6 +268,7 @@ def wait_turn():
         if now < PACE["next"]:
             time.sleep(PACE["next"] - now)
         PACE["next"] = max(now, PACE["next"]) + PACE["interval"]
+        PACE["requests"] += 1
 
 
 def variants(text):
@@ -284,7 +296,9 @@ def count(query, retries=6, blocks=12):
         except urllib.error.HTTPError as e:
             if e.code in (403, 429) and blocks > 0:     # rate-limited: pause, then retry the same query
                 blocks -= 1
-                print(f"  HTTP {e.code}: pausing {PACE['block_pause']} s", flush=True)
+                PACE["interval"] = min(30.0, PACE["interval"] * 1.5)
+                print(f"  HTTP {e.code}: pausing {PACE['block_pause']} s, then one request per "
+                      f"{PACE['interval']:.1f} s", flush=True)
                 time.sleep(PACE["block_pause"])
                 continue
             if e.code not in (500, 502, 503, 504):
@@ -296,7 +310,41 @@ def count(query, retries=6, blocks=12):
     return None, "gave up after retries"
 
 
+def result(row, counts, err, via="single"):
+    return {"id": row["id"], "counts": counts, "matched": bool(any(counts)) if err is None else None,
+            "error": err, "text": row["text"], "via": via}
+
+
+def unqueryable(row):
+    v = variants(row["text"])
+    if not v:
+        return "empty text"
+    if any(OPERATOR.search(x) for x in v):
+        return "contains AND/OR in capitals (read as query operators)"
+    return None
+
+
+def group_test(rows):
+    """Results for `rows`, testing them together first (see the module docstring)."""
+    c, e = count(" OR ".join(v for r in rows for v in variants(r["text"])))
+    if e is None and c == 0:
+        return [result(r, [0], None, "group" if len(rows) > 1 else "single") for r in rows]
+    if len(rows) == 1:
+        return [result(rows[0], [c] if e is None else [], e)]
+    half = len(rows) // 2
+    return group_test(rows[:half]) + group_test(rows[half:])
+
+
+def group_size(field):
+    from benchmarks import PAPER
+    rate = PAPER[field][2] / PAPER[field][3] if field in PAPER else 0.1
+    return 1 if rate >= 0.3 else max(1, min(8, round(rate ** -0.5)))
+
+
 def score(row):
+    bad = unqueryable(row)
+    if bad:
+        return result(row, [], bad)
     counts, err = [], None
     for q in variants(row["text"]):
         c, e = count(q)
@@ -306,8 +354,7 @@ def score(row):
         counts.append(c)
         if c:
             break                                   # found: no need to try the other variant
-    return {"id": row["id"], "counts": counts, "matched": bool(any(counts)) if err is None else None,
-            "error": err, "text": row["text"]}
+    return result(row, counts, err)
 
 
 def load(field):
@@ -321,7 +368,8 @@ def main():
     ap.add_argument("--fields", nargs="*", help="default: every built field")
     ap.add_argument("--sample", type=int, default=2000, help="texts per field (0 = all)")
     ap.add_argument("--seed", type=int, default=0)
-    ap.add_argument("--rate", type=float, default=1.0, help="requests per second (one at a time)")
+    ap.add_argument("--rate", type=float, default=0.2, help="requests per second (one at a time)")
+    ap.add_argument("--no_group", action="store_true", help="query every text on its own")
     ap.add_argument("--block_pause", type=int, default=600, help="seconds to pause after HTTP 403 / 429")
     args = ap.parse_args()
     PACE["interval"], PACE["block_pause"] = 1.0 / args.rate, args.block_pause
@@ -338,19 +386,29 @@ def main():
         if os.path.exists(path):
             done = {json.loads(l)["id"] for l in open(path, encoding="utf-8")}
         todo = [r for r in rows if r["id"] not in done]
-        t0 = time.time()
+        g = 1 if args.no_group else group_size(field)
+        t0, r0, n = time.time(), PACE["requests"], 0
+        print(f"{field}: {len(todo)} texts to query, group size {g}", flush=True)
         with open(path, "a", encoding="utf-8") as out:
-            for i, res in enumerate(map(score, todo), 1):
-                if res["error"] and res["error"].startswith("HTTP 403"):
-                    raise SystemExit("still blocked after repeated pauses; re-run later (finished texts are kept)")
-                out.write(json.dumps(res, ensure_ascii=False) + "\n")
-                out.flush()                             # every row is kept if the run stops
-                if i % 50 == 0:
-                    print(f"  {field}: {i}/{len(todo)} ({(time.time() - t0) / 60:.1f} min)", flush=True)
+            for b in range(0, len(todo), g):
+                chunk = todo[b:b + g]
+                res = [score(r) for r in chunk if unqueryable(r)]
+                ok = [r for r in chunk if not unqueryable(r)]
+                if ok:
+                    res += group_test(ok) if g > 1 else [score(r) for r in ok]
+                for x in res:
+                    if x["error"] and x["error"].startswith("HTTP 403"):
+                        raise SystemExit("still blocked after repeated pauses; re-run later (finished texts are kept)")
+                    out.write(json.dumps(x, ensure_ascii=False) + "\n")
+                out.flush()                             # every finished group is kept if the run stops
+                n_prev, n = n, n + len(chunk)
+                if n // 50 > n_prev // 50:
+                    print(f"  {field}: {n}/{len(todo)} texts, {PACE['requests'] - r0} requests "
+                          f"({(time.time() - t0) / 60:.1f} min)", flush=True)
         res = [json.loads(l) for l in open(path, encoding="utf-8")]
         ok = [r for r in res if r["error"] is None]
         print(f"{field}: {sum(r['matched'] for r in ok)}/{len(ok)} matched, {len(res) - len(ok)} errors, "
-              f"{time.time() - t0:.0f}s", flush=True)
+              f"{PACE['requests'] - r0} requests, {time.time() - t0:.0f}s", flush=True)
 
 
 if __name__ == "__main__":
@@ -526,7 +584,7 @@ cd /kaggle/working/f3
 python scripts/benchmarks.py 2>&1 | grep -v downloading
 
 # ======================= CELL 9 (markdown) =======================
-## 4. Query infini-gram, 6 key fields (about 35-40 min)
+## 4. Query infini-gram, 6 key fields (about 1.5 h)
 
 One request per second; a block (HTTP 403) pauses the run for 10 minutes and continues; network errors are retried.
 Progress is printed every 50 texts. If the script still exits early, the cell restarts it (up to 3 times) and it
@@ -536,7 +594,7 @@ resumes where it stopped; re-running this cell does the same.
 %%bash
 cd /kaggle/working/f3
 for attempt in 1 2 3; do
-  python scripts/query_infinigram.py --out_dir /kaggle/working/f3/results/C1_infinigram_key6_300 --fields tifu_short tifu_long xsum lama_trex qnli_sentence qnli_question --sample 300 --rate 1 && break
+  python scripts/query_infinigram.py --out_dir /kaggle/working/f3/results/C1_infinigram_key6_300 --fields tifu_short tifu_long xsum lama_trex qnli_sentence qnli_question --sample 300 && break
   echo "query run stopped (attempt $attempt); resuming in 60 s"; sleep 60
 done
 

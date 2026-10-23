@@ -1,6 +1,6 @@
 """Build the Kaggle notebook for Dodge et al. 2021 §4.2 (benchmark contamination) from the scripts here.
 
-The work is API calls to infini-gram at one per second, so it needs no GPU: run it with Accelerator "None".
+The work is paced API calls to infini-gram, so it needs no GPU: run it with Accelerator "None".
 "Save Version -> Save & Run All" runs it in the background (up to 12 h).
 
 Writes, next to this file:
@@ -44,8 +44,9 @@ bounds**. A positive control re-finds the paper's own Table 5 XSum examples: 8 o
 other 2 differ only in punctuation), so exact matching recovers roughly 80% of the paper's matches.
 
 **Settings:** Accelerator **None** (no GPU needed), Internet **on**. Then **Save Version -> Save & Run All**; the
-browser can be closed. About 35-40 min: the 6 fields behind the paper's headline claims, 300 texts each
-(about 1,800 API calls at one per second):
+browser can be closed. About 1.5 h: the 6 fields behind the paper's headline claims, 300 texts each. Texts are
+tested in OR-groups (absent texts are resolved several at a time), so about 950 API calls at one per 5 s, a pace
+that stays under the API's block threshold:
 
 | Field | Paper | Why |
 |---|---|---|
@@ -56,7 +57,7 @@ browser can be closed. About 35-40 min: the 6 fields behind the paper's headline
 
 95% CIs: about ±5 points for the high rates, about ±1.5 for the low ones. Other fields can be added later by
 re-running section 4 with more `--fields` (finished texts are kept). The API blocks
-IPs that query too fast, so please keep `--rate 1`.
+IPs that query too fast, so please keep the default pace.
 
 When it finishes, download `f3_results.zip` from the Output tab.
 """),
@@ -86,7 +87,7 @@ cd {W}
 python scripts/benchmarks.py 2>&1 | grep -v downloading
 """),
     md("""
-## 4. Query infini-gram, 6 key fields (about 35-40 min)
+## 4. Query infini-gram, 6 key fields (about 1.5 h)
 
 One request per second; a block (HTTP 403) pauses the run for 10 minutes and continues; network errors are retried.
 Progress is printed every 50 texts. If the script still exits early, the cell restarts it (up to 3 times) and it
@@ -96,7 +97,7 @@ resumes where it stopped; re-running this cell does the same.
 %%bash
 cd {W}
 for attempt in 1 2 3; do
-  python scripts/query_infinigram.py --out_dir {OUT} --fields {KEY_FIELDS} --sample 300 --rate 1 && break
+  python scripts/query_infinigram.py --out_dir {OUT} --fields {KEY_FIELDS} --sample 300 && break
   echo "query run stopped (attempt $attempt); resuming in 60 s"; sleep 60
 done
 """),

@@ -69,7 +69,7 @@ python scripts/analyze_contamination.py --counts results/W1_wimbd_full
 **Kaggle (recommended):** zip this folder (you can leave out `data/`, which is re-downloaded) and upload it as a
 dataset. Import `kaggle/f3_contamination_kaggle.ipynb`, set Accelerator **None** and Internet **on**, then
 Save & Run All. By default it queries the 6 fields behind the paper's headline claims (TIFU-short/long, XSum, LAMA
-T-REx, QNLI sentence/question) at 300 texts each: about 35–40 minutes. Add `--fields` to cover the rest later.
+T-REx, QNLI sentence/question) at 300 texts each: about 1.5 hours. Add `--fields` to cover the rest later.
 
 **Smoke test (C0, local, 30 texts per field for 4 fields):** no errors at 1 request per second. The positive control
 found **8 of the paper's 10** Table 5 XSum summaries; the other two differ from C4's copy only in punctuation. So exact
@@ -78,7 +78,10 @@ matching recovers roughly 80% of the paper's normalized matches, and our rates s
 **Locally:**
 
 The API is a free shared service and blocks an IP (HTTP 403) that sends too many requests; a 4-way parallel smoke
-test triggered this. The client therefore sends **one request per second** by default and pauses on a block.
+test triggered this, and so did one request per second after ~50-65 requests. The client therefore sends one
+request every 5 seconds by default, slows down further after any block, and tests texts in OR-groups (the API's
+pure OR counts are exact; a group with count 0 resolves all its texts in one request). On the 6 key fields this
+takes about 950 requests instead of ~1,800.
 At that rate, 2,000 texts × 21 fields take about 12 hours. `--sample 500` takes about 3 hours.
 
 ```bash
