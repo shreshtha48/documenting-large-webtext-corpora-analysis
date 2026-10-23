@@ -1,0 +1,4 @@
+lexicon,gap,ci_lo,ci_hi,share_of_bootstrap_gap_>0,paper_gap
+SocialSent,7.319,2.478,11.896,0.998,7.5
+VADER,1.816,-1.387,4.821,0.88,2.0
+UnQover,8.995,1.41,15.69,0.994,1.4

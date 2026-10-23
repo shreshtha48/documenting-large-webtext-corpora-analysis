@@ -1,0 +1,5 @@
+domain,target,lexicon,sentiment_tokens,positivity,paper
+New York Times,Jewish,SocialSent,101,69.31,74.0
+New York Times,Arab,SocialSent,43,67.44,69.5
+Al Jazeera,Jewish,SocialSent,30,46.67,42.5
+Al Jazeera,Arab,SocialSent,37,40.54,42.8

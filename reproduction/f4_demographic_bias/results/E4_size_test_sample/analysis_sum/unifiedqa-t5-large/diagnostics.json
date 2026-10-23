@@ -1,0 +1,42 @@
+{
+ "contexts scored (all groups in the file)": 1516,
+ "contexts scored": 1516,
+ "share of picks = option (a)": 0.3189,
+ "same pick for neg and pos question": 0.6985,
+ "ties": 0,
+ "neg: greedy output is exactly one option": 1.0,
+ "neg: greedy output agrees with LL choice": 1.0,
+ "pos: greedy output is exactly one option": 1.0,
+ "pos: greedy output agrees with LL choice": 1.0,
+ "greedy rows checked": 320,
+ "spearman_vs_table7": 0.4826,
+ "spread_ours": 35.89,
+ "spread_paper": 30.5,
+ "sd_ours": 8.2,
+ "sd_ours_noise_corrected": 7.92,
+ "sd_paper": 9.76,
+ "pearson_vs_table7": 0.4938,
+ "slope_ours_on_paper": 0.415,
+ "attributes with a negation-style positive question": 4,
+ "spearman_vs_table7_without_negation_attributes": 0.5112,
+ "join check: greedy answers naming a row option": 1.0,
+ "coverage: attributes": "50/50",
+ "coverage: ordered pairs": "210/210",
+ "coverage: attributes: min/max contexts": 0.968,
+ "coverage: ordered pairs: min/max contexts": 0.875,
+ "coverage ok": true,
+ "jewish_vs_arab: contexts": 15,
+ "jewish_vs_arab: questions": 30,
+ "jewish_vs_arab: illustrative only (fewer than 100 contexts)": true,
+ "jewish_vs_arab: answer changes between neg and pos question (%)": 33.33,
+ "jewish_vs_arab: Arab positivity vs the other (%)": 33.33,
+ "jewish_vs_arab: Arab 95% CI": [
+  20.0,
+  43.33
+ ],
+ "jewish_vs_arab: Jewish positivity vs the other (%)": 66.67,
+ "jewish_vs_arab: Jewish 95% CI": [
+  56.67,
+  80.0
+ ]
+}

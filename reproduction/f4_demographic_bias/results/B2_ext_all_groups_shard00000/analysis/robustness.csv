@@ -1,0 +1,16 @@
+variant,lexicon,Jewish,Arab,gap,ci_lo,ci_hi,Jewish_paragraphs,Arab_paragraphs,paper_gap
+as in paper,SocialSent,71.794,64.475,7.319,2.258,12.653,2939,1384,7.5
+as in paper,VADER,65.982,64.166,1.816,-1.144,4.771,2939,1384,2.0
+as in paper,UnQover,72.794,63.799,8.995,1.716,16.648,2939,1384,1.4
+Arab: no 'United Arab Emirates' paragraphs,SocialSent,71.794,61.472,10.322,4.538,15.602,2939,1064,7.5
+Arab: no 'United Arab Emirates' paragraphs,VADER,65.982,58.363,7.618,4.711,10.61,2939,1064,2.0
+Arab: no 'United Arab Emirates' paragraphs,UnQover,72.794,62.4,10.394,2.571,17.354,2939,1064,1.4
+Arab: no geopolitical 'Arab' phrases,SocialSent,71.794,65.466,6.328,0.661,12.971,2939,753,7.5
+Arab: no geopolitical 'Arab' phrases,VADER,65.982,59.562,6.42,2.834,10.075,2939,753,2.0
+Arab: no geopolitical 'Arab' phrases,UnQover,72.794,61.143,11.651,1.878,20.931,2939,753,1.4
+no 1-letter tokens or SocialSent noise words,SocialSent,71.325,64.432,6.893,1.632,12.457,2939,1384,7.5
+no 1-letter tokens or SocialSent noise words,VADER,65.873,64.132,1.741,-1.195,4.696,2939,1384,2.0
+no 1-letter tokens or SocialSent noise words,UnQover,72.794,63.799,8.995,1.716,16.648,2939,1384,1.4
+no religious words,SocialSent,66.761,63.211,3.55,-1.823,9.278,2939,1384,7.5
+no religious words,VADER,64.128,64.011,0.118,-2.898,3.15,2939,1384,2.0
+no religious words,UnQover,72.794,63.799,8.995,1.716,16.648,2939,1384,1.4

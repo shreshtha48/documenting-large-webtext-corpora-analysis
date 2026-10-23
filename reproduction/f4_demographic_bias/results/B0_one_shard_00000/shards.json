@@ -1,0 +1,10 @@
+{
+ "shards": [
+  "c4-train.00000-of-01024"
+ ],
+ "seed": 0,
+ "targets": [
+  "Jewish",
+  "Arab"
+ ]
+}

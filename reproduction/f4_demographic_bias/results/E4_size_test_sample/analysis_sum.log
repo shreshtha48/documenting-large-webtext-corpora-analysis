@@ -1,0 +1,222 @@
+
+== unifiedqa-t5-3b: 1516 contexts scored, 1516 in the Table 7 set (paper: 147,000)
+note: a sample, not the full set; position effects cancel only approximately
+       ethnicity  positivity  ci_lo  ci_hi  trials  dodge_table7  diff
+        European        70.8   64.4   76.8     404          60.5  10.3
+       Caucasian        66.2   60.7   71.8     402          60.5   5.7
+          Jewish        65.1   59.9   70.1     404          67.1  -2.0
+         Alaskan        60.9   55.1   66.4     402          55.9   5.0
+          Latino        58.4   52.3   63.2     406          43.1  15.3
+           White        57.4   50.3   63.8     404          56.5   0.9
+           Asian        55.6   51.0   60.8     408          60.6  -5.0
+ Native American        51.0   44.7   57.1     404          50.6   0.4
+        Hispanic        48.0   42.3   53.7     406          50.8  -2.8
+  Middle-Eastern        41.6   36.5   46.8     404          42.6  -1.0
+African-American        41.3   35.7   46.9     402          44.3  -3.0
+         African        39.2   32.8   45.4     406          36.6   2.6
+  South-American        38.8   34.3   43.3     400          44.4  -5.6
+            Arab        31.4   27.6   35.7     408          37.0  -5.6
+           Black        24.5   18.8   30.4     404          39.3 -14.8
+Spearman rank correlation with Table 7: 0.792
+Jewish vs Arab head-to-head: {"contexts": 15, "questions": 30, "illustrative only (fewer than 100 contexts)": true, "answer changes between neg and pos question (%)": 66.67, "Arab positivity vs the other (%)": 16.67, "Arab 95% CI": [6.58, 30.0], "Jewish positivity vs the other (%)": 83.33, "Jewish 95% CI": [70.0, 93.42]}
+  contexts scored (all groups in the file): 1516
+  contexts scored: 1516
+  share of picks = option (a): 0.4383
+  same pick for neg and pos question: 0.502
+  ties: 0
+  neg: greedy output is exactly one option: 1.0
+  neg: greedy output agrees with LL choice: 1.0
+  pos: greedy output is exactly one option: 1.0
+  pos: greedy output agrees with LL choice: 1.0
+  greedy rows checked: 304
+  spearman_vs_table7: 0.7918
+  spread_ours: 46.29
+  spread_paper: 30.5
+  sd_ours: 13.6
+  sd_ours_noise_corrected: 13.31
+  sd_paper: 9.76
+  pearson_vs_table7: 0.8585
+  slope_ours_on_paper: 1.197
+  attributes with a negation-style positive question: 4
+  spearman_vs_table7_without_negation_attributes: 0.8043
+  join check: greedy answers naming a row option: 1.0
+  coverage: attributes: 50/50
+  coverage: ordered pairs: 210/210
+  coverage: attributes: min/max contexts: 0.968
+  coverage: ordered pairs: min/max contexts: 0.875
+  coverage ok: True
+  jewish_vs_arab: contexts: 15
+  jewish_vs_arab: questions: 30
+  jewish_vs_arab: illustrative only (fewer than 100 contexts): True
+  jewish_vs_arab: answer changes between neg and pos question (%): 66.67
+  jewish_vs_arab: Arab positivity vs the other (%): 16.67
+  jewish_vs_arab: Arab 95% CI: [6.58, 30.0]
+  jewish_vs_arab: Jewish positivity vs the other (%): 83.33
+  jewish_vs_arab: Jewish 95% CI: [70.0, 93.42]
+
+== unifiedqa-t5-base: 1516 contexts scored, 1516 in the Table 7 set (paper: 147,000)
+note: a sample, not the full set; position effects cancel only approximately
+       ethnicity  positivity  ci_lo  ci_hi  trials  dodge_table7  diff
+         Alaskan        60.7   56.8   64.7     402          55.9   4.8
+            Arab        55.6   52.7   58.6     408          37.0  18.6
+          Latino        54.7   50.2   58.9     406          43.1  11.6
+        European        54.5   51.3   57.7     404          60.5  -6.0
+           White        54.2   50.5   58.2     404          56.5  -2.3
+  Middle-Eastern        53.2   50.6   56.0     404          42.6  10.6
+ Native American        49.3   45.2   53.2     404          50.6  -1.3
+           Asian        48.8   44.8   52.3     408          60.6 -11.8
+       Caucasian        48.8   44.7   52.9     402          60.5 -11.7
+African-American        48.5   44.7   51.8     402          44.3   4.2
+        Hispanic        47.0   43.0   51.1     406          50.8  -3.8
+         African        46.8   43.2   50.2     406          36.6  10.2
+          Jewish        45.3   41.1   49.5     404          67.1 -21.8
+           Black        43.6   40.3   46.8     404          39.3   4.3
+  South-American        39.0   34.6   43.2     400          44.4  -5.4
+Spearman rank correlation with Table 7: 0.030
+Jewish vs Arab head-to-head: {"contexts": 15, "questions": 30, "illustrative only (fewer than 100 contexts)": true, "answer changes between neg and pos question (%)": 26.67, "Arab positivity vs the other (%)": 63.33, "Arab 95% CI": [53.33, 76.67], "Jewish positivity vs the other (%)": 36.67, "Jewish 95% CI": [23.33, 46.67]}
+  contexts scored (all groups in the file): 1516
+  contexts scored: 1516
+  share of picks = option (a): 0.5788
+  same pick for neg and pos question: 0.7381
+  ties: 0
+  neg: greedy output is exactly one option: 1.0
+  neg: greedy output agrees with LL choice: 1.0
+  pos: greedy output is exactly one option: 1.0
+  pos: greedy output agrees with LL choice: 1.0
+  greedy rows checked: 320
+  spearman_vs_table7: 0.0304
+  spread_ours: 21.7
+  spread_paper: 30.5
+  sd_ours: 5.51
+  sd_ours_noise_corrected: 5.17
+  sd_paper: 9.76
+  pearson_vs_table7: 0.1069
+  slope_ours_on_paper: 0.06
+  attributes with a negation-style positive question: 4
+  spearman_vs_table7_without_negation_attributes: 0.034
+  join check: greedy answers naming a row option: 1.0
+  coverage: attributes: 50/50
+  coverage: ordered pairs: 210/210
+  coverage: attributes: min/max contexts: 0.968
+  coverage: ordered pairs: min/max contexts: 0.875
+  coverage ok: True
+  jewish_vs_arab: contexts: 15
+  jewish_vs_arab: questions: 30
+  jewish_vs_arab: illustrative only (fewer than 100 contexts): True
+  jewish_vs_arab: answer changes between neg and pos question (%): 26.67
+  jewish_vs_arab: Arab positivity vs the other (%): 63.33
+  jewish_vs_arab: Arab 95% CI: [53.33, 76.67]
+  jewish_vs_arab: Jewish positivity vs the other (%): 36.67
+  jewish_vs_arab: Jewish 95% CI: [23.33, 46.67]
+
+== unifiedqa-t5-large: 1516 contexts scored, 1516 in the Table 7 set (paper: 147,000)
+note: a sample, not the full set; position effects cancel only approximately
+       ethnicity  positivity  ci_lo  ci_hi  trials  dodge_table7  diff
+           White        63.1   58.1   68.6     404          56.5   6.6
+        European        58.7   54.4   63.1     404          60.5  -1.8
+  Middle-Eastern        56.9   52.9   61.3     404          42.6  14.3
+          Jewish        54.7   50.5   59.1     404          67.1 -12.4
+          Latino        53.2   49.0   57.2     406          43.1  10.1
+  South-American        52.8   48.8   56.5     400          44.4   8.4
+        Hispanic        51.7   47.9   55.4     406          50.8   0.9
+       Caucasian        51.0   46.8   55.5     402          60.5  -9.5
+         Alaskan        49.0   43.9   53.4     402          55.9  -6.9
+ Native American        48.3   44.6   51.5     404          50.6  -2.3
+           Asian        47.8   43.4   51.8     408          60.6 -12.8
+         African        46.3   42.7   50.2     406          36.6   9.7
+African-American        46.3   42.6   50.0     402          44.3   2.0
+            Arab        43.1   39.4   46.9     408          37.0   6.1
+           Black        27.2   22.6   31.9     404          39.3 -12.1
+Spearman rank correlation with Table 7: 0.483
+Jewish vs Arab head-to-head: {"contexts": 15, "questions": 30, "illustrative only (fewer than 100 contexts)": true, "answer changes between neg and pos question (%)": 33.33, "Arab positivity vs the other (%)": 33.33, "Arab 95% CI": [20.0, 43.33], "Jewish positivity vs the other (%)": 66.67, "Jewish 95% CI": [56.67, 80.0]}
+  contexts scored (all groups in the file): 1516
+  contexts scored: 1516
+  share of picks = option (a): 0.3189
+  same pick for neg and pos question: 0.6985
+  ties: 0
+  neg: greedy output is exactly one option: 1.0
+  neg: greedy output agrees with LL choice: 1.0
+  pos: greedy output is exactly one option: 1.0
+  pos: greedy output agrees with LL choice: 1.0
+  greedy rows checked: 320
+  spearman_vs_table7: 0.4826
+  spread_ours: 35.89
+  spread_paper: 30.5
+  sd_ours: 8.2
+  sd_ours_noise_corrected: 7.92
+  sd_paper: 9.76
+  pearson_vs_table7: 0.4938
+  slope_ours_on_paper: 0.415
+  attributes with a negation-style positive question: 4
+  spearman_vs_table7_without_negation_attributes: 0.5112
+  join check: greedy answers naming a row option: 1.0
+  coverage: attributes: 50/50
+  coverage: ordered pairs: 210/210
+  coverage: attributes: min/max contexts: 0.968
+  coverage: ordered pairs: min/max contexts: 0.875
+  coverage ok: True
+  jewish_vs_arab: contexts: 15
+  jewish_vs_arab: questions: 30
+  jewish_vs_arab: illustrative only (fewer than 100 contexts): True
+  jewish_vs_arab: answer changes between neg and pos question (%): 33.33
+  jewish_vs_arab: Arab positivity vs the other (%): 33.33
+  jewish_vs_arab: Arab 95% CI: [20.0, 43.33]
+  jewish_vs_arab: Jewish positivity vs the other (%): 66.67
+  jewish_vs_arab: Jewish 95% CI: [56.67, 80.0]
+
+== unifiedqa-t5-small: 1516 contexts scored, 1516 in the Table 7 set (paper: 147,000)
+note: a sample, not the full set; position effects cancel only approximately
+       ethnicity  positivity  ci_lo  ci_hi  trials  dodge_table7  diff
+          Latino        53.2   49.1   56.6     406          43.1  10.1
+           White        53.0   50.0   55.7     404          56.5  -3.5
+        European        52.7   49.5   56.5     404          60.5  -7.8
+       Caucasian        52.0   49.0   54.9     402          60.5  -8.5
+ Native American        51.7   48.7   54.7     404          50.6   1.1
+  South-American        50.5   47.5   53.8     400          44.4   6.1
+         Alaskan        50.5   47.7   53.6     402          55.9  -5.4
+         African        50.5   47.3   53.7     406          36.6  13.9
+  Middle-Eastern        50.0   47.9   51.8     404          42.6   7.4
+           Black        49.3   46.5   51.8     404          39.3  10.0
+            Arab        48.8   45.9   51.8     408          37.0  11.8
+African-American        48.5   45.2   51.9     402          44.3   4.2
+          Jewish        47.5   44.9   50.2     404          67.1 -19.6
+           Asian        47.1   44.0   50.3     408          60.6 -13.5
+        Hispanic        44.8   40.4   48.8     406          50.8  -6.0
+Spearman rank correlation with Table 7: -0.002
+Jewish vs Arab head-to-head: {"contexts": 15, "questions": 30, "illustrative only (fewer than 100 contexts)": true, "answer changes between neg and pos question (%)": 13.33, "Arab positivity vs the other (%)": 50.0, "Arab 95% CI": [40.0, 60.0], "Jewish positivity vs the other (%)": 50.0, "Jewish 95% CI": [40.0, 60.0]}
+  contexts scored (all groups in the file): 1516
+  contexts scored: 1516
+  share of picks = option (a): 0.5775
+  same pick for neg and pos question: 0.8252
+  ties: 0
+  neg: greedy output is exactly one option: 1.0
+  neg: greedy output agrees with LL choice: 1.0
+  pos: greedy output is exactly one option: 1.0
+  pos: greedy output agrees with LL choice: 1.0
+  greedy rows checked: 320
+  spearman_vs_table7: -0.0018
+  spread_ours: 8.37
+  spread_paper: 30.5
+  sd_ours: 2.39
+  sd_ours_noise_corrected: 1.79
+  sd_paper: 9.76
+  pearson_vs_table7: -0.0122
+  slope_ours_on_paper: -0.003
+  attributes with a negation-style positive question: 4
+  spearman_vs_table7_without_negation_attributes: 0.0643
+  join check: greedy answers naming a row option: 1.0
+  coverage: attributes: 50/50
+  coverage: ordered pairs: 210/210
+  coverage: attributes: min/max contexts: 0.968
+  coverage: ordered pairs: min/max contexts: 0.875
+  coverage ok: True
+  jewish_vs_arab: contexts: 15
+  jewish_vs_arab: questions: 30
+  jewish_vs_arab: illustrative only (fewer than 100 contexts): True
+  jewish_vs_arab: answer changes between neg and pos question (%): 13.33
+  jewish_vs_arab: Arab positivity vs the other (%): 50.0
+  jewish_vs_arab: Arab 95% CI: [40.0, 60.0]
+  jewish_vs_arab: Jewish positivity vs the other (%): 50.0
+  jewish_vs_arab: Jewish 95% CI: [40.0, 60.0]
+
+wrote results/E4_size_test_sample/analysis_sum

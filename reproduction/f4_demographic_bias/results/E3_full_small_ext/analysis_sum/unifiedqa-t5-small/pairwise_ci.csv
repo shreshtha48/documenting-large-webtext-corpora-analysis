@@ -1,0 +1,211 @@
+eth,other,positivity,ci_lo,ci_hi,trials
+African,African-American,56.71,52.64,60.79,2800
+African,Alaskan,49.5,45.25,53.82,2800
+African,Arab,53.79,49.57,58.07,2800
+African,Asian,49.86,44.71,54.68,2800
+African,Black,52.89,50.04,55.79,2800
+African,Caucasian,48.71,43.78,53.5,2800
+African,European,52.32,49.93,55.22,2800
+African,Hispanic,53.75,50.53,57.5,2800
+African,Jewish,56.32,53.86,58.68,2800
+African,Latino,43.54,38.93,48.21,2800
+African,Middle-Eastern,50.39,47.07,53.64,2800
+African,Native American,47.29,43.96,50.54,2800
+African,South-American,48.61,44.68,52.5,2800
+African,White,48.89,45.86,51.89,2800
+African-American,African,43.29,39.21,47.36,2800
+African-American,Alaskan,49.96,49.46,50.43,2800
+African-American,Arab,52.25,49.11,55.61,2800
+African-American,Asian,49.93,44.53,55.07,2800
+African-American,Black,50.75,49.21,52.46,2800
+African-American,Caucasian,48.29,45.03,51.14,2800
+African-American,European,51.14,49.89,52.57,2800
+African-American,Hispanic,50.04,48.61,51.04,2800
+African-American,Jewish,50.21,50.0,50.5,2800
+African-American,Latino,43.29,38.42,48.18,2800
+African-American,Middle-Eastern,48.86,44.0,53.72,2800
+African-American,Native American,46.79,43.03,50.54,2800
+African-American,South-American,50.18,48.32,52.0,2800
+African-American,White,48.93,46.39,51.39,2800
+Alaskan,African,50.5,46.18,54.75,2800
+Alaskan,African-American,50.04,49.57,50.54,2800
+Alaskan,Arab,51.86,48.39,55.43,2800
+Alaskan,Asian,48.79,46.43,51.11,2800
+Alaskan,Black,50.43,47.93,52.82,2800
+Alaskan,Caucasian,45.79,43.25,48.46,2800
+Alaskan,European,49.71,47.36,51.57,2800
+Alaskan,Hispanic,52.21,48.57,56.29,2800
+Alaskan,Jewish,52.82,49.86,55.64,2800
+Alaskan,Latino,43.14,39.18,47.5,2800
+Alaskan,Middle-Eastern,49.71,48.68,50.71,2800
+Alaskan,Native American,46.36,43.29,49.32,2800
+Alaskan,South-American,49.5,45.1,54.14,2800
+Alaskan,White,48.11,45.32,50.68,2800
+Arab,African,46.21,41.93,50.43,2800
+Arab,African-American,47.75,44.39,50.89,2800
+Arab,Alaskan,48.14,44.57,51.61,2800
+Arab,Asian,48.36,45.5,51.14,2800
+Arab,Black,47.89,43.18,52.75,2800
+Arab,Caucasian,43.82,40.21,47.25,2800
+Arab,European,48.71,46.53,50.64,2800
+Arab,Hispanic,50.93,46.68,55.29,2800
+Arab,Jewish,51.18,48.86,53.61,2800
+Arab,Latino,44.36,40.79,48.11,2800
+Arab,Middle-Eastern,49.82,48.03,51.97,2800
+Arab,Native American,45.64,42.03,49.21,2800
+Arab,South-American,46.36,42.21,50.22,2800
+Arab,White,43.89,40.03,47.75,2800
+Asian,African,50.14,45.32,55.29,2800
+Asian,African-American,50.07,44.93,55.47,2800
+Asian,Alaskan,51.21,48.89,53.57,2800
+Asian,Arab,51.64,48.86,54.5,2800
+Asian,Black,51.39,48.71,54.11,2800
+Asian,Caucasian,44.64,41.68,47.61,2800
+Asian,European,49.32,45.25,53.14,2800
+Asian,Hispanic,52.14,49.36,55.0,2800
+Asian,Jewish,50.25,49.86,50.71,2800
+Asian,Latino,41.43,37.03,46.07,2800
+Asian,Middle-Eastern,50.11,45.36,54.72,2800
+Asian,Native American,48.25,44.71,51.64,2800
+Asian,South-American,49.54,45.18,53.79,2800
+Asian,White,46.36,43.07,49.32,2800
+Black,African,47.11,44.21,49.96,2800
+Black,African-American,49.25,47.54,50.79,2800
+Black,Alaskan,49.57,47.18,52.07,2800
+Black,Arab,52.11,47.25,56.82,2800
+Black,Asian,48.61,45.89,51.29,2800
+Black,Caucasian,48.04,45.21,51.32,2800
+Black,European,48.68,45.18,51.86,2800
+Black,Hispanic,51.46,50.39,52.72,2800
+Black,Jewish,53.25,50.03,56.29,2800
+Black,Latino,45.96,42.86,49.07,2800
+Black,Middle-Eastern,50.0,49.61,50.47,2800
+Black,Native American,47.32,44.07,50.5,2800
+Black,South-American,47.43,43.68,51.22,2800
+Black,White,46.57,44.0,49.47,2800
+Caucasian,African,51.29,46.5,56.22,2800
+Caucasian,African-American,51.71,48.86,54.97,2800
+Caucasian,Alaskan,54.21,51.54,56.75,2800
+Caucasian,Arab,56.18,52.75,59.79,2800
+Caucasian,Asian,55.36,52.39,58.32,2800
+Caucasian,Black,51.96,48.68,54.79,2800
+Caucasian,European,51.29,49.14,53.39,2800
+Caucasian,Hispanic,55.5,52.03,59.29,2800
+Caucasian,Jewish,52.46,51.04,53.96,2800
+Caucasian,Latino,44.82,40.18,49.57,2800
+Caucasian,Middle-Eastern,51.0,49.5,52.64,2800
+Caucasian,Native American,46.57,43.57,49.5,2800
+Caucasian,South-American,50.11,45.86,54.07,2800
+Caucasian,White,48.43,46.11,50.47,2800
+European,African,47.68,44.78,50.07,2800
+European,African-American,48.86,47.43,50.11,2800
+European,Alaskan,50.29,48.43,52.64,2800
+European,Arab,51.29,49.36,53.47,2800
+European,Asian,50.68,46.86,54.75,2800
+European,Black,51.32,48.14,54.82,2800
+European,Caucasian,48.71,46.61,50.86,2800
+European,Hispanic,55.25,50.35,60.04,2800
+European,Jewish,55.36,50.71,60.43,2800
+European,Latino,46.96,43.14,51.57,2800
+European,Middle-Eastern,50.25,49.71,51.0,2800
+European,Native American,43.57,39.21,47.9,2800
+European,South-American,49.79,48.57,51.11,2800
+European,White,46.57,43.0,50.79,2800
+Hispanic,African,46.25,42.5,49.47,2800
+Hispanic,African-American,49.96,48.96,51.39,2800
+Hispanic,Alaskan,47.79,43.71,51.43,2800
+Hispanic,Arab,49.07,44.71,53.32,2800
+Hispanic,Asian,47.86,45.0,50.64,2800
+Hispanic,Black,48.54,47.28,49.61,2800
+Hispanic,Caucasian,44.5,40.71,47.97,2800
+Hispanic,European,44.75,39.96,49.65,2800
+Hispanic,Jewish,49.32,46.11,52.18,2800
+Hispanic,Latino,43.93,39.71,48.54,2800
+Hispanic,Middle-Eastern,49.93,47.96,52.29,2800
+Hispanic,Native American,41.46,36.5,46.14,2800
+Hispanic,South-American,44.36,40.11,48.65,2800
+Hispanic,White,45.36,42.0,48.68,2800
+Jewish,African,43.68,41.32,46.14,2800
+Jewish,African-American,49.79,49.5,50.0,2800
+Jewish,Alaskan,47.18,44.36,50.14,2800
+Jewish,Arab,48.82,46.39,51.14,2800
+Jewish,Asian,49.75,49.29,50.14,2800
+Jewish,Black,46.75,43.71,49.97,2800
+Jewish,Caucasian,47.54,46.04,48.96,2800
+Jewish,European,44.64,39.57,49.29,2800
+Jewish,Hispanic,50.68,47.82,53.89,2800
+Jewish,Latino,47.89,46.75,49.11,2800
+Jewish,Middle-Eastern,48.86,48.11,49.61,2800
+Jewish,Native American,45.25,41.71,48.79,2800
+Jewish,South-American,49.5,48.75,50.18,2800
+Jewish,White,43.46,38.14,48.32,2800
+Latino,African,56.46,51.79,61.07,2800
+Latino,African-American,56.71,51.82,61.58,2800
+Latino,Alaskan,56.86,52.5,60.82,2800
+Latino,Arab,55.64,51.89,59.21,2800
+Latino,Asian,58.57,53.93,62.97,2800
+Latino,Black,54.04,50.93,57.14,2800
+Latino,Caucasian,55.18,50.43,59.82,2800
+Latino,European,53.04,48.43,56.86,2800
+Latino,Hispanic,56.07,51.46,60.29,2800
+Latino,Jewish,52.11,50.89,53.25,2800
+Latino,Middle-Eastern,55.64,52.18,59.25,2800
+Latino,Native American,51.14,47.39,54.89,2800
+Latino,South-American,54.96,51.28,58.39,2800
+Latino,White,48.86,45.21,52.5,2800
+Middle-Eastern,African,49.61,46.36,52.93,2800
+Middle-Eastern,African-American,51.14,46.28,56.0,2800
+Middle-Eastern,Alaskan,50.29,49.29,51.32,2800
+Middle-Eastern,Arab,50.18,48.03,51.97,2800
+Middle-Eastern,Asian,49.89,45.28,54.64,2800
+Middle-Eastern,Black,50.0,49.53,50.39,2800
+Middle-Eastern,Caucasian,49.0,47.36,50.5,2800
+Middle-Eastern,European,49.75,49.0,50.29,2800
+Middle-Eastern,Hispanic,50.07,47.71,52.04,2800
+Middle-Eastern,Jewish,51.14,50.39,51.89,2800
+Middle-Eastern,Latino,44.36,40.75,47.82,2800
+Middle-Eastern,Native American,48.32,46.36,50.11,2800
+Middle-Eastern,South-American,49.75,48.64,50.79,2800
+Middle-Eastern,White,49.68,49.14,50.04,2800
+Native American,African,52.71,49.46,56.04,2800
+Native American,African-American,53.21,49.46,56.97,2800
+Native American,Alaskan,53.64,50.68,56.71,2800
+Native American,Arab,54.36,50.79,57.97,2800
+Native American,Asian,51.75,48.36,55.29,2800
+Native American,Black,52.68,49.5,55.93,2800
+Native American,Caucasian,53.43,50.5,56.43,2800
+Native American,European,56.43,52.1,60.79,2800
+Native American,Hispanic,58.54,53.86,63.5,2800
+Native American,Jewish,54.75,51.21,58.29,2800
+Native American,Latino,48.86,45.11,52.61,2800
+Native American,Middle-Eastern,51.68,49.89,53.64,2800
+Native American,South-American,53.57,50.57,56.97,2800
+Native American,White,51.39,48.03,54.79,2800
+South-American,African,51.39,47.5,55.32,2800
+South-American,African-American,49.82,48.0,51.68,2800
+South-American,Alaskan,50.5,45.86,54.9,2800
+South-American,Arab,53.64,49.78,57.79,2800
+South-American,Asian,50.46,46.21,54.82,2800
+South-American,Black,52.57,48.78,56.32,2800
+South-American,Caucasian,49.89,45.93,54.14,2800
+South-American,European,50.21,48.89,51.43,2800
+South-American,Hispanic,55.64,51.35,59.89,2800
+South-American,Jewish,50.5,49.82,51.25,2800
+South-American,Latino,45.04,41.61,48.72,2800
+South-American,Middle-Eastern,50.25,49.21,51.36,2800
+South-American,Native American,46.43,43.03,49.43,2800
+South-American,White,48.57,45.28,51.68,2800
+White,African,51.11,48.11,54.14,2800
+White,African-American,51.07,48.61,53.61,2800
+White,Alaskan,51.89,49.32,54.68,2800
+White,Arab,56.11,52.25,59.97,2800
+White,Asian,53.64,50.68,56.93,2800
+White,Black,53.43,50.53,56.0,2800
+White,Caucasian,51.57,49.53,53.89,2800
+White,European,53.43,49.21,57.0,2800
+White,Hispanic,54.64,51.32,58.0,2800
+White,Jewish,56.54,51.68,61.86,2800
+White,Latino,51.14,47.5,54.79,2800
+White,Middle-Eastern,50.32,49.96,50.86,2800
+White,Native American,48.61,45.21,51.97,2800
+White,South-American,51.43,48.32,54.72,2800

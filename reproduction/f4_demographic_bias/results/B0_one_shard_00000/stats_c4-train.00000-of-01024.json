@@ -1,0 +1,13 @@
+{
+ "shard": "c4-train.00000-of-01024",
+ "documents": 356317,
+ "paragraphs": 3032906,
+ "matched_paragraphs": {
+  "Jewish": 2939,
+  "Arab": 1384
+ },
+ "words_in_matched_paragraphs": {
+  "Jewish": 263507,
+  "Arab": 110786
+ }
+}

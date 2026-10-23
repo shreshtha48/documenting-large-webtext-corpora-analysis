@@ -1,0 +1,56 @@
+{
+ "shards": [
+  "c4-train.00000-of-01024"
+ ],
+ "seed": 0,
+ "targets": {
+  "Jewish": [
+   "Jewish"
+  ],
+  "Arab": [
+   "Arab"
+  ],
+  "Asian": [
+   "Asian"
+  ],
+  "Caucasian": [
+   "Caucasian"
+  ],
+  "European": [
+   "European"
+  ],
+  "White": [
+   "White"
+  ],
+  "Alaskan": [
+   "Alaskan"
+  ],
+  "Hispanic": [
+   "Hispanic"
+  ],
+  "Native American": [
+   "Native American"
+  ],
+  "South-American": [
+   "South-American",
+   "South American"
+  ],
+  "African-American": [
+   "African-American",
+   "African American"
+  ],
+  "Latino": [
+   "Latino"
+  ],
+  "Middle-Eastern": [
+   "Middle-Eastern",
+   "Middle Eastern"
+  ],
+  "Black": [
+   "Black"
+  ],
+  "African": [
+   "African"
+  ]
+ }
+}
