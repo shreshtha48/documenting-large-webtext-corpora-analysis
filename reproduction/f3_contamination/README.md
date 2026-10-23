@@ -7,6 +7,9 @@
 
 The paper matched "exact matches, normalized for capitalization and punctuation".
 
+**Status (2026-10-23):** 6 headline fields reproduced in pattern; see [RESULTS.md](RESULTS.md). The ranking matches the
+paper exactly, and the paper's value is inside our CI for 4 of 6 fields.
+
 **Our method.** We query the free [infini-gram](https://infini-gram.io) API. Its `v4_c4train_llama` index covers
 **all of C4.EN** (364,868,892 documents), so this is a full-corpus check, not a shard sample. A text counts as
 contaminated if it occurs at least once.
