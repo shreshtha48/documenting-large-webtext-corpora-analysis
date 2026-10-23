@@ -88,13 +88,17 @@ python scripts/benchmarks.py 2>&1 | grep -v downloading
     md("""
 ## 4. Query infini-gram, 6 key fields (about 35-40 min)
 
-One request per second; a block (HTTP 403) pauses the run for 10 minutes and continues. Progress is printed every 500
-texts per field.
+One request per second; a block (HTTP 403) pauses the run for 10 minutes and continues; network errors are retried.
+Progress is printed every 50 texts. If the script still exits early, the cell restarts it (up to 3 times) and it
+resumes where it stopped; re-running this cell does the same.
 """),
     code(f"""
 %%bash
 cd {W}
-python scripts/query_infinigram.py --out_dir {OUT} --fields {KEY_FIELDS} --sample 300 --rate 1
+for attempt in 1 2 3; do
+  python scripts/query_infinigram.py --out_dir {OUT} --fields {KEY_FIELDS} --sample 300 --rate 1 && break
+  echo "query run stopped (attempt $attempt); resuming in 60 s"; sleep 60
+done
 """),
     md("## 5. Analysis: Table 2 vs the paper, figure, matched examples, positive control"),
     code(f"""

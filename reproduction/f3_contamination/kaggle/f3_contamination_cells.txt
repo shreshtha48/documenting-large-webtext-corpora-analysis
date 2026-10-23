@@ -278,6 +278,8 @@ def count(query, retries=6, blocks=12):
                 d = json.load(r)
             if "error" in d:
                 return None, d["error"]
+            if "count" not in d:                        # e.g. a gateway error page: retry
+                raise ValueError(f"no count in response: {str(d)[:120]}")
             return int(d["count"]), None
         except urllib.error.HTTPError as e:
             if e.code in (403, 429) and blocks > 0:     # rate-limited: pause, then retry the same query
@@ -287,8 +289,8 @@ def count(query, retries=6, blocks=12):
                 continue
             if e.code not in (500, 502, 503, 504):
                 return None, f"HTTP {e.code}"
-        except (urllib.error.URLError, TimeoutError, ConnectionError, json.JSONDecodeError):
-            pass
+        except Exception as e:                          # network, SSL, truncated or odd responses: retry
+            print(f"  retry after {type(e).__name__}: {str(e)[:100]}", flush=True)
         attempt += 1
         time.sleep(min(60, 2 ** attempt))
     return None, "gave up after retries"
@@ -342,8 +344,8 @@ def main():
                 if res["error"] and res["error"].startswith("HTTP 403"):
                     raise SystemExit("still blocked after repeated pauses; re-run later (finished texts are kept)")
                 out.write(json.dumps(res, ensure_ascii=False) + "\n")
-                if i % 500 == 0:
-                    out.flush()
+                out.flush()                             # every row is kept if the run stops
+                if i % 50 == 0:
                     print(f"  {field}: {i}/{len(todo)} ({(time.time() - t0) / 60:.1f} min)", flush=True)
         res = [json.loads(l) for l in open(path, encoding="utf-8")]
         ok = [r for r in res if r["error"] is None]
@@ -526,13 +528,17 @@ python scripts/benchmarks.py 2>&1 | grep -v downloading
 # ======================= CELL 9 (markdown) =======================
 ## 4. Query infini-gram, 6 key fields (about 35-40 min)
 
-One request per second; a block (HTTP 403) pauses the run for 10 minutes and continues. Progress is printed every 500
-texts per field.
+One request per second; a block (HTTP 403) pauses the run for 10 minutes and continues; network errors are retried.
+Progress is printed every 50 texts. If the script still exits early, the cell restarts it (up to 3 times) and it
+resumes where it stopped; re-running this cell does the same.
 
 # ======================= CELL 10 (code) =======================
 %%bash
 cd /kaggle/working/f3
-python scripts/query_infinigram.py --out_dir /kaggle/working/f3/results/C1_infinigram_key6_300 --fields tifu_short tifu_long xsum lama_trex qnli_sentence qnli_question --sample 300 --rate 1
+for attempt in 1 2 3; do
+  python scripts/query_infinigram.py --out_dir /kaggle/working/f3/results/C1_infinigram_key6_300 --fields tifu_short tifu_long xsum lama_trex qnli_sentence qnli_question --sample 300 --rate 1 && break
+  echo "query run stopped (attempt $attempt); resuming in 60 s"; sleep 60
+done
 
 # ======================= CELL 11 (markdown) =======================
 ## 5. Analysis: Table 2 vs the paper, figure, matched examples, positive control

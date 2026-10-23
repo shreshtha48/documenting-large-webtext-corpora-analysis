@@ -63,6 +63,8 @@ def count(query, retries=6, blocks=12):
                 d = json.load(r)
             if "error" in d:
                 return None, d["error"]
+            if "count" not in d:                        # e.g. a gateway error page: retry
+                raise ValueError(f"no count in response: {str(d)[:120]}")
             return int(d["count"]), None
         except urllib.error.HTTPError as e:
             if e.code in (403, 429) and blocks > 0:     # rate-limited: pause, then retry the same query
@@ -72,8 +74,8 @@ def count(query, retries=6, blocks=12):
                 continue
             if e.code not in (500, 502, 503, 504):
                 return None, f"HTTP {e.code}"
-        except (urllib.error.URLError, TimeoutError, ConnectionError, json.JSONDecodeError):
-            pass
+        except Exception as e:                          # network, SSL, truncated or odd responses: retry
+            print(f"  retry after {type(e).__name__}: {str(e)[:100]}", flush=True)
         attempt += 1
         time.sleep(min(60, 2 ** attempt))
     return None, "gave up after retries"
@@ -127,8 +129,8 @@ def main():
                 if res["error"] and res["error"].startswith("HTTP 403"):
                     raise SystemExit("still blocked after repeated pauses; re-run later (finished texts are kept)")
                 out.write(json.dumps(res, ensure_ascii=False) + "\n")
-                if i % 500 == 0:
-                    out.flush()
+                out.flush()                             # every row is kept if the run stops
+                if i % 50 == 0:
                     print(f"  {field}: {i}/{len(todo)} ({(time.time() - t0) / 60:.1f} min)", flush=True)
         res = [json.loads(l) for l in open(path, encoding="utf-8")]
         ok = [r for r in res if r["error"] is None]
