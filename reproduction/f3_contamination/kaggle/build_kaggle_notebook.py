@@ -15,7 +15,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 SCRIPTS = ["benchmarks.py", "query_infinigram.py", "analyze_contamination.py"]
 W = "/kaggle/working/f3"
-OUT = "/kaggle/working/f3/results/C1_infinigram_500"
+OUT = "/kaggle/working/f3/results/C1_infinigram_key6_300"
+# the paper's headline range: lowest and highest label and input fields, XSum (Table 5) and LAMA T-REx
+KEY_FIELDS = "tifu_short tifu_long xsum lama_trex qnli_sentence qnli_question"
 
 
 def md(text):
@@ -42,8 +44,18 @@ bounds**. A positive control re-finds the paper's own Table 5 XSum examples: 8 o
 other 2 differ only in punctuation), so exact matching recovers roughly 80% of the paper's matches.
 
 **Settings:** Accelerator **None** (no GPU needed), Internet **on**. Then **Save Version -> Save & Run All**; the
-browser can be closed. About 3-4 h: 500 texts per field (all 146 for WNLI), about 11,000 API calls at one per
-second; 95% CIs of roughly ±3 points at the paper's rates. The API blocks
+browser can be closed. About 35-40 min: the 6 fields behind the paper's headline claims, 300 texts each
+(about 1,800 API calls at one per second):
+
+| Field | Paper | Why |
+|---|---|---|
+| TIFU-short / TIFU-long | 24.88% / 1.87% | highest and lowest summary targets |
+| XSum | 15.49% | the paper's worked example (Table 5) |
+| LAMA T-REx | 4.6% | knowledge probes |
+| QNLI sentence / question | 53.6% / 1.8% | highest and lowest inputs |
+
+95% CIs: about ±5 points for the high rates, about ±1.5 for the low ones. Other fields can be added later by
+re-running section 4 with more `--fields` (finished texts are kept). The API blocks
 IPs that query too fast, so please keep `--rate 1`.
 
 When it finishes, download `f3_results.zip` from the Output tab.
@@ -74,7 +86,7 @@ cd {W}
 python scripts/benchmarks.py 2>&1 | grep -v downloading
 """),
     md("""
-## 4. Query infini-gram (about 3-4 h)
+## 4. Query infini-gram, 6 key fields (about 35-40 min)
 
 One request per second; a block (HTTP 403) pauses the run for 10 minutes and continues. Progress is printed every 500
 texts per field.
@@ -82,7 +94,7 @@ texts per field.
     code(f"""
 %%bash
 cd {W}
-python scripts/query_infinigram.py --out_dir {OUT} --sample 500 --rate 1
+python scripts/query_infinigram.py --out_dir {OUT} --fields {KEY_FIELDS} --sample 300 --rate 1
 """),
     md("## 5. Analysis: Table 2 vs the paper, figure, matched examples, positive control"),
     code(f"""
@@ -104,7 +116,7 @@ if os.path.exists(f"{{A}}/fig_table2.png"):
     code(f"""
 %%bash
 cd {W}/results
-zip -qr /kaggle/working/f3_results.zip C1_infinigram_500
+zip -qr /kaggle/working/f3_results.zip C1_infinigram_key6_300
 ls -la /kaggle/working/f3_results.zip
 """),
 ]

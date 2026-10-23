@@ -53,7 +53,8 @@ XSum test file and queries it. All 10 should be found; if they are not, the matc
 
 **Kaggle (recommended):** zip this folder (you can leave out `data/`, which is re-downloaded) and upload it as a
 dataset. Import `kaggle/f3_contamination_kaggle.ipynb`, set Accelerator **None** and Internet **on**, then
-Save & Run All. It takes about 3–4 h at `--sample 500` (CIs of roughly ±3 points).
+Save & Run All. By default it queries the 6 fields behind the paper's headline claims (TIFU-short/long, XSum, LAMA
+T-REx, QNLI sentence/question) at 300 texts each: about 35–40 minutes. Add `--fields` to cover the rest later.
 
 **Smoke test (C0, local, 30 texts per field for 4 fields):** no errors at 1 request per second. The positive control
 found **8 of the paper's 10** Table 5 XSum summaries; the other two differ from C4's copy only in punctuation. So exact
