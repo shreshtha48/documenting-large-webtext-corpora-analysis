@@ -5,7 +5,6 @@ browser closed (up to 12 h), and the CPU-only run uses no GPU quota.
 
 Writes, next to this file:
     f5_excluded_kaggle.ipynb   import into Kaggle (File -> Import Notebook)
-    f5_excluded_cells.txt      the same cells as plain text
 
 Usage: python kaggle/build_kaggle_notebook.py
 """
@@ -126,18 +125,13 @@ def main():
           "metadata": {"kernelspec": {"name": "python3", "display_name": "Python 3", "language": "python"},
                        "language_info": {"name": "python"}},
           "cells": []}
-    lines = []
     for i, (kind, src) in enumerate(CELLS):
         cell = {"cell_type": kind, "metadata": {}, "source": src.splitlines(keepends=True), "id": f"c{i:02d}"}
         if kind == "code":
             cell.update(outputs=[], execution_count=None)
         nb["cells"].append(cell)
-        lines.append(f"# ======================= CELL {i} ({kind}) =======================\n{src}\n")
     with open(os.path.join(HERE, "f5_excluded_kaggle.ipynb"), "w", encoding="utf-8") as f:
         json.dump(nb, f, indent=1, ensure_ascii=False)
-    with open(os.path.join(HERE, "f5_excluded_cells.txt"), "w", encoding="utf-8") as f:
-        f.write("Paste each block into its own Kaggle cell (markdown blocks into markdown cells).\n"
-                "Do not paste the '# ===== CELL' separator lines.\n\n" + "\n".join(lines))
     print(f"wrote {len(CELLS)} cells")
 
 

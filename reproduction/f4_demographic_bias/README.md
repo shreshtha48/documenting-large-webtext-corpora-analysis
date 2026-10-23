@@ -20,9 +20,8 @@ and removing religious words halves the SocialSent gap (3.4). See EXPERIMENTS.md
 |---|---|
 | `EXPERIMENTS.md` | Log of E1–E6: what ran, where, and what worked or failed, and why |
 | `kaggle/f4_arm_a_end_to_end.ipynb` | **The one notebook to run on Kaggle** (File → Import Notebook). Resumable |
-| `kaggle/f4_arm_a_cells.txt` | The same cells as plain text, for copy-paste |
 | `kaggle/build_notebook.py` | Rebuilds both from `scripts/`; run it after editing any script |
-| `colab/f4_arm_b_colab.ipynb`, `colab/f4_arm_b_cells.txt` | **Arm B notebook for Google Colab** (CPU): lexicons → B1 reproduction → optional all-groups extension (B3) |
+| `colab/f4_arm_b_colab.ipynb` | **Arm B notebook for Google Colab** (CPU): lexicons → B1 reproduction → optional all-groups extension (B3) |
 | `colab/build_colab_notebook.py` | Rebuilds the Colab notebook from `scripts/` |
 | `scripts/generate_questions.py` | UnQover question generation (stdlib only, seconds) |
 | `scripts/score_unifiedqa.py` | Log-likelihood of both answer options for every question; resumable chunks |
@@ -38,7 +37,6 @@ and removing religious words halves the SocialSent gap (3.4). See EXPERIMENTS.md
 | `results/B0_one_shard_00000/`, `results/B1_c4_12_shards/` | Arm B reproduction: matching paragraphs, per-shard stats and `analysis/` |
 | `results/B2_ext_all_groups_shard00000/` | Arm B extension: all 15 groups on one shard |
 | `third_party/unqover/` | Vendored `allenai/unqover` @ `3e47969` (Apache-2.0), unmodified, plus our `ethnicity_ext` list |
-| `../paper_figures/plot_fig5_pmi.py` | Figure 5 replication (§5.2, identity PMI vs blocklist) from the one-shard pilot |
 
 ## Running on Kaggle
 
@@ -90,8 +88,7 @@ construction.
 | `table7.csv/.md/.png`, `pairwise_ci.csv`, `by_attr_class.csv`, `diagnostics.json` | The numbers behind the figures |
 
 The paper's §4.3 has only Table 7 and no figure. Its bias-related figure is **Figure 5** (§5.2, identity terms vs the
-blocklist), replicated in `../paper_figures/fig5_pmi_identity_blocklist.png` from the pilot's one shard (384,171 docs).
-Sexual-orientation terms rank highest, as in the paper.
+blocklist), reproduced on 10 shards in `../f5_excluded_data/` (Spearman 0.97 with the paper's bars).
 
 ## Assumptions (not specified by the paper; reported as ours)
 

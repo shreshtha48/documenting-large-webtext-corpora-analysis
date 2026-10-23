@@ -6,8 +6,8 @@ Words". §5 characterises what that removed. This folder reproduces all of §5 o
 - which identity mentions are excluded (§5.2, Fig. 5, Table 6, and the manual check);
 - whose English is excluded (§5.3, dialect removal rates).
 
-**Status:** see [RESULTS.md](RESULTS.md). One shard is analysed locally (S0). The 12-shard run (S1) is the Kaggle
-notebook's main run and has not been run yet.
+**Status:** reproduced on 10 shards (S1, 3.8M documents): Fig. 6 15/50 sexual clusters (paper 16/50), Fig. 5
+Spearman 0.97, AAE removal 35.8% (paper 42%). Details in [RESULTS.md](RESULTS.md).
 
 ## Layout
 
@@ -21,7 +21,8 @@ notebook's main run and has not been run yet.
 | `scripts/analyze_excluded.py` | Fig. 5, Table 6, dialect tables and figure, Fig. 6 clustering, the manual-check sheet |
 | `data/ldnoobw_en_25e679f.txt` | The blocklist C4 used (TFDS v3.0.1) |
 | `data/twitteraae_model/` | Model files from `slanglab/twitteraae` @ `db4d6d1` (MIT); downloaded automatically if missing |
-| `results/S0_noblocklist_shard00000/` | One-shard local run |
+| `results/S0_noblocklist_shard00000/` | One-shard local run (pipeline test) |
+| `results/S1_noblocklist_10_shards/` | Main run: analysis and per-shard stats (counts and samples stay on Google Drive) |
 
 ## Method (with the paper's gaps filled in, and marked as ours)
 

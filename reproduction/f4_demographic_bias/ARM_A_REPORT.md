@@ -108,4 +108,4 @@ scoring error (see the agreement check in §2).
 - Code: `scripts/` (generation, scoring, analysis, summary) and `kaggle/f4_arm_a_end_to_end.ipynb`.
 - Data: `data/questions/` (the paper's 294,000 questions plus an extended set with 5 more groups).
 - Results: `results/E3_full_small_ext/`, `results/E4_size_test_sample/`, `results/experiments_summary.md`.
-- Figure replications: `results/.../table7_paper_layout.png` (Table 7) and `../paper_figures/fig5_pmi_identity_blocklist.png` (Fig. 5, §5.2).
+- Figures: `results/figures_arm_a/` (summary figures with captions) and `results/.../table7_paper_layout.png` (Table 7).

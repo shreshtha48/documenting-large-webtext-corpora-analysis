@@ -2,7 +2,6 @@
 
 Writes, next to this file:
     f5_excluded_colab.ipynb   open in Colab (File -> Upload notebook)
-    f5_excluded_cells.txt     the same cells as plain text, for copy-paste
 
 The scripts are embedded with %%writefile, so the notebook runs the repo's current code. CPU only (free tier).
 Re-run this builder after editing a script.
@@ -197,18 +196,13 @@ def main():
           "metadata": {"kernelspec": {"name": "python3", "display_name": "Python 3", "language": "python"},
                        "language_info": {"name": "python"}, "colab": {"provenance": []}},
           "cells": []}
-    lines = []
     for i, (kind, src) in enumerate(CELLS):
         cell = {"cell_type": kind, "metadata": {}, "source": src.splitlines(keepends=True), "id": f"c{i:02d}"}
         if kind == "code":
             cell.update(outputs=[], execution_count=None)
         nb["cells"].append(cell)
-        lines.append(f"# ======================= CELL {i} ({kind}) =======================\n{src}\n")
     with open(os.path.join(HERE, "f5_excluded_colab.ipynb"), "w", encoding="utf-8") as f:
         json.dump(nb, f, indent=1, ensure_ascii=False)
-    with open(os.path.join(HERE, "f5_excluded_cells.txt"), "w", encoding="utf-8") as f:
-        f.write("Paste each block into its own Colab cell (markdown blocks into text cells).\n"
-                "Do not paste the '# ===== CELL' separator lines.\n\n" + "\n".join(lines))
     print(f"wrote {len(CELLS)} cells")
 
 
