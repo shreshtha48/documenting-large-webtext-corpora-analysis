@@ -4,8 +4,10 @@ Two arms: **A**, the UnifiedQA probe behind Table 7, and **B**, the C4 paragraph
 logged in [EXPERIMENTS.md](EXPERIMENTS.md), including the ones that did not reproduce. Arm A's write-up is
 [ARM_A_REPORT.md](ARM_A_REPORT.md).
 
-**Status:** UnifiedQA-**3B** reproduces Table 7 on a 1,516-context sample (Spearman 0.79; Jewish 65.1 vs paper 67.1,
-Arab 31.4 vs 37.0). Small, base and large do not. The full 147,000-context 3B run (E6) is pending.
+**Status:** UnifiedQA-**3B** on all 294,000 questions (E6) reproduces Table 7's ranking: Spearman 0.84, Jewish 65.7
+vs paper 67.1, Arab 34.6 vs 37.0, both inside our CIs. Black, Latino and European differ by 8–14 points. Small, base
+and large do not reproduce. Summary figures: `results/figures_arm_a/`, made by `scripts/make_figures_arm_a.py`, with
+captions in that folder's README.md.
 Open issue (audit, 2026-10-23): our 3B values are more extreme than the paper's (noise-corrected SD 13.3 vs 9.8);
 E6 will tell. UnifiedQA-11B is untested because it does not fit the free GPU tiers.
 Arm B reproduces on 12 C4 shards, with every paper value inside our 95% CI: SocialSent Jewish 73.4 vs 73.2, Arab 66.2 vs 65.7, gap 7.1 [5.6–8.7] vs 7.5; VADER gap 2.0 vs 2.0.

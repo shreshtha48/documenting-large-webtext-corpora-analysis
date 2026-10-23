@@ -19,7 +19,7 @@ lowercases all inputs). Positivity follows A.7. CIs: bootstrap over the 50 attri
 | E3 | Full run, UnifiedQA-small | Kaggle 2×T4 | extended file, 266,000 contexts (contains the paper's 147,000) | **Did not reproduce.** Spearman −0.01; Jewish 47.4, Arab 47.4; spread 8.0. Answer flips with sentiment in only 18% of contexts | `results/E3_full_small_ext/` |
 | E4 | Size test: small, base, large, 3B | Kaggle 2×T4 | 1-in-97 sample, 1,516 contexts (every pair, both orders, all 50 attributes) | **Only 3B reproduces.** Spearman: small 0.00, base 0.03, large 0.48, **3B 0.79** (Pearson 0.86). 3B: Jewish 65.1 [59.9–70.1], Arab 31.4 [27.6–35.7] | `results/E4_size_test_sample/` |
 | E5 | Answer rule: summed vs per-token-mean log-prob | analysis only | E3, E4 | No change to any conclusion: the largest Spearman change is 0.08 (base, 0.03 → −0.05), and 3B moves 0.79 → 0.81. Rule `sum` is the default | `analysis_mean/` folders |
-| E6 | Full run, UnifiedQA-3B | Kaggle 2×T4 | the paper's 147,000 contexts | **Pending** (notebook section 7, about 3.5–4 h) | `results/E6_full_3b/` once run |
+| E6 | Full run, UnifiedQA-3B | Kaggle 2×T4 | the paper's 147,000 contexts (294,000 questions) | **Reproduces the ranking and both focus groups.** Spearman 0.84 (Pearson 0.87). Jewish 65.7 [62.7–68.8] vs paper 67.1; Arab 34.6 [31.8–37.5] vs paper 37.0. All checks pass (join, full coverage, greedy agreement 99.98–100%). The paper lies outside our CI for 7 of 15 groups; the large gaps are Black 25.2 vs 39.3, Latino 56.0 vs 43.1 and European 68.6 vs 60.5. Head to head, the model puts the negative trait on the Arab person in 84% of 1,400 Jewish–Arab contexts | `results/E6_full_3b/`, figures in `results/figures_arm_a/` |
 | A1 | Audit fixes (analysis only, no new model runs) | laptop CPU | E3, E4 re-analysed | See "Audit fixes" below. No reported E4 number changed. E3's diagnostics now use only its 147,000 Table 7 contexts (flip rate 17.8 → 18.1). **New finding:** 3B is over-dispersed. Its noise-corrected SD is 13.3 vs the paper's 9.8 (slope 1.20), so sampling noise does not explain the 46 vs 30.5 spread | `results/*/analysis_*/` |
 | — | CPU run of base and large on the 1-in-97 sample | laptop CPU | — | Stopped before finishing and moved to GPU (became E4). No results | — |
 
@@ -34,7 +34,14 @@ lowercases all inputs). Positivity follows A.7. CIs: bootstrap over the 50 attri
 3. **The paper never states the model size** (§4.3, A.7 and footnote 19 just say "UnifiedQA"). The size test is our
    evidence that the paper used 3B (11B could not be tested on Kaggle).
 
-## Open discrepancies for 3B (from the E4 sample; re-check after E6)
+## Open discrepancies for 3B (E4 sample; E6 confirms them)
+
+**E6 update:** on the full set, Black (25.2 vs 39.3), Latino (56.0 vs 43.1) and European (68.6 vs 60.5) remain far
+outside our CIs, so sampling noise is ruled out. Our values are also more spread out (noise-corrected SD 12.1 vs 9.8).
+Remaining candidate explanations: a different UnifiedQA size or version in the paper (11B is untested, because it
+does not fit the free tier), or a different decision rule.
+
+### Earlier note (E4 sample)
 
 Outside our 95% CI on the sample: Latino 58.4 vs 43.1, Black 24.5 vs 39.3, European 70.8 vs 60.5, South-American 38.8
 vs 44.4. Candidate reasons, untested: sampling noise at 1,516 contexts, an 11B model in the paper, or a different

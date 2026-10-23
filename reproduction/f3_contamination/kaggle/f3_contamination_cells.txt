@@ -1,0 +1,551 @@
+Paste each block into its own Kaggle cell (markdown blocks into markdown cells).
+Do not paste the '# ===== CELL' separator lines.
+
+# ======================= CELL 0 (markdown) =======================
+# Dodge et al. 2021 §4.2: benchmark texts found in C4.EN (Table 2 / Table 4)
+
+For each benchmark field (XSum summaries, TIFU, LAMA probes, GLUE and BoolQ test inputs) we ask the free
+[infini-gram](https://infini-gram.io) API whether the text occurs in **all of C4.EN** (364,868,892 documents). The
+paper matched texts after normalizing case and punctuation; infini-gram matches exactly, so our rates are **lower
+bounds**. A positive control re-finds the paper's own Table 5 XSum examples: 8 of 10 were found in a local test (the
+other 2 differ only in punctuation), so exact matching recovers roughly 80% of the paper's matches.
+
+**Settings:** Accelerator **None** (no GPU needed), Internet **on**. Then **Save Version -> Save & Run All**; the
+browser can be closed. About 6-7 h: 1,000 texts per field, about 22,000 API calls at one per second. The API blocks
+IPs that query too fast, so please keep `--rate 1`.
+
+When it finishes, download `f3_results.zip` from the Output tab.
+
+# ======================= CELL 1 (markdown) =======================
+## 1. Setup: copy the dataset into a writable folder
+
+# ======================= CELL 2 (code) =======================
+%%bash
+SRC=$(dirname "$(dirname "$(find /kaggle/input -path '*scripts/query_infinigram.py' | head -1)")")
+echo "project folder: $SRC"
+test -n "$SRC" || { echo "attach the f3_contamination dataset (Add Input)"; exit 1; }
+mkdir -p /kaggle/working/f3
+cp -rn "$SRC"/. /kaggle/working/f3/          # -n: never overwrite results already in /kaggle/working
+curl -s -o /dev/null -w "infini-gram API: HTTP %{http_code}\n" -X POST https://api.infini-gram.io/ \
+  -H "Content-Type: application/json" \
+  -d '{"index":"v4_c4train_llama","query_type":"count","query":"Grimsby fought back from two goals down"}'
+
+# ======================= CELL 3 (markdown) =======================
+## 2. Scripts (embedded from the repo, so the notebook runs the current code)
+
+# ======================= CELL 4 (code) =======================
+%%writefile /kaggle/working/f3/scripts/benchmarks.py
+"""Dodge et al. 2021 §4.2 / Table 4: the benchmark texts whose presence in C4.EN is measured.
+
+Each row of Table 4 becomes one "field": a list of texts. This script downloads the sources and writes
+data/benchmarks/<field>.jsonl.gz with one {"id", "text"} per line.
+
+Sources and choices (the paper names the datasets and splits only):
+- LAMA T-REx (34,039 facts; paper 34,014) and Google-RE (5,528; paper 5,528): the paper's "template-generated
+  sentences with a masked token that we fill in". Templates from LAMA's relations.jsonl (T-REx) and LAMA's
+  run_experiments.py (Google-RE), filled with the subject and object labels. Source: dl.fbaipublicfiles.com/LAMA.
+- XSum test summaries (11,334; paper 11,334): EdinburghNLP/xsum.
+- TIFU-short (79,740) and TIFU-long (42,139): the Reddit TIFU post titles and TL;DRs, as the Hugging Face
+  ctr4si/reddit_tifu "short" / "long" configs define them (original casing).
+- WikiBio test targets (72,831; paper 72,831): michaelauli/wiki_bio, the full biography text. ONLY lowercased,
+  tokenized text exists ("-lrb-" for "("), so an exact, case-sensitive index cannot test it fairly. Built only with
+  --wikibio and reported as not comparable.
+- GLUE test inputs: nyu-mll/glue (MNLI: the mismatched test set, 9,847 rows, which matches the paper's count).
+- BoolQ test (3,245; paper 3,245): aps/super_glue "boolq". The paper does not say which field; both the question
+  and the passage are built.
+- AMR-to-text (LDC2017T10) is licensed and not freely available: not built.
+
+Usage: python scripts/benchmarks.py [--wikibio]
+"""
+import argparse, gzip, json, os, re, urllib.request, zipfile
+
+import pandas as pd
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(HERE)
+OUT = os.path.join(ROOT, "data", "benchmarks")
+CACHE = os.path.join(ROOT, "data", "downloads")
+
+LAMA_ZIP = "https://dl.fbaipublicfiles.com/LAMA/data.zip"
+TIFU = "https://huggingface.co/datasets/ctr4si/reddit_tifu/resolve/main/data/tifu_all_tokenized_and_filtered.json.gz"
+WIKIBIO = "https://huggingface.co/datasets/michaelauli/wiki_bio/resolve/main/data/wikipedia-biography-dataset.zip"
+GOOGLE_RE_TEMPLATES = {"place_of_birth": "[X] was born in [Y] .", "date_of_birth": "[X] (born [Y]).",
+                       "place_of_death": "[X] died in [Y] ."}   # LAMA scripts/run_experiments.py
+
+# Table 4 of the paper: field -> (dataset, part, matched, total)
+PAPER = {
+    "lama_trex": ("LAMA T-REx", "label", 1585, 34014), "lama_google_re": ("LAMA Google-RE", "label", 314, 5528),
+    "xsum": ("XSum", "label", 1756, 11334), "tifu_short": ("TIFU-short", "label", 19843, 79740),
+    "tifu_long": ("TIFU-long", "label", 790, 42139), "wikibio": ("WikiBio", "label", 2712, 72831),
+    "boolq": ("BoolQ", "input", 79, 3245), "cola": ("CoLA", "input", 153, 1063),
+    "mnli_hypothesis": ("MNLI hypothesis", "input", 1402, 9847), "mnli_premise": ("MNLI premise", "input", 1494, 9847),
+    "mrpc_sentence1": ("MRPC sentence 1", "input", 46, 1725), "mrpc_sentence2": ("MRPC sentence 2", "input", 46, 1725),
+    "qnli_sentence": ("QNLI sentence", "input", 2931, 5463), "qnli_question": ("QNLI question", "input", 97, 5463),
+    "rte_sentence1": ("RTE sentence 1", "input", 179, 3000), "rte_sentence2": ("RTE sentence 2", "input", 325, 3000),
+    "sst2": ("SST-2", "input", 200, 1821), "stsb_sentence1": ("STS-B sentence 1", "input", 253, 1379),
+    "stsb_sentence2": ("STS-B sentence 2", "input", 256, 1379), "wnli_sentence1": ("WNLI sentence 1", "input", 7, 146),
+    "wnli_sentence2": ("WNLI sentence 2", "input", 3, 146),
+}
+# our extra field (the paper does not say which BoolQ field it used)
+EXTRA = {"boolq_passage": "boolq"}
+GLUE = {"cola": ("cola", "test", ["sentence"]), "mnli": ("mnli", "test_mismatched", ["hypothesis", "premise"]),
+        "mrpc": ("mrpc", "test", ["sentence1", "sentence2"]), "qnli": ("qnli", "test", ["sentence", "question"]),
+        "rte": ("rte", "test", ["sentence1", "sentence2"]), "sst2": ("sst2", "test", ["sentence"]),
+        "stsb": ("stsb", "test", ["sentence1", "sentence2"]), "wnli": ("wnli", "test", ["sentence1", "sentence2"])}
+
+
+def fetch(url, name):
+    os.makedirs(CACHE, exist_ok=True)
+    path = os.path.join(CACHE, name)
+    if not os.path.exists(path):
+        print(f"  downloading {url}", flush=True)
+        urllib.request.urlretrieve(url, path + ".tmp")
+        os.replace(path + ".tmp", path)
+    return path
+
+
+def hf_parquet(dataset, config, split):
+    """A split from the Hugging Face dataset viewer's parquet export."""
+    with urllib.request.urlopen(f"https://datasets-server.huggingface.co/parquet?dataset={dataset}", timeout=60) as r:
+        files = [f for f in json.load(r)["parquet_files"] if f["config"] == config and f["split"] == split]
+    return pd.concat([pd.read_parquet(fetch(f["url"], f"{dataset.replace('/', '_')}_{config}_{split}_{i}.parquet"))
+                      for i, f in enumerate(files)], ignore_index=True)
+
+
+def write(field, texts):
+    os.makedirs(OUT, exist_ok=True)
+    with gzip.open(os.path.join(OUT, f"{field}.jsonl.gz"), "wt", encoding="utf-8") as g:
+        for i, t in enumerate(texts):
+            g.write(json.dumps({"id": i, "text": t}, ensure_ascii=False) + "\n")
+    print(f"{field}: {len(texts)} texts", flush=True)
+
+
+def fill(template, x, y):
+    s = template.replace("[X]", x).replace("[Y]", y)
+    return re.sub(r"\s+([.,;:!?)])", r"\1", s)        # LAMA templates put a space before the final period
+
+
+def lama():
+    z = zipfile.ZipFile(fetch(LAMA_ZIP, "lama_data.zip"))
+    rel = {r["relation"]: r["template"] for r in map(json.loads, z.read("data/relations.jsonl").decode().splitlines())}
+    trex = []
+    for n in sorted(x for x in z.namelist() if "/TREx/" in x and x.endswith(".jsonl")):
+        p = os.path.basename(n)[:-6]
+        trex += [fill(rel[p], d["sub_label"], d["obj_label"]) for d in map(json.loads, z.read(n).decode().splitlines())]
+    write("lama_trex", trex)
+    gre = []
+    for r, t in GOOGLE_RE_TEMPLATES.items():
+        gre += [fill(t, d["sub_label"], d["obj_label"])
+                for d in map(json.loads, z.read(f"data/Google_RE/{r}_test.jsonl").decode().splitlines())]
+    write("lama_google_re", gre)
+
+
+def recase(low, original):
+    """The span of `original` that equals the lowercased `low`, in its original case (None if not found)."""
+    low, o = low.strip(), original or ""
+    if not low or len(o.lower()) != len(o):
+        return None
+    i = o.lower().find(low)
+    return o[i:i + len(low)] if i >= 0 else None
+
+
+def tifu():
+    """As the Hugging Face loader (v1.1.0): summary = trimmed_title (short) or tldr (long); posts with an empty body or
+    summary are skipped, which gives the paper's 79,740 / 42,139. Both summaries are stored lowercased, so each is
+    located in the original title / post body and taken back in its original case (found for 100% of rows)."""
+    short, long_ = [], []
+    with gzip.open(fetch(TIFU, "tifu_all_tokenized_and_filtered.json.gz"), "rt", encoding="utf-8") as f:
+        for line in f:
+            d = json.loads(line)
+            if not (d.get("selftext_without_tldr") or "").strip():
+                continue
+            if d["trimmed_title"].strip():
+                short.append(recase(d["trimmed_title"], d["title"]) or d["trimmed_title"].strip())
+            if (d.get("tldr") or "").strip():
+                long_.append(recase(d["tldr"], d.get("selftext")) or d["tldr"].strip())
+    write("tifu_short", short)
+    write("tifu_long", long_)
+
+
+def wikibio():
+    z = zipfile.ZipFile(fetch(WIKIBIO, "wikipedia-biography-dataset.zip"))
+    base = next(n for n in z.namelist() if n.endswith("test/test.nb")).rsplit("/", 1)[0]
+    nb = [int(x) for x in z.read(f"{base}/test.nb").decode().split()]
+    sents = z.read(f"{base}/test.sent").decode("utf-8").splitlines()
+    out, k = [], 0
+    for n in nb:
+        out.append(" ".join(sents[k:k + n]).strip())
+        k += n
+    write("wikibio", out)
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--wikibio", action="store_true", help="also build WikiBio (334 MB download; lowercased text)")
+    args = ap.parse_args()
+    lama()
+    write("xsum", hf_parquet("EdinburghNLP/xsum", "default", "test")["summary"].str.strip().tolist())
+    tifu()
+    bq = hf_parquet("aps/super_glue", "boolq", "test")
+    write("boolq", bq["question"].str.strip().tolist())
+    write("boolq_passage", bq["passage"].str.strip().tolist())
+    for name, (cfg, split, cols) in GLUE.items():
+        df = hf_parquet("nyu-mll/glue", cfg, split)
+        for c in cols:
+            write(name if len(cols) == 1 else f"{name}_{c}", df[c].str.strip().tolist())
+    if args.wikibio:
+        wikibio()
+
+
+if __name__ == "__main__":
+    main()
+
+# ======================= CELL 5 (code) =======================
+%%writefile /kaggle/working/f3/scripts/query_infinigram.py
+"""Dodge et al. 2021 §4.2: is each benchmark text in C4.EN? Exact-match counts from the infini-gram API.
+
+The infini-gram index "v4_c4train_llama" covers all of C4.EN train (allenai/c4 "en": 364,868,892 documents),
+the corpus the paper measured. A text counts as contaminated if its count is at least 1.
+
+Difference from the paper, which matched "exact matches, normalized for capitalization and punctuation":
+infini-gram matches token sequences exactly, so case and punctuation must agree. Our rates are therefore LOWER
+BOUNDS on the paper's. Two cheap steps narrow the gap:
+- trailing punctuation and quotes are removed before querying (a text that ends "hopes." is then also found where
+  C4 has "hopes!" or "hopes"; anything matching the full text still matches);
+- if a text has no capital letter at all (a lowercased source), a sentence-case variant is also queried.
+Texts whose query fails (e.g. too long for the API) are recorded with their error and left out of the denominator.
+
+Each field is a random sample of --sample texts (seed 0; all texts if fewer), so every rate gets a Wilson CI.
+Results append to <out_dir>/counts_<field>.jsonl, so an interrupted run resumes.
+
+Politeness: the API is a free shared service behind an AWS gateway that answers HTTP 403 when one IP sends too
+many requests (we hit it at ~6 requests/s). So requests go one at a time at --rate per second (default 1), with an
+identifying User-Agent; a 403 / 429 pauses the run for --block_pause seconds and retries the same text, instead of
+recording an error.
+
+Usage:
+    python scripts/query_infinigram.py --out_dir results/C1_infinigram_2000 --sample 2000
+    python scripts/query_infinigram.py --fields xsum cola --sample 0 ...     # 0 = every text
+"""
+import argparse, glob, gzip, json, os, random, re, threading, time
+import urllib.error, urllib.request
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(HERE)
+BENCH = os.path.join(ROOT, "data", "benchmarks")
+API = "https://api.infini-gram.io/"
+INDEX = "v4_c4train_llama"
+TRAIL = re.compile(r"[\s.!?,;:'\"”’)\]]+$")
+UA = "c4-documentation-reproduction (Dodge et al. 2021 Table 2; research use)"
+PACE = {"interval": 1.0, "next": 0.0, "block_pause": 600, "lock": threading.Lock()}
+
+
+def wait_turn():
+    with PACE["lock"]:
+        now = time.time()
+        if now < PACE["next"]:
+            time.sleep(PACE["next"] - now)
+        PACE["next"] = max(now, PACE["next"]) + PACE["interval"]
+
+
+def variants(text):
+    v = TRAIL.sub("", text.strip())
+    out = [v] if v else []
+    if v and not re.search(r"[A-Z]", v):
+        out.append(v[0].upper() + v[1:])
+    return out
+
+
+def count(query, retries=6, blocks=12):
+    body = json.dumps({"index": INDEX, "query_type": "count", "query": query}).encode()
+    attempt = 0
+    while attempt < retries:
+        wait_turn()
+        try:
+            req = urllib.request.Request(API, data=body, headers={"Content-Type": "application/json", "User-Agent": UA})
+            with urllib.request.urlopen(req, timeout=60) as r:
+                d = json.load(r)
+            if "error" in d:
+                return None, d["error"]
+            return int(d["count"]), None
+        except urllib.error.HTTPError as e:
+            if e.code in (403, 429) and blocks > 0:     # rate-limited: pause, then retry the same query
+                blocks -= 1
+                print(f"  HTTP {e.code}: pausing {PACE['block_pause']} s", flush=True)
+                time.sleep(PACE["block_pause"])
+                continue
+            if e.code not in (500, 502, 503, 504):
+                return None, f"HTTP {e.code}"
+        except (urllib.error.URLError, TimeoutError, ConnectionError, json.JSONDecodeError):
+            pass
+        attempt += 1
+        time.sleep(min(60, 2 ** attempt))
+    return None, "gave up after retries"
+
+
+def score(row):
+    counts, err = [], None
+    for q in variants(row["text"]):
+        c, e = count(q)
+        if e:
+            err = e
+            break
+        counts.append(c)
+        if c:
+            break                                   # found: no need to try the other variant
+    return {"id": row["id"], "counts": counts, "matched": bool(any(counts)) if err is None else None,
+            "error": err, "text": row["text"]}
+
+
+def load(field):
+    with gzip.open(os.path.join(BENCH, f"{field}.jsonl.gz"), "rt", encoding="utf-8") as f:
+        return [json.loads(l) for l in f]
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--out_dir", required=True)
+    ap.add_argument("--fields", nargs="*", help="default: every built field")
+    ap.add_argument("--sample", type=int, default=2000, help="texts per field (0 = all)")
+    ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--rate", type=float, default=1.0, help="requests per second (one at a time)")
+    ap.add_argument("--block_pause", type=int, default=600, help="seconds to pause after HTTP 403 / 429")
+    args = ap.parse_args()
+    PACE["interval"], PACE["block_pause"] = 1.0 / args.rate, args.block_pause
+    os.makedirs(args.out_dir, exist_ok=True)
+    fields = args.fields or sorted(os.path.basename(p)[:-9] for p in glob.glob(os.path.join(BENCH, "*.jsonl.gz")))
+    with open(os.path.join(args.out_dir, "config.json"), "w") as f:
+        json.dump({"index": INDEX, "api": API, "sample": args.sample, "seed": args.seed, "fields": fields}, f, indent=1)
+    for field in fields:
+        rows = load(field)
+        if args.sample and len(rows) > args.sample:
+            rows = random.Random(f"{args.seed}-{field}").sample(rows, args.sample)
+        path = os.path.join(args.out_dir, f"counts_{field}.jsonl")
+        done = set()
+        if os.path.exists(path):
+            done = {json.loads(l)["id"] for l in open(path, encoding="utf-8")}
+        todo = [r for r in rows if r["id"] not in done]
+        t0 = time.time()
+        with open(path, "a", encoding="utf-8") as out:
+            for i, res in enumerate(map(score, todo), 1):
+                if res["error"] and res["error"].startswith("HTTP 403"):
+                    raise SystemExit("still blocked after repeated pauses; re-run later (finished texts are kept)")
+                out.write(json.dumps(res, ensure_ascii=False) + "\n")
+                if i % 500 == 0:
+                    out.flush()
+                    print(f"  {field}: {i}/{len(todo)} ({(time.time() - t0) / 60:.1f} min)", flush=True)
+        res = [json.loads(l) for l in open(path, encoding="utf-8")]
+        ok = [r for r in res if r["error"] is None]
+        print(f"{field}: {sum(r['matched'] for r in ok)}/{len(ok)} matched, {len(res) - len(ok)} errors, "
+              f"{time.time() - t0:.0f}s", flush=True)
+
+
+if __name__ == "__main__":
+    main()
+
+# ======================= CELL 6 (code) =======================
+%%writefile /kaggle/working/f3/scripts/analyze_contamination.py
+"""Dodge et al. 2021 §4.2: Table 2 / Table 4 reproduction from query_infinigram.py output.
+
+Writes into --out_dir:
+    table2.csv / table2.md   per field: matched / queried, % with a 95% Wilson CI, the paper's %, difference
+    fig_table2.png           ours (with CI) vs the paper per field, labels and inputs separated as in Table 2
+    examples.md              up to 10 matched texts per label field (the paper's Table 5 shows XSum ones)
+    positive_control.md      the 10 XSum summaries the paper lists in Table 5 as found in C4, located in our XSum
+                             test file by their opening words and queried; all of them should be found
+
+Our rates are lower bounds on the paper's (exact, case- and punctuation-sensitive matching; see
+query_infinigram.py), so "ours below the paper" is expected; "ours above the paper" would be a real discrepancy.
+
+Usage: python scripts/analyze_contamination.py --counts results/C1_infinigram_2000
+"""
+import argparse, glob, gzip, json, math, os, sys
+
+import numpy as np
+import pandas as pd
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+from benchmarks import PAPER  # noqa: E402
+from query_infinigram import BENCH, score  # noqa: E402
+
+# opening words of the paper's Table 5 summaries (enough to find each row in the XSum test set)
+TABLE5_PREFIXES = ["The takeover of Bradford Bulls", "US presidential candidate Donald Trump has given",
+                   "Two men who were sued over the Omagh bomb", "Grimsby fought back from two goals down",
+                   "Doctors say a potential treatment for peanut allergy", "A breast surgeon who intentionally",
+                   "Turkey has bombarded so-called Islamic State", "Peterborough United have signed forward",
+                   "The first major trial to see if losing weight", "Villarreal central defender Eric Bailly"]
+LABELS = {"boolq_passage": ("BoolQ passage (ours)", "input")}
+
+INK, INK2, MUTED, GRID, SURFACE = "#0b0b0b", "#52514e", "#898781", "#e1e0d9", "#fcfcfb"
+C_OURS, C_PAPER = "#2a78d6", "#eb6834"
+
+
+def wilson(k, n, z=1.96):
+    if n == 0:
+        return np.nan, np.nan
+    p = k / n
+    d = 1 + z * z / n
+    c = (p + z * z / (2 * n)) / d
+    h = z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / d
+    return 100 * max(0.0, c - h), 100 * min(1.0, c + h)
+
+
+def md_table(df):
+    lines = ["| " + " | ".join(df.columns) + " |", "|" + "---|" * len(df.columns)]
+    lines += ["| " + " | ".join(str(v) for v in r) + " |" for r in df.itertuples(index=False)]
+    return "\n".join(lines) + "\n"
+
+
+def table(counts_dir):
+    rows, matched = [], {}
+    for p in sorted(glob.glob(os.path.join(counts_dir, "counts_*.jsonl"))):
+        field = os.path.basename(p)[7:-6]
+        res = [json.loads(l) for l in open(p, encoding="utf-8")]
+        ok = [r for r in res if r["error"] is None]
+        k, n = sum(r["matched"] for r in ok), len(ok)
+        lo, hi = wilson(k, n)
+        name, part, pk, pn = PAPER.get(field, (*LABELS.get(field, (field, "input")), None, None))
+        with gzip.open(os.path.join(BENCH, f"{field}.jsonl.gz"), "rt", encoding="utf-8") as f:
+            total = sum(1 for _ in f)
+        rows.append({"field": field, "dataset": name, "part": part, "texts_in_dataset": total, "queried": n,
+                     "errors": len(res) - n, "matched": k, "matched_%": 100 * k / n if n else np.nan,
+                     "ci_lo": lo, "ci_hi": hi, "paper_%": 100 * pk / pn if pk else np.nan,
+                     "paper_matched/total": f"{pk}/{pn}" if pk else ""})
+        matched[field] = [r["text"] for r in ok if r["matched"]]
+    t = pd.DataFrame(rows)
+    t["diff_vs_paper"] = t["matched_%"] - t["paper_%"]
+    order = {f: i for i, f in enumerate(list(PAPER) + list(LABELS))}
+    return t.sort_values("field", key=lambda s: s.map(order).fillna(99)).reset_index(drop=True), matched
+
+
+def figure(t, out, dpi):
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    from matplotlib.lines import Line2D
+    t = t.iloc[::-1].reset_index(drop=True)
+    y = np.arange(len(t))
+    fig, ax = plt.subplots(figsize=(9, 0.38 * len(t) + 1.8), facecolor=SURFACE)
+    ax.set_facecolor(SURFACE)
+    for s in ("top", "right", "left"):
+        ax.spines[s].set_visible(False)
+    ax.spines["bottom"].set_color(GRID)
+    ax.tick_params(colors=INK2, length=0)
+    ax.grid(axis="x", color=GRID, linewidth=0.8)
+    ax.set_axisbelow(True)
+    v = t["matched_%"].to_numpy()
+    ax.errorbar(v, y, xerr=[v - t["ci_lo"], t["ci_hi"] - v], fmt="o", color=C_OURS, ms=6, mec=SURFACE, mew=1.2,
+                ecolor=C_OURS, elinewidth=1.4, capsize=2.5, zorder=3)
+    ax.scatter(t["paper_%"], y, s=46, marker="D", facecolor=SURFACE, edgecolor=C_PAPER, linewidth=1.6, zorder=4)
+    split = [i for i in range(1, len(t)) if t.loc[i, "part"] != t.loc[i - 1, "part"]]
+    for i in split:
+        ax.axhline(i - 0.5, color=MUTED, linewidth=0.8, linestyle=(0, (3, 3)))
+    ax.set_yticks(y, [f"{d}  ({p})" for d, p in zip(t["dataset"], t["part"])], color=INK, fontsize=8.5)
+    ax.set_xlabel("Texts found verbatim in C4.EN (%)", color=INK2)
+    ax.legend(handles=[Line2D([], [], marker="o", color=C_OURS, linestyle="none",
+                              label="ours: infini-gram exact match, all of C4.EN (95% Wilson CI); a lower bound"),
+                       Line2D([], [], marker="D", color=C_PAPER, markerfacecolor=SURFACE, linestyle="none",
+                              label="Dodge et al. 2021, Table 4 (normalized for case and punctuation)")],
+              loc="lower left", bbox_to_anchor=(0, 1.0), ncol=1, frameon=False, fontsize=8.5, labelcolor=INK2)
+    ax.set_title("Table 2 reproduction: benchmark texts found in C4.EN", color=INK, loc="left", fontsize=12, pad=40)
+    fig.tight_layout()
+    fig.savefig(os.path.join(out, "fig_table2.png"), dpi=dpi, facecolor=SURFACE, bbox_inches="tight")
+    plt.close(fig)
+
+
+def positive_control():
+    path = os.path.join(BENCH, "xsum.jsonl.gz")
+    if not os.path.exists(path):
+        return None
+    rows = [json.loads(l) for l in gzip.open(path, "rt", encoding="utf-8")]
+    out = []
+    for pre in TABLE5_PREFIXES:
+        hit = [r for r in rows if r["text"].startswith(pre)]
+        res = score(hit[0]) if hit else None
+        out.append({"table5_summary_starts": pre + " ...", "in_our_xsum_test": bool(hit),
+                    "found_in_c4": None if res is None else res["matched"],
+                    "count": None if res is None else (res["counts"] or [None])[-1]})
+    return pd.DataFrame(out)
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--counts", required=True, help="folder written by query_infinigram.py")
+    ap.add_argument("--out_dir", default=None, help="default: <counts>/analysis")
+    ap.add_argument("--dpi", type=int, default=300)
+    ap.add_argument("--no_control", action="store_true")
+    args = ap.parse_args()
+    out = args.out_dir or os.path.join(args.counts, "analysis")
+    os.makedirs(out, exist_ok=True)
+    t, matched = table(args.counts)
+    t.round(3).to_csv(os.path.join(out, "table2.csv"), index=False)
+    show = t[["dataset", "part", "queried", "errors", "matched", "matched_%", "ci_lo", "ci_hi", "paper_%",
+              "paper_matched/total"]].round(2)
+    with open(os.path.join(out, "table2.md"), "w", encoding="utf-8") as f:
+        f.write("# Table 2 reproduction (exact match in all of C4.EN via infini-gram; lower bounds)\n\n" + md_table(show))
+    figure(t, out, args.dpi)
+    with open(os.path.join(out, "examples.md"), "w", encoding="utf-8") as f:
+        for field in (x for x in matched if t.set_index("field").loc[x, "part"] == "label"):
+            f.write(f"## {field}\n\n" + "".join(f"- {s}\n" for s in matched[field][:10]) + "\n")
+    print(show.to_string(index=False))
+    if not args.no_control:
+        pc = positive_control()
+        if pc is not None:
+            with open(os.path.join(out, "positive_control.md"), "w", encoding="utf-8") as f:
+                f.write("# Positive control: the paper's Table 5 XSum summaries\n\n" + md_table(pc))
+            print("\npositive control (paper Table 5):\n" + pc.to_string(index=False))
+    print(f"\nwrote {out}")
+
+
+if __name__ == "__main__":
+    main()
+
+# ======================= CELL 7 (markdown) =======================
+## 3. Build the benchmark texts (about 5 min, ~250 MB of downloads)
+
+Expected counts match the paper's Table 4: XSum 11,334; TIFU-short 79,740; TIFU-long 42,139; Google-RE 5,528;
+BoolQ 3,245; GLUE test sets as in the paper (T-REx 34,039 vs the paper's 34,014).
+
+# ======================= CELL 8 (code) =======================
+%%bash
+cd /kaggle/working/f3
+python scripts/benchmarks.py 2>&1 | grep -v downloading
+
+# ======================= CELL 9 (markdown) =======================
+## 4. Query infini-gram (about 6-7 h)
+
+One request per second; a block (HTTP 403) pauses the run for 10 minutes and continues. Progress is printed every 500
+texts per field.
+
+# ======================= CELL 10 (code) =======================
+%%bash
+cd /kaggle/working/f3
+python scripts/query_infinigram.py --out_dir /kaggle/working/f3/results/C1_infinigram_1000 --sample 1000 --rate 1
+
+# ======================= CELL 11 (markdown) =======================
+## 5. Analysis: Table 2 vs the paper, figure, matched examples, positive control
+
+# ======================= CELL 12 (code) =======================
+%%bash
+cd /kaggle/working/f3
+python scripts/analyze_contamination.py --counts /kaggle/working/f3/results/C1_infinigram_1000
+
+# ======================= CELL 13 (code) =======================
+import os
+from IPython.display import Image, Markdown, display
+A = "/kaggle/working/f3/results/C1_infinigram_1000/analysis"
+for f in ("table2.md", "positive_control.md"):
+    p = f"{A}/{f}"
+    display(Markdown(open(p).read()) if os.path.exists(p) else Markdown(f"missing: {p}"))
+if os.path.exists(f"{A}/fig_table2.png"):
+    display(Image(f"{A}/fig_table2.png", width=900))
+
+# ======================= CELL 14 (markdown) =======================
+## 6. Download
+
+# ======================= CELL 15 (code) =======================
+%%bash
+cd /kaggle/working/f3/results
+zip -qr /kaggle/working/f3_results.zip C1_infinigram_1000
+ls -la /kaggle/working/f3_results.zip

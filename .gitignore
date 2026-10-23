@@ -23,9 +23,15 @@ Thumbs.db
 reproduction/**/results/
 reproduction/paper_figures/*.png
 logs_*.txt
+# ...except F4 (§4.3), whose runs are final: scores, analyses, figures, Kaggle logs
+!reproduction/f4_demographic_bias/results/
+!reproduction/f4_demographic_bias/results/**/logs/logs_*.txt
 
 # Upload bundles for Colab / Kaggle (rebuilt from the folders)
 *.zip
 
 # Downloaded at run time from slanglab/twitteraae (pinned commit, see scripts/dialect.py)
 reproduction/f5_excluded_data/data/twitteraae_model/
+
+# Contamination (f3): downloaded benchmark sources and built text files (rebuilt by scripts/benchmarks.py)
+reproduction/f3_contamination/data/
