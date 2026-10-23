@@ -22,7 +22,7 @@ English stop words, min_df=5, sublinear tf; documents truncated to 20,000 charac
 Usage:
     python scripts/analyze_excluded.py --scan results/S1_noblocklist_12_shards --out_dir results/S1_noblocklist_12_shards/analysis
 """
-import argparse, glob, gzip, json, os, random
+import argparse, glob, gzip, json, os, random, time
 
 import numpy as np
 import pandas as pd
@@ -231,41 +231,10 @@ def inspection_sheet(scan_dir, out, seed, n=50):
 
 # ---------- §5.1: clustering (Fig. 6) ----------
 
-def clusters(scan_dir, out, args, plt):
-    from sklearn.cluster import KMeans
+def fig6(X, labels, top5, sexual, summ_row, n_docs, seed, out, args, rng, plt):
+    """Fig. 6: t-SNE of a 50-d SVD projection of --tsne_n docs, coloured by one k-means run's clusters."""
     from sklearn.decomposition import TruncatedSVD
-    from sklearn.feature_extraction.text import TfidfVectorizer
     from sklearn.manifold import TSNE
-    docs = []
-    for p in sorted(glob.glob(os.path.join(scan_dir, "excluded_sample_*.jsonl.gz"))):
-        docs += [json.loads(l)["text"][:20000] for l in gzip.open(p, "rt", encoding="utf-8")]
-    rng = random.Random(args.seed)
-    docs = rng.sample(docs, min(args.n_cluster_docs, len(docs)))
-    print(f"clustering {len(docs):,} excluded documents (paper: 100,000)", flush=True)
-    vec = TfidfVectorizer(max_features=50000, stop_words="english", min_df=5, sublinear_tf=True)
-    X = vec.fit_transform(docs)
-    terms = np.array(vec.get_feature_names_out())
-    bad = {w.strip() for w in open(BADWORDS, encoding="utf-8") if w.strip() and " " not in w.strip()}
-    rows, labels0 = [], None
-    for s in args.cluster_seeds:
-        km = KMeans(n_clusters=args.k, n_init=1, random_state=s).fit(X)
-        size = np.bincount(km.labels_, minlength=args.k)
-        for k in range(args.k):
-            top = terms[np.argsort(-km.cluster_centers_[k])[:10]]
-            rows.append({"seed": s, "cluster": k, "docs": int(size[k]), "share_%": 100 * size[k] / len(docs),
-                         "top10": " ".join(top), "blocklist_words_in_top10": int(sum(t in bad for t in top)),
-                         "auto_sexual": bool(sum(t in bad for t in top) >= 2), "manual_label": ""})
-        if labels0 is None:
-            labels0, top5 = km.labels_, [" ".join(r["top10"].split()[:5]) for r in rows[-args.k:]]
-        print(f"  seed {s}: {sum(r['auto_sexual'] for r in rows[-args.k:])} sexual clusters "
-              f"({sum(r['share_%'] for r in rows[-args.k:] if r['auto_sexual']):.1f}% of docs)", flush=True)
-    cl = pd.DataFrame(rows)
-    cl.round(3).to_csv(os.path.join(out, "clusters.csv"), index=False)
-    summ = pd.DataFrame([{"seed": s, "sexual_clusters": int(g["auto_sexual"].sum()),
-                          "sexual_share_%": g.loc[g["auto_sexual"], "share_%"].sum()}
-                         for s, g in cl.groupby("seed")]).set_index("seed")
-
-    # Fig. 6: t-SNE of a 50-d SVD projection, 5,000 docs, coloured by the first seed's clusters
     idx = np.array(sorted(rng.sample(range(X.shape[0]), min(args.tsne_n, X.shape[0]))))
     Z = TruncatedSVD(50, random_state=0).fit_transform(X[idx])
     E = TSNE(2, init="pca", random_state=0, perplexity=30).fit_transform(Z)
@@ -274,24 +243,64 @@ def clusters(scan_dir, out, args, plt):
     fig, ax = plt.subplots(figsize=(15, 8.5), facecolor=SURFACE)
     ax.set_facecolor(SURFACE)
     for k in range(args.k):
-        m = labels0[idx] == k
+        m = labels[idx] == k
         ax.scatter(E[m, 0], E[m, 1], s=7, color=cmap[k % 60], marker=markers[k % len(markers)], linewidths=0,
-                   label=top5[k] + ("  [sexual]" if cl.loc[(cl.seed == args.cluster_seeds[0]) & (cl.cluster == k),
-                                                          "auto_sexual"].iloc[0] else ""))
+                   label=top5[k] + ("  [sexual]" if sexual[k] else ""))
     ax.set_xticks([]); ax.set_yticks([])
-    for s in ax.spines.values():
-        s.set_color(GRID)
+    for sp in ax.spines.values():
+        sp.set_color(GRID)
     ax.legend(loc="center left", bbox_to_anchor=(1.01, 0.5), fontsize=6.3, markerscale=2, frameon=False,
               labelcolor=INK2, ncol=1)
-    first = summ.iloc[0]
-    ax.set_title(f"Figure 6 reproduction: k-means (k={args.k}) of {len(docs):,} excluded documents, TF-IDF; "
-                 f"t-SNE of {len(idx):,} shown\nAuto-labelled sexual clusters (seed {args.cluster_seeds[0]}): "
-                 f"{int(first['sexual_clusters'])} of {args.k}, {first['sexual_share_%']:.0f}% of documents "
+    ax.set_title(f"Figure 6 reproduction: k-means (k={args.k}) of {n_docs:,} excluded documents, TF-IDF; "
+                 f"t-SNE of {len(idx):,} shown\nAuto-labelled sexual clusters (seed {seed}): "
+                 f"{int(summ_row['sexual_clusters'])} of {args.k}, {summ_row['sexual_share_%']:.0f}% of documents "
                  f"(paper, by hand: 16 of 50, 31%)", color=INK, loc="left", fontsize=11)
     fig.tight_layout()
     fig.savefig(os.path.join(out, "fig6_clusters.png"), dpi=args.dpi, facecolor=SURFACE, bbox_inches="tight")
     plt.close(fig)
-    return summ.reset_index(), len(docs)
+
+
+def clusters(scan_dir, out, args, plt):
+    """k-means over the excluded sample, one run per --cluster_seeds. clusters.csv is rewritten after every seed
+    and Fig. 6 is drawn right after the first, so a session that stops later keeps both."""
+    from sklearn.cluster import KMeans
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    docs = []
+    for p in sorted(glob.glob(os.path.join(scan_dir, "excluded_sample_*.jsonl.gz"))):
+        docs += [json.loads(l)["text"][:20000] for l in gzip.open(p, "rt", encoding="utf-8")]
+    rng = random.Random(args.seed)
+    docs = rng.sample(docs, min(args.n_cluster_docs, len(docs)))
+    n_docs = len(docs)
+    print(f"clustering {n_docs:,} excluded documents (paper: 100,000): TF-IDF ...", flush=True)
+    vec = TfidfVectorizer(max_features=50000, stop_words="english", min_df=5, sublinear_tf=True)
+    X = vec.fit_transform(docs)
+    del docs                                                   # the raw text is no longer needed
+    terms = np.array(vec.get_feature_names_out())
+    bad = {w.strip() for w in open(BADWORDS, encoding="utf-8") if w.strip() and " " not in w.strip()}
+    rows, summ = [], []
+    for i, s in enumerate(args.cluster_seeds):
+        t0 = time.time()
+        print(f"  k-means seed {s} ({i + 1}/{len(args.cluster_seeds)}), about 10 min on 2 CPUs ...", flush=True)
+        km = KMeans(n_clusters=args.k, n_init=1, random_state=s).fit(X)
+        size = np.bincount(km.labels_, minlength=args.k)
+        run = []
+        for k in range(args.k):
+            top = terms[np.argsort(-km.cluster_centers_[k])[:10]]
+            run.append({"seed": s, "cluster": k, "docs": int(size[k]), "share_%": 100 * size[k] / n_docs,
+                        "top10": " ".join(top), "blocklist_words_in_top10": int(sum(t in bad for t in top)),
+                        "auto_sexual": bool(sum(t in bad for t in top) >= 2), "manual_label": ""})
+        rows += run
+        summ.append({"seed": s, "sexual_clusters": sum(r["auto_sexual"] for r in run),
+                     "sexual_share_%": sum(r["share_%"] for r in run if r["auto_sexual"])})
+        pd.DataFrame(rows).round(3).to_csv(os.path.join(out, "clusters.csv"), index=False)
+        print(f"  seed {s}: {summ[-1]['sexual_clusters']} sexual clusters ({summ[-1]['sexual_share_%']:.1f}% of docs), "
+              f"{(time.time() - t0) / 60:.0f} min; clusters.csv saved", flush=True)
+        if i == 0:
+            print("  drawing Fig. 6 (t-SNE of 5,000 docs) ...", flush=True)
+            fig6(X, km.labels_, [" ".join(r["top10"].split()[:5]) for r in run], [r["auto_sexual"] for r in run],
+                 summ[-1], n_docs, s, out, args, rng, plt)
+            print("  fig6_clusters.png saved", flush=True)
+    return pd.DataFrame(summ), n_docs
 
 
 def main():
@@ -301,10 +310,13 @@ def main():
     ap.add_argument("--B", type=int, default=200)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--k", type=int, default=50)
-    ap.add_argument("--cluster_seeds", type=int, nargs="+", default=[0, 1, 2])
+    ap.add_argument("--cluster_seeds", type=int, nargs="+", default=[0],
+                    help="one k-means run as in the paper; e.g. 0 1 2 adds a seed-robustness check")
     ap.add_argument("--n_cluster_docs", type=int, default=100000)
     ap.add_argument("--tsne_n", type=int, default=5000)
     ap.add_argument("--skip_clusters", action="store_true")
+    ap.add_argument("--clusters_only", action="store_true",
+                    help="only §5.1 (Fig. 6, clusters.csv, clusters_summary.md); keep the other outputs as they are")
     ap.add_argument("--dpi", type=int, default=300)
     args = ap.parse_args()
     import sys
@@ -313,6 +325,14 @@ def main():
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+
+    if args.clusters_only:
+        clu, n_clu = clusters(args.scan, args.out_dir, args, plt)
+        with open(os.path.join(args.out_dir, "clusters_summary.md"), "w", encoding="utf-8") as f:
+            f.write(f"# §5.1 clusters ({n_clu:,} docs, k={args.k}; paper: 16 sexual clusters, 31%)\n\n"
+                    + md_table(clu.round(1)))
+        print(open(os.path.join(args.out_dir, "clusters_summary.md"), encoding="utf-8").read())
+        return
 
     df, columns, stats = load_counts(args.scan)
     n_docs, n_ex = int(df["docs"].sum()), int(df["excluded"].sum())

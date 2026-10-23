@@ -94,21 +94,35 @@ print("working folder:", os.getcwd(), "| blocklist present:", os.path.exists("da
 Re-run this cell after a timeout: finished shards are skipped. Each line reports the share excluded (about 7% expected)
 and how often the fast dialect inference agrees with the exact one (expected above 99%).
 """),
-    code(f"""
+    code("""
 from google.colab import drive
 drive.mount("/content/drive")
 OUT = "/content/drive/MyDrive/f5_S1_noblocklist_12_shards"
+"""),
+    code(f"""
 %cd {W}
 !python scripts/scan_noblocklist.py --n 12 --seed 0 --workers 2 --cache_dir /content/hf_cache --out_dir "$OUT"
 """),
     md("""
 ## 4. Analysis: Fig. 5 + Table 6, §5.3 dialects, Fig. 6 clusters
 
-About 10-20 minutes, most of it k-means (three seeds) and t-SNE. `--skip_clusters` leaves out §5.1.
+About 20-30 minutes on free Colab. Fig. 5, Table 6, the dialect results and the inspection sheet are saved first;
+then one k-means run (as in the paper; about 10 min), after which `clusters.csv` and `fig6_clusters.png` are saved
+straight away. Progress is printed at each step.
 """),
     code(f"""
 %cd {W}
 !python scripts/analyze_excluded.py --scan "$OUT" --out_dir "$OUT/analysis"
+"""),
+    md("""
+**If the session dropped during clustering:** the other outputs are already on Drive. After reconnecting, run
+section 1 (upload the zip), the `pip` cell, the section 2 script cells and the Drive cell at the top of section 3
+(not the scan), then only this cell. It redoes just §5.1. Add `--cluster_seeds 0 1 2` for the optional
+seed-robustness check (about 10 more minutes per seed).
+"""),
+    code(f"""
+%cd {W}
+!python scripts/analyze_excluded.py --scan "$OUT" --out_dir "$OUT/analysis" --clusters_only
 """),
     md("## 5. Results"),
     code("""
