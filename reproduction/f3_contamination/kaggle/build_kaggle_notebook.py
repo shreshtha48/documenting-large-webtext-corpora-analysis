@@ -52,7 +52,7 @@ When it finishes, download `f3_results.zip` from the Output tab.
 %%bash
 SRC=$(dirname "$(dirname "$(find /kaggle/input -path '*scripts/query_infinigram.py' | head -1)")")
 echo "project folder: $SRC"
-test -n "$SRC" || {{ echo "attach the f3_contamination dataset (Add Input)"; exit 1; }}
+test -f "$SRC/scripts/query_infinigram.py" || {{ echo "attach the f3_contamination dataset (Add Input)"; exit 1; }}
 mkdir -p {W}
 cp -rn "$SRC"/. {W}/          # -n: never overwrite results already in /kaggle/working
 curl -s -o /dev/null -w "infini-gram API: HTTP %{{http_code}}\\n" -X POST https://api.infini-gram.io/ \\
