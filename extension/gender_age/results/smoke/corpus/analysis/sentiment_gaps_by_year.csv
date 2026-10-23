@@ -1,0 +1,301 @@
+year,lexicon,female,male,gap,ci_lo,ci_hi
+<=2009,SocialSent,women,men,-24.47,-39.53,-11.99
+<=2009,SocialSent,female,male,-0.77,-49.85,58.87
+<=2009,SocialSent,girl,boy,7.54,-14.78,25.36
+<=2009,SocialSent,lady,gentleman,14.86,-42.2,77.99
+<=2009,SocialSent,mother,father,14.29,-14.06,49.23
+<=2009,SocialSent,wife,husband,-17.86,-61.43,15.17
+<=2009,SocialSent,daughter,son,-9.21,-46.6,20.23
+<=2009,SocialSent,she/her,he/him,1.52,-6.35,7.3
+<=2009,SocialSent,teen girl,teen boy,,,
+<=2009,SocialSent,little girl,little boy,50.0,50.0,50.0
+<=2009,SocialSent,young woman,young man,-100.0,-100.0,-100.0
+<=2009,SocialSent,middle-aged woman,middle-aged man,,,
+<=2009,SocialSent,old woman,old man,-50.0,-50.0,-50.0
+<=2009,SocialSent,Jewish women,Jewish men,,,
+<=2009,SocialSent,Arab women,Arab men,,,
+<=2009,SocialSent,Black women,Black men,,,
+<=2009,SocialSent,White women,White men,,,
+<=2009,SocialSent,Asian women,Asian men,,,
+<=2009,SocialSent,Hispanic women,Hispanic men,,,
+<=2009,SocialSent,Latina/o women,Latina/o men,,,
+<=2009,SocialSent,African American women,African American men,,,
+<=2009,SocialSent,Indian women,Indian men,,,
+<=2009,SocialSent,European women,European men,,,
+<=2009,SocialSent,Chinese women,Chinese men,,,
+<=2009,SocialSent,Muslim women,Muslim men,,,
+<=2009,VADER,women,men,-14.57,-24.01,-4.19
+<=2009,VADER,female,male,-2.3,-25.3,25.09
+<=2009,VADER,girl,boy,0.15,-21.2,11.66
+<=2009,VADER,lady,gentleman,-0.53,-32.39,22.59
+<=2009,VADER,mother,father,4.1,-5.79,12.73
+<=2009,VADER,wife,husband,-10.3,-51.87,6.44
+<=2009,VADER,daughter,son,6.79,-11.41,23.43
+<=2009,VADER,she/her,he/him,7.97,2.11,12.86
+<=2009,VADER,teen girl,teen boy,,,
+<=2009,VADER,little girl,little boy,50.0,50.0,50.0
+<=2009,VADER,young woman,young man,0.0,-33.23,46.33
+<=2009,VADER,middle-aged woman,middle-aged man,,,
+<=2009,VADER,old woman,old man,-14.55,-66.67,0.28
+<=2009,VADER,Jewish women,Jewish men,,,
+<=2009,VADER,Arab women,Arab men,,,
+<=2009,VADER,Black women,Black men,,,
+<=2009,VADER,White women,White men,,,
+<=2009,VADER,Asian women,Asian men,,,
+<=2009,VADER,Hispanic women,Hispanic men,,,
+<=2009,VADER,Latina/o women,Latina/o men,,,
+<=2009,VADER,African American women,African American men,,,
+<=2009,VADER,Indian women,Indian men,,,
+<=2009,VADER,European women,European men,,,
+<=2009,VADER,Chinese women,Chinese men,,,
+<=2009,VADER,Muslim women,Muslim men,,,
+2010-12,SocialSent,women,men,-10.73,-25.62,2.76
+2010-12,SocialSent,female,male,-36.19,-68.33,0.0
+2010-12,SocialSent,girl,boy,-13.67,-31.73,-2.0
+2010-12,SocialSent,lady,gentleman,-14.29,-26.35,-3.61
+2010-12,SocialSent,mother,father,9.1,-14.04,25.92
+2010-12,SocialSent,wife,husband,-4.39,-27.17,13.54
+2010-12,SocialSent,daughter,son,24.62,5.46,40.36
+2010-12,SocialSent,she/her,he/him,5.08,-0.33,9.04
+2010-12,SocialSent,teen girl,teen boy,,,
+2010-12,SocialSent,little girl,little boy,,,
+2010-12,SocialSent,young woman,young man,-55.56,-100.0,-50.0
+2010-12,SocialSent,middle-aged woman,middle-aged man,,,
+2010-12,SocialSent,old woman,old man,,,
+2010-12,SocialSent,Jewish women,Jewish men,,,
+2010-12,SocialSent,Arab women,Arab men,,,
+2010-12,SocialSent,Black women,Black men,-33.33,-33.33,-33.33
+2010-12,SocialSent,White women,White men,,,
+2010-12,SocialSent,Asian women,Asian men,,,
+2010-12,SocialSent,Hispanic women,Hispanic men,,,
+2010-12,SocialSent,Latina/o women,Latina/o men,,,
+2010-12,SocialSent,African American women,African American men,,,
+2010-12,SocialSent,Indian women,Indian men,,,
+2010-12,SocialSent,European women,European men,,,
+2010-12,SocialSent,Chinese women,Chinese men,,,
+2010-12,SocialSent,Muslim women,Muslim men,,,
+2010-12,VADER,women,men,7.59,-4.37,19.58
+2010-12,VADER,female,male,-11.51,-25.93,-1.82
+2010-12,VADER,girl,boy,-8.41,-19.28,-0.43
+2010-12,VADER,lady,gentleman,8.99,4.01,19.47
+2010-12,VADER,mother,father,7.33,-4.32,16.52
+2010-12,VADER,wife,husband,1.39,-18.22,13.35
+2010-12,VADER,daughter,son,10.1,-21.87,23.51
+2010-12,VADER,she/her,he/him,5.74,2.0,9.5
+2010-12,VADER,teen girl,teen boy,,,
+2010-12,VADER,little girl,little boy,,,
+2010-12,VADER,young woman,young man,-60.98,-100.0,-34.51
+2010-12,VADER,middle-aged woman,middle-aged man,,,
+2010-12,VADER,old woman,old man,,,
+2010-12,VADER,Jewish women,Jewish men,,,
+2010-12,VADER,Arab women,Arab men,,,
+2010-12,VADER,Black women,Black men,4.17,4.17,4.17
+2010-12,VADER,White women,White men,47.37,28.57,58.33
+2010-12,VADER,Asian women,Asian men,,,
+2010-12,VADER,Hispanic women,Hispanic men,,,
+2010-12,VADER,Latina/o women,Latina/o men,,,
+2010-12,VADER,African American women,African American men,,,
+2010-12,VADER,Indian women,Indian men,,,
+2010-12,VADER,European women,European men,,,
+2010-12,VADER,Chinese women,Chinese men,,,
+2010-12,VADER,Muslim women,Muslim men,,,
+2013-15,SocialSent,women,men,-4.85,-14.43,2.88
+2013-15,SocialSent,female,male,-2.95,-31.0,7.33
+2013-15,SocialSent,girl,boy,-3.34,-14.62,13.99
+2013-15,SocialSent,lady,gentleman,14.8,-13.79,27.78
+2013-15,SocialSent,mother,father,4.19,-9.65,14.59
+2013-15,SocialSent,wife,husband,-0.99,-15.76,10.91
+2013-15,SocialSent,daughter,son,2.6,-10.7,19.42
+2013-15,SocialSent,she/her,he/him,1.14,-1.88,6.23
+2013-15,SocialSent,teen girl,teen boy,,,
+2013-15,SocialSent,little girl,little boy,,,
+2013-15,SocialSent,young woman,young man,23.5,-5.37,67.65
+2013-15,SocialSent,middle-aged woman,middle-aged man,,,
+2013-15,SocialSent,old woman,old man,15.0,-10.0,56.67
+2013-15,SocialSent,Jewish women,Jewish men,,,
+2013-15,SocialSent,Arab women,Arab men,,,
+2013-15,SocialSent,Black women,Black men,,,
+2013-15,SocialSent,White women,White men,,,
+2013-15,SocialSent,Asian women,Asian men,,,
+2013-15,SocialSent,Hispanic women,Hispanic men,,,
+2013-15,SocialSent,Latina/o women,Latina/o men,,,
+2013-15,SocialSent,African American women,African American men,,,
+2013-15,SocialSent,Indian women,Indian men,,,
+2013-15,SocialSent,European women,European men,,,
+2013-15,SocialSent,Chinese women,Chinese men,,,
+2013-15,SocialSent,Muslim women,Muslim men,,,
+2013-15,VADER,women,men,7.96,-1.49,21.8
+2013-15,VADER,female,male,9.14,-11.75,20.74
+2013-15,VADER,girl,boy,2.24,-10.14,12.87
+2013-15,VADER,lady,gentleman,-10.19,-20.69,13.39
+2013-15,VADER,mother,father,2.31,-6.31,9.13
+2013-15,VADER,wife,husband,5.42,-8.09,15.02
+2013-15,VADER,daughter,son,-2.09,-12.8,15.58
+2013-15,VADER,she/her,he/him,2.91,0.18,7.0
+2013-15,VADER,teen girl,teen boy,,,
+2013-15,VADER,little girl,little boy,,,
+2013-15,VADER,young woman,young man,4.64,-22.78,36.77
+2013-15,VADER,middle-aged woman,middle-aged man,,,
+2013-15,VADER,old woman,old man,-3.59,-19.6,14.3
+2013-15,VADER,Jewish women,Jewish men,,,
+2013-15,VADER,Arab women,Arab men,,,
+2013-15,VADER,Black women,Black men,,,
+2013-15,VADER,White women,White men,,,
+2013-15,VADER,Asian women,Asian men,,,
+2013-15,VADER,Hispanic women,Hispanic men,,,
+2013-15,VADER,Latina/o women,Latina/o men,,,
+2013-15,VADER,African American women,African American men,,,
+2013-15,VADER,Indian women,Indian men,,,
+2013-15,VADER,European women,European men,,,
+2013-15,VADER,Chinese women,Chinese men,,,
+2013-15,VADER,Muslim women,Muslim men,,,
+2016-17,SocialSent,women,men,4.33,-7.66,15.96
+2016-17,SocialSent,female,male,16.67,-37.8,78.12
+2016-17,SocialSent,girl,boy,8.26,-13.08,30.23
+2016-17,SocialSent,lady,gentleman,49.17,39.39,61.68
+2016-17,SocialSent,mother,father,-2.52,-20.08,6.6
+2016-17,SocialSent,wife,husband,8.29,-6.76,22.02
+2016-17,SocialSent,daughter,son,-3.24,-31.09,24.99
+2016-17,SocialSent,she/her,he/him,6.24,-0.53,11.88
+2016-17,SocialSent,teen girl,teen boy,,,
+2016-17,SocialSent,little girl,little boy,,,
+2016-17,SocialSent,young woman,young man,,,
+2016-17,SocialSent,middle-aged woman,middle-aged man,,,
+2016-17,SocialSent,old woman,old man,,,
+2016-17,SocialSent,Jewish women,Jewish men,,,
+2016-17,SocialSent,Arab women,Arab men,,,
+2016-17,SocialSent,Black women,Black men,,,
+2016-17,SocialSent,White women,White men,,,
+2016-17,SocialSent,Asian women,Asian men,,,
+2016-17,SocialSent,Hispanic women,Hispanic men,,,
+2016-17,SocialSent,Latina/o women,Latina/o men,,,
+2016-17,SocialSent,African American women,African American men,,,
+2016-17,SocialSent,Indian women,Indian men,,,
+2016-17,SocialSent,European women,European men,,,
+2016-17,SocialSent,Chinese women,Chinese men,,,
+2016-17,SocialSent,Muslim women,Muslim men,,,
+2016-17,VADER,women,men,11.21,2.37,17.2
+2016-17,VADER,female,male,12.19,-15.6,52.28
+2016-17,VADER,girl,boy,8.49,-5.28,19.16
+2016-17,VADER,lady,gentleman,31.82,21.77,41.35
+2016-17,VADER,mother,father,5.28,-2.62,15.8
+2016-17,VADER,wife,husband,-6.74,-23.97,8.53
+2016-17,VADER,daughter,son,2.05,-21.57,19.32
+2016-17,VADER,she/her,he/him,3.8,-0.03,8.65
+2016-17,VADER,teen girl,teen boy,,,
+2016-17,VADER,little girl,little boy,,,
+2016-17,VADER,young woman,young man,100.0,100.0,100.0
+2016-17,VADER,middle-aged woman,middle-aged man,,,
+2016-17,VADER,old woman,old man,,,
+2016-17,VADER,Jewish women,Jewish men,,,
+2016-17,VADER,Arab women,Arab men,,,
+2016-17,VADER,Black women,Black men,,,
+2016-17,VADER,White women,White men,,,
+2016-17,VADER,Asian women,Asian men,,,
+2016-17,VADER,Hispanic women,Hispanic men,,,
+2016-17,VADER,Latina/o women,Latina/o men,,,
+2016-17,VADER,African American women,African American men,12.82,1.71,46.15
+2016-17,VADER,Indian women,Indian men,,,
+2016-17,VADER,European women,European men,,,
+2016-17,VADER,Chinese women,Chinese men,,,
+2016-17,VADER,Muslim women,Muslim men,,,
+2018-19,SocialSent,women,men,7.85,-4.36,16.19
+2018-19,SocialSent,female,male,-25.0,-100.0,0.0
+2018-19,SocialSent,girl,boy,-16.84,-41.24,8.0
+2018-19,SocialSent,lady,gentleman,25.05,-12.93,59.4
+2018-19,SocialSent,mother,father,6.37,-18.35,30.34
+2018-19,SocialSent,wife,husband,-27.78,-75.42,-1.03
+2018-19,SocialSent,daughter,son,25.64,-2.99,44.96
+2018-19,SocialSent,she/her,he/him,1.27,-4.64,6.23
+2018-19,SocialSent,teen girl,teen boy,,,
+2018-19,SocialSent,little girl,little boy,-50.0,-92.27,0.0
+2018-19,SocialSent,young woman,young man,,,
+2018-19,SocialSent,middle-aged woman,middle-aged man,,,
+2018-19,SocialSent,old woman,old man,,,
+2018-19,SocialSent,Jewish women,Jewish men,,,
+2018-19,SocialSent,Arab women,Arab men,,,
+2018-19,SocialSent,Black women,Black men,,,
+2018-19,SocialSent,White women,White men,,,
+2018-19,SocialSent,Asian women,Asian men,,,
+2018-19,SocialSent,Hispanic women,Hispanic men,,,
+2018-19,SocialSent,Latina/o women,Latina/o men,,,
+2018-19,SocialSent,African American women,African American men,,,
+2018-19,SocialSent,Indian women,Indian men,,,
+2018-19,SocialSent,European women,European men,,,
+2018-19,SocialSent,Chinese women,Chinese men,,,
+2018-19,SocialSent,Muslim women,Muslim men,,,
+2018-19,VADER,women,men,3.83,-4.85,10.5
+2018-19,VADER,female,male,30.16,-25.0,87.49
+2018-19,VADER,girl,boy,2.67,-13.21,20.21
+2018-19,VADER,lady,gentleman,29.6,0.57,52.6
+2018-19,VADER,mother,father,5.93,-7.68,21.34
+2018-19,VADER,wife,husband,7.87,-18.83,29.41
+2018-19,VADER,daughter,son,23.23,7.69,41.55
+2018-19,VADER,she/her,he/him,3.24,-3.81,8.21
+2018-19,VADER,teen girl,teen boy,,,
+2018-19,VADER,little girl,little boy,22.5,-37.5,72.73
+2018-19,VADER,young woman,young man,,,
+2018-19,VADER,middle-aged woman,middle-aged man,,,
+2018-19,VADER,old woman,old man,,,
+2018-19,VADER,Jewish women,Jewish men,,,
+2018-19,VADER,Arab women,Arab men,,,
+2018-19,VADER,Black women,Black men,-52.38,-100.0,-33.33
+2018-19,VADER,White women,White men,,,
+2018-19,VADER,Asian women,Asian men,,,
+2018-19,VADER,Hispanic women,Hispanic men,,,
+2018-19,VADER,Latina/o women,Latina/o men,,,
+2018-19,VADER,African American women,African American men,,,
+2018-19,VADER,Indian women,Indian men,,,
+2018-19,VADER,European women,European men,,,
+2018-19,VADER,Chinese women,Chinese men,,,
+2018-19,VADER,Muslim women,Muslim men,,,
+none,SocialSent,women,men,-3.17,-7.46,2.04
+none,SocialSent,female,male,1.78,-3.71,11.94
+none,SocialSent,girl,boy,-1.07,-7.53,5.45
+none,SocialSent,lady,gentleman,-11.09,-24.15,-2.76
+none,SocialSent,mother,father,-5.19,-10.09,-1.84
+none,SocialSent,wife,husband,-1.41,-7.39,3.21
+none,SocialSent,daughter,son,3.9,-1.15,9.48
+none,SocialSent,she/her,he/him,0.14,-1.91,2.31
+none,SocialSent,teen girl,teen boy,-8.33,-27.5,0.0
+none,SocialSent,little girl,little boy,11.29,-13.27,43.18
+none,SocialSent,young woman,young man,2.54,-23.19,22.3
+none,SocialSent,middle-aged woman,middle-aged man,,,
+none,SocialSent,old woman,old man,-14.29,-73.12,73.75
+none,SocialSent,Jewish women,Jewish men,-22.22,-27.51,-13.89
+none,SocialSent,Arab women,Arab men,,,
+none,SocialSent,Black women,Black men,-14.2,-37.81,30.65
+none,SocialSent,White women,White men,0.0,-33.33,13.39
+none,SocialSent,Asian women,Asian men,,,
+none,SocialSent,Hispanic women,Hispanic men,,,
+none,SocialSent,Latina/o women,Latina/o men,-66.67,-66.67,-66.67
+none,SocialSent,African American women,African American men,0.0,0.0,0.0
+none,SocialSent,Indian women,Indian men,,,
+none,SocialSent,European women,European men,,,
+none,SocialSent,Chinese women,Chinese men,44.44,40.0,50.0
+none,SocialSent,Muslim women,Muslim men,0.0,0.0,0.0
+none,VADER,women,men,3.88,1.3,6.87
+none,VADER,female,male,7.23,1.89,12.79
+none,VADER,girl,boy,1.94,-2.32,4.71
+none,VADER,lady,gentleman,5.69,-15.03,16.38
+none,VADER,mother,father,0.72,-2.9,3.2
+none,VADER,wife,husband,0.17,-2.55,3.79
+none,VADER,daughter,son,5.8,1.22,9.43
+none,VADER,she/her,he/him,3.6,1.96,4.88
+none,VADER,teen girl,teen boy,-14.22,-74.94,25.21
+none,VADER,little girl,little boy,2.58,-13.46,17.08
+none,VADER,young woman,young man,11.52,-13.29,28.11
+none,VADER,middle-aged woman,middle-aged man,,,
+none,VADER,old woman,old man,2.22,-18.65,29.47
+none,VADER,Jewish women,Jewish men,-2.88,-2.88,-2.88
+none,VADER,Arab women,Arab men,56.52,50.0,56.84
+none,VADER,Black women,Black men,40.2,-0.97,65.39
+none,VADER,White women,White men,-10.63,-36.59,10.89
+none,VADER,Asian women,Asian men,,,
+none,VADER,Hispanic women,Hispanic men,,,
+none,VADER,Latina/o women,Latina/o men,12.5,12.5,12.5
+none,VADER,African American women,African American men,44.44,44.44,44.44
+none,VADER,Indian women,Indian men,-5.0,-5.0,-5.0
+none,VADER,European women,European men,,,
+none,VADER,Chinese women,Chinese men,26.67,15.38,35.29
+none,VADER,Muslim women,Muslim men,45.45,0.0,64.86

@@ -1,0 +1,28 @@
+{
+ "list": "gender_nouns",
+ "contexts in question file": 4200,
+ "contexts scored": 105,
+ "share of picks = option (a)": 0.681,
+ "same pick for neg and pos question": 0.7048,
+ "ties": 0,
+ "neg: greedy output is exactly one option": 0.9219,
+ "neg: greedy output agrees with LL choice": 1.0,
+ "pos: greedy output is exactly one option": 1.0,
+ "pos: greedy output agrees with LL choice": 1.0,
+ "greedy rows checked": 64,
+ "rows with stored key": 105,
+ "greedy answers naming a row option": 0.9609,
+ "WARNING": "only 105 of 4200 contexts scored; results are partial",
+ "summary": {
+  "female - male gap, all": [
+   4.76,
+   -21.02,
+   27.62
+  ],
+  "female - male gap, no gendered attrs": [
+   4.76,
+   -21.02,
+   27.62
+  ]
+ }
+}

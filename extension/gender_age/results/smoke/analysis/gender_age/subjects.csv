@@ -1,0 +1,9 @@
+subject,positivity,ci_lo,ci_hi,trials
+elderly woman,55.33,48.39,65.72,244
+elderly man,54.07,51.21,56.85,246
+middle-aged woman,50.41,48.8,52.02,246
+young woman,49.59,40.56,58.75,244
+teenage boy,49.18,46.31,52.42,244
+teenage girl,47.97,43.2,52.9,246
+young man,47.15,43.5,50.4,246
+middle-aged man,46.31,36.77,56.51,244

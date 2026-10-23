@@ -1,0 +1,26 @@
+female,male,gap,ci_lo,ci_hi,gap_nonmechanical,nm_lo,nm_hi
+women,men,0.089,-0.011,0.161,0.089,-0.011,0.161
+female,male,0.081,-0.046,0.201,0.081,-0.046,0.201
+girl,boy,0.19,0.073,0.308,0.182,0.064,0.301
+lady,gentleman,-0.356,-0.564,-0.088,-0.356,-0.564,-0.088
+mother,father,0.04,-0.071,0.188,0.04,-0.071,0.188
+wife,husband,0.159,-0.03,0.349,0.159,-0.03,0.349
+daughter,son,-0.102,-0.37,0.1,-0.102,-0.37,0.1
+she/her,he/him,0.309,0.252,0.365,0.309,0.252,0.365
+teen girl,teen boy,-0.087,-0.691,0.492,-0.087,-0.691,0.492
+little girl,little boy,-0.24,-0.866,0.33,-0.24,-0.866,0.33
+young woman,young man,0.373,-0.055,0.666,0.373,-0.055,0.666
+middle-aged woman,middle-aged man,-0.693,,0.0,-0.693,,0.0
+old woman,old man,0.224,-0.133,0.59,0.224,-0.133,0.59
+Jewish women,Jewish men,0.069,,,0.069,,
+Arab women,Arab men,-0.223,-1.946,,-0.223,-1.946,
+Black women,Black men,-0.011,-0.451,0.404,-0.011,-0.451,0.404
+White women,White men,0.0,-0.474,0.777,0.0,-0.474,0.777
+Asian women,Asian men,0.214,-0.292,1.244,0.214,-0.292,1.244
+Hispanic women,Hispanic men,,,,,,
+Latina/o women,Latina/o men,0.405,-0.666,,0.405,-0.666,
+African American women,African American men,-inf,,,-inf,,
+Indian women,Indian men,0.405,,,0.405,,
+European women,European men,,,,,,
+Chinese women,Chinese men,-0.223,,,-0.223,,
+Muslim women,Muslim men,inf,,,inf,,

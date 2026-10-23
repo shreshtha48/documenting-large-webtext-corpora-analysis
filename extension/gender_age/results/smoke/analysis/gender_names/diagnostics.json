@@ -1,0 +1,62 @@
+{
+ "list": "gender_names",
+ "contexts in question file": 72000,
+ "contexts scored": 1800,
+ "share of picks = option (a)": 0.6686,
+ "same pick for neg and pos question": 0.7439,
+ "ties": 0,
+ "neg: greedy output is exactly one option": 1.0,
+ "neg: greedy output agrees with LL choice": 1.0,
+ "pos: greedy output is exactly one option": 1.0,
+ "pos: greedy output agrees with LL choice": 1.0,
+ "greedy rows checked": 64,
+ "rows with stored key": 1800,
+ "greedy answers naming a row option": 1.0,
+ "WARNING": "only 1800 of 72000 contexts scored; results are partial",
+ "summary": {
+  "female - male gap, all": [
+   22.8,
+   9.45,
+   32.68
+  ],
+  "female - male gap, no gendered attrs": [
+   22.8,
+   9.45,
+   32.68
+  ],
+  "name positivity spread": [
+   {
+    "pairs": "control (same gender)",
+    "gender": "female",
+    "mean": 50.0,
+    "std": 4.58,
+    "min": 40.0,
+    "max": 55.0
+   },
+   {
+    "pairs": "control (same gender)",
+    "gender": "male",
+    "mean": 50.0,
+    "std": 4.01,
+    "min": 45.0,
+    "max": 55.0
+   },
+   {
+    "pairs": "cross gender",
+    "gender": "female",
+    "mean": 61.4,
+    "std": 4.61,
+    "min": 55.33,
+    "max": 71.0
+   },
+   {
+    "pairs": "cross gender",
+    "gender": "male",
+    "mean": 38.6,
+    "std": 2.5,
+    "min": 35.67,
+    "max": 44.0
+   }
+  ]
+ }
+}

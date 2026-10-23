@@ -1,0 +1,151 @@
+documents,lexicon,female,male,gap,ci_lo,ci_hi
+kept (C4.EN),SocialSent,women,men,-3.73,-7.77,-0.21
+kept (C4.EN),SocialSent,female,male,-0.96,-7.24,8.99
+kept (C4.EN),SocialSent,girl,boy,-1.35,-5.53,3.54
+kept (C4.EN),SocialSent,lady,gentleman,10.86,-13.1,27.01
+kept (C4.EN),SocialSent,mother,father,-2.45,-7.35,1.09
+kept (C4.EN),SocialSent,wife,husband,-2.32,-7.41,2.42
+kept (C4.EN),SocialSent,daughter,son,5.22,0.9,10.78
+kept (C4.EN),SocialSent,she/her,he/him,1.04,-0.9,2.91
+kept (C4.EN),SocialSent,teen girl,teen boy,-5.15,-35.18,19.1
+kept (C4.EN),SocialSent,little girl,little boy,5.26,-22.01,24.36
+kept (C4.EN),SocialSent,young woman,young man,1.8,-18.46,21.91
+kept (C4.EN),SocialSent,middle-aged woman,middle-aged man,,,
+kept (C4.EN),SocialSent,old woman,old man,-1.92,-58.32,23.67
+kept (C4.EN),SocialSent,Jewish women,Jewish men,-30.0,-48.07,50.0
+kept (C4.EN),SocialSent,Arab women,Arab men,,,
+kept (C4.EN),SocialSent,Black women,Black men,-21.15,-46.93,10.12
+kept (C4.EN),SocialSent,White women,White men,16.91,-18.93,33.33
+kept (C4.EN),SocialSent,Asian women,Asian men,,,
+kept (C4.EN),SocialSent,Hispanic women,Hispanic men,,,
+kept (C4.EN),SocialSent,Latina/o women,Latina/o men,-50.0,-66.67,0.0
+kept (C4.EN),SocialSent,African American women,African American men,-20.0,-33.21,0.0
+kept (C4.EN),SocialSent,Indian women,Indian men,,,
+kept (C4.EN),SocialSent,European women,European men,,,
+kept (C4.EN),SocialSent,Chinese women,Chinese men,44.44,40.0,50.0
+kept (C4.EN),SocialSent,Muslim women,Muslim men,-13.33,-24.24,0.0
+kept (C4.EN),VADER,women,men,4.39,1.88,7.26
+kept (C4.EN),VADER,female,male,6.96,2.55,11.01
+kept (C4.EN),VADER,girl,boy,1.57,-2.3,3.82
+kept (C4.EN),VADER,lady,gentleman,11.56,-0.17,21.99
+kept (C4.EN),VADER,mother,father,1.6,-0.87,3.79
+kept (C4.EN),VADER,wife,husband,0.3,-2.56,3.5
+kept (C4.EN),VADER,daughter,son,5.51,2.3,9.93
+kept (C4.EN),VADER,she/her,he/him,3.85,2.52,4.9
+kept (C4.EN),VADER,teen girl,teen boy,-15.43,-51.63,21.38
+kept (C4.EN),VADER,little girl,little boy,4.5,-13.79,21.12
+kept (C4.EN),VADER,young woman,young man,6.65,-11.33,21.09
+kept (C4.EN),VADER,middle-aged woman,middle-aged man,,,
+kept (C4.EN),VADER,old woman,old man,-2.57,-23.62,14.39
+kept (C4.EN),VADER,Jewish women,Jewish men,1.12,-9.33,35.71
+kept (C4.EN),VADER,Arab women,Arab men,56.52,50.0,56.84
+kept (C4.EN),VADER,Black women,Black men,29.21,-4.68,48.16
+kept (C4.EN),VADER,White women,White men,2.49,-22.01,25.5
+kept (C4.EN),VADER,Asian women,Asian men,-62.5,-62.5,-62.5
+kept (C4.EN),VADER,Hispanic women,Hispanic men,,,
+kept (C4.EN),VADER,Latina/o women,Latina/o men,30.0,12.5,100.0
+kept (C4.EN),VADER,African American women,African American men,15.0,-26.79,46.08
+kept (C4.EN),VADER,Indian women,Indian men,-5.0,-5.0,-5.0
+kept (C4.EN),VADER,European women,European men,,,
+kept (C4.EN),VADER,Chinese women,Chinese men,26.67,15.38,35.29
+kept (C4.EN),VADER,Muslim women,Muslim men,47.37,0.0,100.0
+kept (C4.EN),UnQover,women,men,3.82,-0.62,9.96
+kept (C4.EN),UnQover,female,male,2.81,-9.61,16.8
+kept (C4.EN),UnQover,girl,boy,-5.69,-14.74,2.5
+kept (C4.EN),UnQover,lady,gentleman,29.13,-12.89,71.55
+kept (C4.EN),UnQover,mother,father,5.61,0.71,10.88
+kept (C4.EN),UnQover,wife,husband,1.1,-4.63,8.56
+kept (C4.EN),UnQover,daughter,son,7.5,-1.16,14.06
+kept (C4.EN),UnQover,she/her,he/him,5.36,2.41,7.12
+kept (C4.EN),UnQover,teen girl,teen boy,50.0,0.0,100.0
+kept (C4.EN),UnQover,little girl,little boy,3.95,-39.5,80.63
+kept (C4.EN),UnQover,young woman,young man,7.41,-26.56,40.55
+kept (C4.EN),UnQover,middle-aged woman,middle-aged man,,,
+kept (C4.EN),UnQover,old woman,old man,2.27,-51.11,42.88
+kept (C4.EN),UnQover,Jewish women,Jewish men,0.0,0.0,0.0
+kept (C4.EN),UnQover,Arab women,Arab men,,,
+kept (C4.EN),UnQover,Black women,Black men,-16.67,-50.0,48.25
+kept (C4.EN),UnQover,White women,White men,,,
+kept (C4.EN),UnQover,Asian women,Asian men,,,
+kept (C4.EN),UnQover,Hispanic women,Hispanic men,,,
+kept (C4.EN),UnQover,Latina/o women,Latina/o men,,,
+kept (C4.EN),UnQover,African American women,African American men,,,
+kept (C4.EN),UnQover,Indian women,Indian men,,,
+kept (C4.EN),UnQover,European women,European men,,,
+kept (C4.EN),UnQover,Chinese women,Chinese men,40.0,0.0,100.0
+kept (C4.EN),UnQover,Muslim women,Muslim men,,,
+excluded,SocialSent,women,men,0.16,-2.55,3.52
+excluded,SocialSent,female,male,9.67,1.66,16.38
+excluded,SocialSent,girl,boy,6.98,1.51,16.63
+excluded,SocialSent,lady,gentleman,-1.96,-10.48,7.6
+excluded,SocialSent,mother,father,-6.36,-11.78,0.32
+excluded,SocialSent,wife,husband,-2.95,-7.84,8.13
+excluded,SocialSent,daughter,son,-0.17,-13.15,4.22
+excluded,SocialSent,she/her,he/him,1.92,-0.04,4.15
+excluded,SocialSent,teen girl,teen boy,-3.61,-27.13,26.46
+excluded,SocialSent,little girl,little boy,16.0,-1.58,39.02
+excluded,SocialSent,young woman,young man,-2.91,-16.79,18.78
+excluded,SocialSent,middle-aged woman,middle-aged man,-83.33,-100.0,-66.67
+excluded,SocialSent,old woman,old man,3.85,-20.79,30.62
+excluded,SocialSent,Jewish women,Jewish men,25.0,25.0,25.0
+excluded,SocialSent,Arab women,Arab men,50.0,50.0,50.0
+excluded,SocialSent,Black women,Black men,24.21,-10.63,43.9
+excluded,SocialSent,White women,White men,-38.19,-76.04,-0.31
+excluded,SocialSent,Asian women,Asian men,20.83,2.62,27.92
+excluded,SocialSent,Hispanic women,Hispanic men,,,
+excluded,SocialSent,Latina/o women,Latina/o men,-22.22,-33.33,0.0
+excluded,SocialSent,African American women,African American men,,,
+excluded,SocialSent,Indian women,Indian men,,,
+excluded,SocialSent,European women,European men,,,
+excluded,SocialSent,Chinese women,Chinese men,,,
+excluded,SocialSent,Muslim women,Muslim men,,,
+excluded,VADER,women,men,1.76,-0.32,3.89
+excluded,VADER,female,male,3.27,-2.29,9.62
+excluded,VADER,girl,boy,6.13,1.93,10.29
+excluded,VADER,lady,gentleman,-8.15,-13.54,-1.5
+excluded,VADER,mother,father,-1.23,-5.27,2.98
+excluded,VADER,wife,husband,-3.97,-8.8,2.05
+excluded,VADER,daughter,son,1.77,-1.73,6.14
+excluded,VADER,she/her,he/him,3.21,1.75,5.02
+excluded,VADER,teen girl,teen boy,-3.32,-17.39,17.31
+excluded,VADER,little girl,little boy,8.49,-20.35,32.13
+excluded,VADER,young woman,young man,-11.14,-22.95,0.09
+excluded,VADER,middle-aged woman,middle-aged man,5.56,-43.1,30.56
+excluded,VADER,old woman,old man,20.56,8.2,31.61
+excluded,VADER,Jewish women,Jewish men,2.78,-27.78,9.72
+excluded,VADER,Arab women,Arab men,33.18,33.18,33.18
+excluded,VADER,Black women,Black men,9.96,-20.81,23.68
+excluded,VADER,White women,White men,14.22,-16.62,35.03
+excluded,VADER,Asian women,Asian men,21.5,-11.54,60.0
+excluded,VADER,Hispanic women,Hispanic men,,,
+excluded,VADER,Latina/o women,Latina/o men,-22.32,-33.33,5.26
+excluded,VADER,African American women,African American men,,,
+excluded,VADER,Indian women,Indian men,46.67,-33.33,55.56
+excluded,VADER,European women,European men,,,
+excluded,VADER,Chinese women,Chinese men,-28.12,-40.0,-25.93
+excluded,VADER,Muslim women,Muslim men,,,
+excluded,UnQover,women,men,5.58,1.56,11.27
+excluded,UnQover,female,male,-4.14,-14.41,6.72
+excluded,UnQover,girl,boy,14.53,0.95,27.65
+excluded,UnQover,lady,gentleman,-10.58,-22.04,3.12
+excluded,UnQover,mother,father,-0.89,-11.65,8.88
+excluded,UnQover,wife,husband,-8.83,-19.42,-2.39
+excluded,UnQover,daughter,son,-5.46,-15.58,1.94
+excluded,UnQover,she/her,he/him,7.28,3.46,12.1
+excluded,UnQover,teen girl,teen boy,28.57,-28.61,98.96
+excluded,UnQover,little girl,little boy,38.89,-49.09,65.49
+excluded,UnQover,young woman,young man,9.26,-14.74,27.83
+excluded,UnQover,middle-aged woman,middle-aged man,,,
+excluded,UnQover,old woman,old man,-13.64,-60.0,80.0
+excluded,UnQover,Jewish women,Jewish men,,,
+excluded,UnQover,Arab women,Arab men,,,
+excluded,UnQover,Black women,Black men,28.24,-15.17,74.66
+excluded,UnQover,White women,White men,-7.14,-66.67,65.83
+excluded,UnQover,Asian women,Asian men,100.0,100.0,100.0
+excluded,UnQover,Hispanic women,Hispanic men,,,
+excluded,UnQover,Latina/o women,Latina/o men,0.0,0.0,0.0
+excluded,UnQover,African American women,African American men,,,
+excluded,UnQover,Indian women,Indian men,,,
+excluded,UnQover,European women,European men,,,
+excluded,UnQover,Chinese women,Chinese men,,,
+excluded,UnQover,Muslim women,Muslim men,,,

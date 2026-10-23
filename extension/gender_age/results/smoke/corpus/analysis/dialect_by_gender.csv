@@ -1,0 +1,16 @@
+dialect,documents mentioning,docs,removed_%,ci_lo,ci_hi
+AAE,all,31,45.16,31.46,60.41
+AAE,female,9,66.67,25.8,91.54
+AAE,male,6,66.67,25.0,100.0
+Hispanic,all,25,48.0,28.73,63.88
+Hispanic,female,9,77.78,42.25,100.0
+Hispanic,male,4,75.0,21.12,100.0
+Other,all,329,6.38,4.67,9.45
+Other,female,24,29.17,16.9,50.0
+Other,male,30,26.67,18.34,43.16
+WAE,all,19604,7.23,6.96,7.55
+WAE,female,3165,24.33,22.76,25.37
+WAE,male,3107,22.53,21.43,23.96
+unassigned,all,11,0.0,0.0,0.0
+unassigned,female,0,,,
+unassigned,male,0,,,

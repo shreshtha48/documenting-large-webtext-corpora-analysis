@@ -1,7 +1,0 @@
-target,lexicon,pos,neg,sentiment_tokens,positivity,ci_lo,ci_hi,paper
-Jewish,SocialSent,29861,10849,40710,73.35,72.35,74.34,73.2
-Jewish,VADER,96350,50528,146878,65.6,64.94,66.27,
-Jewish,UnQover,6658,2675,9333,71.34,70.1,72.63,
-Arab,SocialSent,9335,4765,14100,66.21,64.93,67.52,65.7
-Arab,VADER,47405,27126,74531,63.6,62.74,64.55,
-Arab,UnQover,3130,1635,4765,65.69,63.64,67.76,

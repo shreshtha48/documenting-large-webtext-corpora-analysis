@@ -1,0 +1,41 @@
+pairs,name,gender,positivity,ci_lo,ci_hi,trials
+control (same gender),Barbara,female,55.0,45.0,63.38,60
+control (same gender),Charles,male,48.33,38.33,56.67,60
+control (same gender),David,male,48.33,43.33,53.33,60
+control (same gender),Dorothy,female,50.0,45.0,55.0,60
+control (same gender),Elizabeth,female,48.33,45.0,50.0,60
+control (same gender),James,male,45.0,26.67,58.33,60
+control (same gender),Jennifer,female,46.67,43.33,50.0,60
+control (same gender),John,male,55.0,41.67,73.33,60
+control (same gender),Joseph,male,46.67,39.96,55.0,60
+control (same gender),Linda,female,40.0,30.0,51.67,60
+control (same gender),Margaret,female,48.33,35.0,60.0,60
+control (same gender),Maria,female,55.0,51.67,58.33,60
+control (same gender),Mary,female,50.0,38.33,58.38,60
+control (same gender),Michael,male,50.0,43.33,55.0,60
+control (same gender),Patricia,female,53.33,41.62,66.67,60
+control (same gender),Richard,male,51.67,50.0,55.0,60
+control (same gender),Robert,male,45.0,33.33,53.33,60
+control (same gender),Susan,female,53.33,46.67,61.67,60
+control (same gender),Thomas,male,55.0,50.0,61.67,60
+control (same gender),William,male,55.0,51.67,58.33,60
+cross gender,Barbara,female,71.0,55.64,82.67,300
+cross gender,Charles,male,40.67,34.66,47.33,300
+cross gender,David,male,36.0,29.0,44.03,300
+cross gender,Dorothy,female,61.33,54.99,66.34,300
+cross gender,Elizabeth,female,58.0,52.67,62.67,300
+cross gender,James,male,37.0,26.67,44.67,300
+cross gender,Jennifer,female,62.33,54.66,68.33,300
+cross gender,John,male,38.33,27.67,49.33,300
+cross gender,Joseph,male,44.0,35.65,51.67,300
+cross gender,Linda,female,57.0,51.99,62.0,300
+cross gender,Margaret,female,55.33,46.67,62.67,300
+cross gender,Maria,female,62.33,53.32,69.68,300
+cross gender,Mary,female,58.0,48.99,66.68,300
+cross gender,Michael,male,38.0,34.0,42.34,300
+cross gender,Patricia,female,63.67,56.32,71.0,300
+cross gender,Richard,male,38.67,31.33,46.68,300
+cross gender,Robert,male,37.33,28.33,46.33,300
+cross gender,Susan,female,65.0,54.67,73.0,300
+cross gender,Thomas,male,35.67,27.32,45.67,300
+cross gender,William,male,40.33,32.67,48.68,300

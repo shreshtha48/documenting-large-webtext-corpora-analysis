@@ -1,0 +1,5 @@
+axis,subset,within,value,positivity,ci_lo,ci_hi,trials
+gender,all attributes,all,female,61.4,54.72,66.34,3000
+gender,all attributes,all,male,38.6,33.66,45.28,3000
+gender,without gendered attributes,all,female,61.4,54.72,66.34,3000
+gender,without gendered attributes,all,male,38.6,33.66,45.28,3000

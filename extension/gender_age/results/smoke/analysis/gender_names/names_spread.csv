@@ -1,0 +1,5 @@
+pairs,gender,mean,std,min,max
+control (same gender),female,50.0,4.58,40.0,55.0
+control (same gender),male,50.0,4.01,45.0,55.0
+cross gender,female,61.4,4.61,55.33,71.0
+cross gender,male,38.6,2.5,35.67,44.0

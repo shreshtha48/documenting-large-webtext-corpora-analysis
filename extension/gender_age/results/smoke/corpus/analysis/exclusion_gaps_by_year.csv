@@ -1,0 +1,151 @@
+female,male,gap,ci_lo,ci_hi,year
+women,men,-0.018,-0.425,0.324,<=2009
+female,male,-0.154,-0.916,,<=2009
+girl,boy,-0.301,-0.881,0.349,<=2009
+lady,gentleman,-1.299,,,<=2009
+mother,father,-0.362,-1.119,0.33,<=2009
+wife,husband,-0.043,-0.539,0.88,<=2009
+daughter,son,0.182,-0.392,1.059,<=2009
+she/her,he/him,0.269,-0.001,0.465,<=2009
+teen girl,teen boy,,,,<=2009
+little girl,little boy,,,,<=2009
+young woman,young man,0.288,,,<=2009
+middle-aged woman,middle-aged man,,,,<=2009
+old woman,old man,,,,<=2009
+Jewish women,Jewish men,,,,<=2009
+Arab women,Arab men,,,,<=2009
+Black women,Black men,,,,<=2009
+White women,White men,,,,<=2009
+Asian women,Asian men,,,,<=2009
+Hispanic women,Hispanic men,,,,<=2009
+Latina/o women,Latina/o men,,,,<=2009
+African American women,African American men,,,,<=2009
+Indian women,Indian men,,,,<=2009
+European women,European men,,,,<=2009
+Chinese women,Chinese men,,,,<=2009
+Muslim women,Muslim men,,,,<=2009
+women,men,-0.007,-0.361,0.386,2010-12
+female,male,0.0,-1.257,0.811,2010-12
+girl,boy,-0.028,-0.55,0.525,2010-12
+lady,gentleman,inf,,,2010-12
+mother,father,-0.291,-0.669,0.369,2010-12
+wife,husband,-0.313,-1.159,0.401,2010-12
+daughter,son,-0.458,,0.625,2010-12
+she/her,he/him,0.279,0.042,0.439,2010-12
+teen girl,teen boy,,,,2010-12
+little girl,little boy,-0.511,,0.0,2010-12
+young woman,young man,inf,,,2010-12
+middle-aged woman,middle-aged man,,,,2010-12
+old woman,old man,-inf,,,2010-12
+Jewish women,Jewish men,,,,2010-12
+Arab women,Arab men,,,,2010-12
+Black women,Black men,-inf,,,2010-12
+White women,White men,-inf,,,2010-12
+Asian women,Asian men,,,,2010-12
+Hispanic women,Hispanic men,,,,2010-12
+Latina/o women,Latina/o men,,,,2010-12
+African American women,African American men,,,,2010-12
+Indian women,Indian men,,,,2010-12
+European women,European men,,,,2010-12
+Chinese women,Chinese men,,,,2010-12
+Muslim women,Muslim men,,,,2010-12
+women,men,0.39,0.101,0.648,2013-15
+female,male,0.399,-0.234,1.276,2013-15
+girl,boy,-0.811,-1.364,-0.194,2013-15
+lady,gentleman,-1.609,,-0.798,2013-15
+mother,father,0.366,-0.189,0.794,2013-15
+wife,husband,0.092,-0.524,0.567,2013-15
+daughter,son,-0.745,-1.907,0.255,2013-15
+she/her,he/him,0.009,-0.159,0.203,2013-15
+teen girl,teen boy,,,,2013-15
+little girl,little boy,-1.792,,-0.916,2013-15
+young woman,young man,0.606,,,2013-15
+middle-aged woman,middle-aged man,,,,2013-15
+old woman,old man,inf,,,2013-15
+Jewish women,Jewish men,,,,2013-15
+Arab women,Arab men,,,,2013-15
+Black women,Black men,,,,2013-15
+White women,White men,,,,2013-15
+Asian women,Asian men,,,,2013-15
+Hispanic women,Hispanic men,,,,2013-15
+Latina/o women,Latina/o men,,,,2013-15
+African American women,African American men,,,,2013-15
+Indian women,Indian men,,,,2013-15
+European women,European men,,,,2013-15
+Chinese women,Chinese men,,,,2013-15
+Muslim women,Muslim men,inf,,,2013-15
+women,men,0.062,-0.236,0.306,2016-17
+female,male,-0.718,-1.471,-0.334,2016-17
+girl,boy,-0.193,-0.706,0.157,2016-17
+lady,gentleman,-0.241,-1.425,,2016-17
+mother,father,-0.293,-0.797,0.056,2016-17
+wife,husband,-0.267,-1.353,0.531,2016-17
+daughter,son,-0.314,-1.75,0.578,2016-17
+she/her,he/him,0.303,0.077,0.483,2016-17
+teen girl,teen boy,-0.693,,-0.162,2016-17
+little girl,little boy,-0.693,,-0.009,2016-17
+young woman,young man,0.223,,,2016-17
+middle-aged woman,middle-aged man,,,,2016-17
+old woman,old man,,,,2016-17
+Jewish women,Jewish men,,,,2016-17
+Arab women,Arab men,,,,2016-17
+Black women,Black men,,,,2016-17
+White women,White men,0.405,0.0,1.099,2016-17
+Asian women,Asian men,,,,2016-17
+Hispanic women,Hispanic men,,,,2016-17
+Latina/o women,Latina/o men,,,,2016-17
+African American women,African American men,,,,2016-17
+Indian women,Indian men,,,,2016-17
+European women,European men,,,,2016-17
+Chinese women,Chinese men,,,,2016-17
+Muslim women,Muslim men,,,,2016-17
+women,men,0.13,-0.254,0.509,2018-19
+female,male,0.693,0.059,,2018-19
+girl,boy,0.145,-0.209,0.625,2018-19
+lady,gentleman,0.304,-0.761,,2018-19
+mother,father,-0.009,-0.573,0.555,2018-19
+wife,husband,0.331,-0.253,0.813,2018-19
+daughter,son,0.436,-0.099,1.153,2018-19
+she/her,he/him,0.26,0.041,0.466,2018-19
+teen girl,teen boy,,,,2018-19
+little girl,little boy,inf,,,2018-19
+young woman,young man,0.693,0.0,,2018-19
+middle-aged woman,middle-aged man,,,,2018-19
+old woman,old man,inf,,,2018-19
+Jewish women,Jewish men,,,,2018-19
+Arab women,Arab men,,,,2018-19
+Black women,Black men,0.693,,,2018-19
+White women,White men,,,,2018-19
+Asian women,Asian men,,,,2018-19
+Hispanic women,Hispanic men,,,,2018-19
+Latina/o women,Latina/o men,,,,2018-19
+African American women,African American men,,,,2018-19
+Indian women,Indian men,,,,2018-19
+European women,European men,,,,2018-19
+Chinese women,Chinese men,0.0,0.0,0.0,2018-19
+Muslim women,Muslim men,,,,2018-19
+women,men,0.075,-0.045,0.156,none
+female,male,0.082,-0.038,0.209,none
+girl,boy,0.317,0.173,0.43,none
+lady,gentleman,-0.327,-0.536,0.028,none
+mother,father,0.1,-0.014,0.265,none
+wife,husband,0.235,0.003,0.441,none
+daughter,son,-0.092,-0.399,0.151,none
+she/her,he/him,0.345,0.282,0.421,none
+teen girl,teen boy,-0.166,-0.831,0.433,none
+little girl,little boy,0.169,-0.562,1.499,none
+young woman,young man,0.317,-0.283,0.83,none
+middle-aged woman,middle-aged man,-0.405,,0.0,none
+old woman,old man,0.211,-0.217,0.544,none
+Jewish women,Jewish men,0.0,,,none
+Arab women,Arab men,-0.223,-1.946,,none
+Black women,Black men,-0.008,-0.4,0.347,none
+White women,White men,0.053,-0.436,1.576,none
+Asian women,Asian men,0.288,0.0,1.336,none
+Hispanic women,Hispanic men,,,,none
+Latina/o women,Latina/o men,0.118,-0.693,,none
+African American women,African American men,-inf,,,none
+Indian women,Indian men,0.0,,,none
+European women,European men,,,,none
+Chinese women,Chinese men,0.0,,,none
+Muslim women,Muslim men,inf,,,none

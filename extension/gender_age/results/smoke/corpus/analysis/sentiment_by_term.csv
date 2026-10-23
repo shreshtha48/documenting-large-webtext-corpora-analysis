@@ -1,0 +1,355 @@
+documents,term,lexicon,paragraphs,sentiment_tokens,positivity,ci_lo,ci_hi
+kept (C4.EN),women,SocialSent,1782,2055,69.34,64.85,72.66
+kept (C4.EN),women,VADER,1782,7723,68.26,66.04,70.25
+kept (C4.EN),women,UnQover,1782,542,74.72,69.47,79.98
+kept (C4.EN),men,SocialSent,2140,2666,73.07,70.31,75.43
+kept (C4.EN),men,VADER,2140,9748,63.87,62.4,65.76
+kept (C4.EN),men,UnQover,2140,653,70.9,67.16,74.29
+kept (C4.EN),female,SocialSent,308,343,66.18,59.92,73.25
+kept (C4.EN),female,VADER,308,1303,70.07,66.0,74.41
+kept (C4.EN),female,UnQover,308,90,63.33,51.9,79.01
+kept (C4.EN),male,SocialSent,244,283,67.14,58.53,75.77
+kept (C4.EN),male,VADER,244,1133,63.11,58.79,68.16
+kept (C4.EN),male,UnQover,244,76,60.53,47.83,73.62
+kept (C4.EN),girl,SocialSent,812,1236,78.16,75.97,80.7
+kept (C4.EN),girl,VADER,812,3628,74.81,72.45,77.23
+kept (C4.EN),girl,UnQover,812,270,74.07,68.27,80.31
+kept (C4.EN),boy,SocialSent,527,761,79.5,75.42,84.2
+kept (C4.EN),boy,VADER,527,2320,73.23,70.48,76.83
+kept (C4.EN),boy,UnQover,527,173,79.77,73.8,85.12
+kept (C4.EN),lady,SocialSent,378,637,81.63,76.9,86.05
+kept (C4.EN),lady,VADER,378,1742,79.16,76.47,82.3
+kept (C4.EN),lady,UnQover,378,153,86.27,77.31,89.87
+kept (C4.EN),gentleman,SocialSent,34,65,70.77,51.64,92.26
+kept (C4.EN),gentleman,VADER,34,179,67.6,58.07,79.12
+kept (C4.EN),gentleman,UnQover,34,7,57.14,15.31,100.0
+kept (C4.EN),mother,SocialSent,1122,1746,75.95,72.71,78.74
+kept (C4.EN),mother,VADER,1122,5004,71.48,69.98,73.41
+kept (C4.EN),mother,UnQover,1122,382,85.86,82.61,89.09
+kept (C4.EN),father,SocialSent,780,1208,78.39,74.6,82.21
+kept (C4.EN),father,VADER,780,3739,69.88,67.65,72.19
+kept (C4.EN),father,UnQover,780,238,80.25,75.24,86.24
+kept (C4.EN),wife,SocialSent,495,712,75.98,72.52,80.11
+kept (C4.EN),wife,VADER,495,2184,72.44,69.26,75.71
+kept (C4.EN),wife,UnQover,495,191,84.82,79.22,89.64
+kept (C4.EN),husband,SocialSent,521,811,78.3,75.32,82.34
+kept (C4.EN),husband,VADER,521,2369,72.14,69.28,74.58
+kept (C4.EN),husband,UnQover,521,172,83.72,76.71,90.18
+kept (C4.EN),daughter,SocialSent,509,745,83.62,80.52,88.78
+kept (C4.EN),daughter,VADER,509,2235,76.24,72.45,80.38
+kept (C4.EN),daughter,UnQover,509,163,85.28,78.25,90.8
+kept (C4.EN),son,SocialSent,683,968,78.41,75.76,82.24
+kept (C4.EN),son,VADER,683,3136,70.73,67.82,73.71
+kept (C4.EN),son,UnQover,683,189,77.78,70.11,83.73
+kept (C4.EN),she/her,SocialSent,6578,8170,74.05,72.43,75.83
+kept (C4.EN),she/her,VADER,6578,26078,71.54,70.44,72.42
+kept (C4.EN),she/her,UnQover,6578,1853,79.49,76.59,81.23
+kept (C4.EN),he/him,SocialSent,13169,14742,73.02,72.09,74.39
+kept (C4.EN),he/him,VADER,13169,49608,67.69,66.77,68.78
+kept (C4.EN),he/him,UnQover,13169,3093,74.14,72.25,76.26
+kept (C4.EN),child,SocialSent,3915,4933,75.49,73.65,78.09
+kept (C4.EN),child,VADER,3915,16793,75.38,74.13,76.75
+kept (C4.EN),child,UnQover,3915,1193,81.98,79.46,85.18
+kept (C4.EN),teen,SocialSent,427,458,65.94,59.18,72.88
+kept (C4.EN),teen,VADER,427,1654,66.2,61.85,69.77
+kept (C4.EN),teen,UnQover,427,114,68.42,51.73,77.87
+kept (C4.EN),young adult,SocialSent,216,233,70.39,62.35,78.35
+kept (C4.EN),young adult,VADER,216,1073,69.43,63.19,77.9
+kept (C4.EN),young adult,UnQover,216,68,73.53,57.48,84.52
+kept (C4.EN),adult,SocialSent,697,944,73.62,68.85,78.06
+kept (C4.EN),adult,VADER,697,3257,76.14,73.73,78.94
+kept (C4.EN),adult,UnQover,697,256,82.81,77.27,88.32
+kept (C4.EN),middle-aged,SocialSent,9,14,50.0,3.21,85.71
+kept (C4.EN),middle-aged,VADER,9,67,79.1,66.78,91.54
+kept (C4.EN),middle-aged,UnQover,9,10,100.0,100.0,100.0
+kept (C4.EN),elderly,SocialSent,306,279,67.38,61.93,71.59
+kept (C4.EN),elderly,VADER,306,1333,73.37,68.28,76.97
+kept (C4.EN),elderly,UnQover,306,98,84.69,75.98,91.01
+kept (C4.EN),person,SocialSent,8388,10759,69.29,67.93,70.91
+kept (C4.EN),person,VADER,8388,38975,70.26,69.25,71.26
+kept (C4.EN),person,UnQover,8388,2730,77.8,76.08,79.64
+kept (C4.EN),teen girl,SocialSent,11,17,82.35,63.41,100.0
+kept (C4.EN),teen girl,VADER,11,55,63.64,42.31,80.23
+kept (C4.EN),teen girl,UnQover,11,1,100.0,100.0,100.0
+kept (C4.EN),teen boy,SocialSent,8,16,87.5,60.0,100.0
+kept (C4.EN),teen boy,VADER,8,43,79.07,48.49,100.0
+kept (C4.EN),teen boy,UnQover,8,2,50.0,0.0,100.0
+kept (C4.EN),little girl,SocialSent,45,111,77.48,64.67,85.56
+kept (C4.EN),little girl,VADER,45,294,78.57,68.94,83.32
+kept (C4.EN),little girl,UnQover,45,19,78.95,45.16,93.83
+kept (C4.EN),little boy,SocialSent,19,18,72.22,56.18,91.4
+kept (C4.EN),little boy,VADER,19,54,74.07,56.17,89.2
+kept (C4.EN),little boy,UnQover,19,4,75.0,0.0,100.0
+kept (C4.EN),young woman,SocialSent,44,46,73.91,61.75,82.45
+kept (C4.EN),young woman,VADER,44,199,66.33,55.91,74.37
+kept (C4.EN),young woman,UnQover,44,9,66.67,35.48,100.0
+kept (C4.EN),young man,SocialSent,74,104,72.12,57.19,86.78
+kept (C4.EN),young man,VADER,74,377,59.68,51.53,70.79
+kept (C4.EN),young man,UnQover,74,27,59.26,42.11,75.0
+kept (C4.EN),middle-aged woman,SocialSent,2,3,0.0,0.0,0.0
+kept (C4.EN),middle-aged woman,VADER,2,10,70.0,33.33,85.71
+kept (C4.EN),middle-aged woman,UnQover,2,1,100.0,100.0,100.0
+kept (C4.EN),middle-aged man,SocialSent,0,0,,,
+kept (C4.EN),middle-aged man,VADER,0,0,,,
+kept (C4.EN),middle-aged man,UnQover,0,0,,,
+kept (C4.EN),old woman,SocialSent,20,16,75.0,25.0,100.0
+kept (C4.EN),old woman,VADER,20,66,57.58,29.45,67.4
+kept (C4.EN),old woman,UnQover,20,4,75.0,31.14,100.0
+kept (C4.EN),old man,SocialSent,38,39,76.92,64.08,90.88
+kept (C4.EN),old man,VADER,38,133,60.15,49.65,68.13
+kept (C4.EN),old man,UnQover,38,11,72.73,50.0,97.75
+kept (C4.EN),Jewish women,SocialSent,6,8,50.0,0.0,75.0
+kept (C4.EN),Jewish women,VADER,6,27,81.48,50.0,94.74
+kept (C4.EN),Jewish women,UnQover,6,2,100.0,100.0,100.0
+kept (C4.EN),Jewish men,SocialSent,10,10,80.0,0.0,88.89
+kept (C4.EN),Jewish men,VADER,10,56,80.36,14.29,94.7
+kept (C4.EN),Jewish men,UnQover,10,2,100.0,100.0,100.0
+kept (C4.EN),Arab women,SocialSent,4,7,85.71,66.67,100.0
+kept (C4.EN),Arab women,VADER,4,23,56.52,50.0,57.14
+kept (C4.EN),Arab women,UnQover,4,0,,,
+kept (C4.EN),Arab men,SocialSent,1,0,,,
+kept (C4.EN),Arab men,VADER,1,3,0.0,0.0,0.0
+kept (C4.EN),Arab men,UnQover,1,0,,,
+kept (C4.EN),Black women,SocialSent,26,26,53.85,34.27,71.24
+kept (C4.EN),Black women,VADER,26,125,72.8,48.19,78.58
+kept (C4.EN),Black women,UnQover,26,8,50.0,33.33,100.0
+kept (C4.EN),Black men,SocialSent,17,20,75.0,50.75,95.81
+kept (C4.EN),Black men,VADER,17,78,43.59,26.95,60.04
+kept (C4.EN),Black men,UnQover,17,6,66.67,5.63,100.0
+kept (C4.EN),White women,SocialSent,11,16,87.5,66.67,100.0
+kept (C4.EN),White women,VADER,11,61,70.49,50.29,87.26
+kept (C4.EN),White women,UnQover,11,0,,,
+kept (C4.EN),White men,SocialSent,11,17,70.59,56.08,92.73
+kept (C4.EN),White men,VADER,11,50,68.0,55.33,81.36
+kept (C4.EN),White men,UnQover,11,6,83.33,50.0,100.0
+kept (C4.EN),Asian women,SocialSent,1,0,,,
+kept (C4.EN),Asian women,VADER,1,1,0.0,0.0,0.0
+kept (C4.EN),Asian women,UnQover,1,0,,,
+kept (C4.EN),Asian men,SocialSent,2,0,,,
+kept (C4.EN),Asian men,VADER,2,16,62.5,62.5,62.5
+kept (C4.EN),Asian men,UnQover,2,1,100.0,100.0,100.0
+kept (C4.EN),Hispanic women,SocialSent,0,0,,,
+kept (C4.EN),Hispanic women,VADER,0,0,,,
+kept (C4.EN),Hispanic women,UnQover,0,0,,,
+kept (C4.EN),Hispanic men,SocialSent,4,1,100.0,100.0,100.0
+kept (C4.EN),Hispanic men,VADER,4,14,14.29,9.09,33.33
+kept (C4.EN),Hispanic men,UnQover,4,1,0.0,0.0,0.0
+kept (C4.EN),Latina/o women,SocialSent,1,1,0.0,0.0,0.0
+kept (C4.EN),Latina/o women,VADER,1,1,100.0,100.0,100.0
+kept (C4.EN),Latina/o women,UnQover,1,0,,,
+kept (C4.EN),Latina/o men,SocialSent,2,4,50.0,0.0,66.67
+kept (C4.EN),Latina/o men,VADER,2,10,70.0,0.0,87.5
+kept (C4.EN),Latina/o men,UnQover,2,0,,,
+kept (C4.EN),African American women,SocialSent,10,5,80.0,67.08,100.0
+kept (C4.EN),African American women,VADER,10,16,75.0,55.56,100.0
+kept (C4.EN),African American women,UnQover,10,0,,,
+kept (C4.EN),African American men,SocialSent,6,2,100.0,100.0,100.0
+kept (C4.EN),African American men,VADER,6,25,60.0,53.85,100.0
+kept (C4.EN),African American men,UnQover,6,2,50.0,0.0,100.0
+kept (C4.EN),Indian women,SocialSent,3,4,75.0,0.0,100.0
+kept (C4.EN),Indian women,VADER,3,8,75.0,75.0,75.0
+kept (C4.EN),Indian women,UnQover,3,0,,,
+kept (C4.EN),Indian men,SocialSent,2,0,,,
+kept (C4.EN),Indian men,VADER,2,5,80.0,80.0,80.0
+kept (C4.EN),Indian men,UnQover,2,0,,,
+kept (C4.EN),European women,SocialSent,0,0,,,
+kept (C4.EN),European women,VADER,0,0,,,
+kept (C4.EN),European women,UnQover,0,0,,,
+kept (C4.EN),European men,SocialSent,0,0,,,
+kept (C4.EN),European men,VADER,0,0,,,
+kept (C4.EN),European men,UnQover,0,0,,,
+kept (C4.EN),Chinese women,SocialSent,3,2,100.0,100.0,100.0
+kept (C4.EN),Chinese women,VADER,3,5,100.0,100.0,100.0
+kept (C4.EN),Chinese women,UnQover,3,1,100.0,100.0,100.0
+kept (C4.EN),Chinese men,SocialSent,2,9,55.56,50.0,60.0
+kept (C4.EN),Chinese men,VADER,2,30,73.33,64.71,84.62
+kept (C4.EN),Chinese men,UnQover,2,5,60.0,0.0,100.0
+kept (C4.EN),Muslim women,SocialSent,5,5,20.0,0.0,33.33
+kept (C4.EN),Muslim women,VADER,5,19,47.37,2.0,100.0
+kept (C4.EN),Muslim women,UnQover,5,2,100.0,100.0,100.0
+kept (C4.EN),Muslim men,SocialSent,2,3,33.33,33.33,33.33
+kept (C4.EN),Muslim men,VADER,2,10,0.0,0.0,0.0
+kept (C4.EN),Muslim men,UnQover,2,0,,,
+kept (C4.EN),Jewish (paper),SocialSent,128,136,63.24,47.19,77.39
+kept (C4.EN),Jewish (paper),VADER,128,508,63.39,53.2,71.74
+kept (C4.EN),Jewish (paper),UnQover,128,41,68.29,45.24,80.85
+kept (C4.EN),Arab (paper),SocialSent,78,92,77.17,59.06,87.84
+kept (C4.EN),Arab (paper),VADER,78,325,59.69,46.17,74.15
+kept (C4.EN),Arab (paper),UnQover,78,22,63.64,40.31,82.73
+excluded,women,SocialSent,1109,2262,68.35,63.5,72.59
+excluded,women,VADER,1109,7572,66.38,64.86,68.13
+excluded,women,UnQover,1109,444,74.77,71.83,78.98
+excluded,men,SocialSent,1277,2669,68.19,63.84,71.9
+excluded,men,VADER,1277,9254,64.62,62.64,66.57
+excluded,men,UnQover,1277,568,69.19,65.38,72.85
+excluded,female,SocialSent,310,619,63.97,53.68,71.98
+excluded,female,VADER,310,1867,67.43,62.56,71.7
+excluded,female,UnQover,310,107,77.57,67.71,86.56
+excluded,male,SocialSent,277,337,54.3,43.57,63.19
+excluded,male,VADER,277,1306,64.17,58.83,68.9
+excluded,male,UnQover,277,82,81.71,69.23,89.6
+excluded,girl,SocialSent,867,1832,75.6,72.42,78.75
+excluded,girl,VADER,867,5637,70.68,68.68,72.61
+excluded,girl,UnQover,867,354,76.55,65.7,80.66
+excluded,boy,SocialSent,310,835,68.62,57.18,74.39
+excluded,boy,VADER,310,2420,64.55,61.55,68.33
+excluded,boy,UnQover,310,158,62.03,48.94,70.43
+excluded,lady,SocialSent,248,903,79.29,75.61,82.22
+excluded,lady,VADER,248,2419,71.64,68.67,74.36
+excluded,lady,UnQover,248,143,76.92,71.73,86.21
+excluded,gentleman,SocialSent,44,96,81.25,71.18,88.69
+excluded,gentleman,VADER,44,292,79.79,73.1,84.9
+excluded,gentleman,UnQover,44,24,87.5,75.0,100.0
+excluded,mother,SocialSent,510,1141,65.73,58.59,70.13
+excluded,mother,VADER,510,3656,63.51,60.65,65.99
+excluded,mother,UnQover,510,217,67.74,59.31,74.26
+excluded,father,SocialSent,325,878,72.1,65.2,76.64
+excluded,father,VADER,325,2689,64.75,59.09,68.39
+excluded,father,UnQover,325,153,68.63,61.03,75.55
+excluded,wife,SocialSent,283,747,72.42,69.48,75.58
+excluded,wife,VADER,283,2304,63.02,59.02,65.67
+excluded,wife,UnQover,283,157,71.34,64.95,78.45
+excluded,husband,SocialSent,189,666,75.38,65.48,79.69
+excluded,husband,VADER,189,1966,66.99,61.16,70.18
+excluded,husband,UnQover,189,116,80.17,75.2,91.33
+excluded,daughter,SocialSent,137,658,72.34,58.83,77.16
+excluded,daughter,VADER,137,1996,64.28,56.84,67.46
+excluded,daughter,UnQover,137,112,63.39,55.94,71.61
+excluded,son,SocialSent,223,753,72.51,65.64,77.23
+excluded,son,VADER,223,2262,62.51,55.86,65.65
+excluded,son,UnQover,223,122,68.85,61.67,77.55
+excluded,she/her,SocialSent,3284,5414,69.78,66.92,72.16
+excluded,she/her,VADER,3284,17349,65.31,63.48,66.88
+excluded,she/her,UnQover,3284,1033,75.61,72.27,79.01
+excluded,he/him,SocialSent,5100,8202,67.86,65.4,69.61
+excluded,he/him,VADER,5100,27569,62.1,59.98,63.45
+excluded,he/him,UnQover,5100,1667,68.33,64.63,71.33
+excluded,child,SocialSent,1019,2150,63.72,56.48,69.51
+excluded,child,VADER,1019,6827,63.0,60.29,65.09
+excluded,child,UnQover,1019,420,73.33,69.13,77.67
+excluded,teen,SocialSent,424,851,63.45,55.29,70.23
+excluded,teen,VADER,424,2728,59.79,56.54,63.09
+excluded,teen,UnQover,424,147,65.99,55.24,72.55
+excluded,young adult,SocialSent,36,68,58.82,42.04,73.44
+excluded,young adult,VADER,36,247,65.99,56.06,74.94
+excluded,young adult,UnQover,36,13,76.92,50.0,98.5
+excluded,adult,SocialSent,313,723,61.0,52.13,70.49
+excluded,adult,VADER,313,2297,66.17,62.31,69.36
+excluded,adult,UnQover,313,122,77.87,67.12,84.49
+excluded,middle-aged,SocialSent,15,27,70.37,58.1,91.25
+excluded,middle-aged,VADER,15,81,54.32,41.8,73.06
+excluded,middle-aged,UnQover,15,2,100.0,100.0,100.0
+excluded,elderly,SocialSent,50,96,69.79,53.55,81.44
+excluded,elderly,VADER,50,353,68.84,54.45,79.84
+excluded,elderly,UnQover,50,17,88.24,71.43,100.0
+excluded,person,SocialSent,2673,5338,65.14,62.61,68.05
+excluded,person,VADER,2673,18653,64.12,61.98,65.75
+excluded,person,UnQover,2673,1143,69.38,66.46,72.24
+excluded,teen girl,SocialSent,28,41,60.98,42.21,87.31
+excluded,teen girl,VADER,28,163,53.37,46.8,69.87
+excluded,teen girl,UnQover,28,14,78.57,57.79,100.0
+excluded,teen boy,SocialSent,26,48,64.58,37.83,81.58
+excluded,teen boy,VADER,26,127,56.69,42.66,73.4
+excluded,teen boy,UnQover,26,4,50.0,0.0,100.0
+excluded,little girl,SocialSent,19,50,66.0,54.77,79.08
+excluded,little girl,VADER,19,146,68.49,44.59,85.46
+excluded,little girl,UnQover,19,9,88.89,8.0,100.0
+excluded,little boy,SocialSent,15,36,50.0,28.64,65.51
+excluded,little boy,VADER,15,125,60.0,43.24,66.11
+excluded,little boy,UnQover,15,8,50.0,33.33,100.0
+excluded,young woman,SocialSent,29,53,67.92,60.0,78.32
+excluded,young woman,VADER,29,196,55.1,46.96,65.62
+excluded,young woman,UnQover,29,12,83.33,67.24,98.82
+excluded,young man,SocialSent,35,120,70.83,47.34,78.52
+excluded,young man,VADER,35,397,66.25,59.49,72.47
+excluded,young man,UnQover,35,27,74.07,62.39,90.45
+excluded,middle-aged woman,SocialSent,2,1,0.0,0.0,0.0
+excluded,middle-aged woman,VADER,2,9,55.56,50.0,60.0
+excluded,middle-aged woman,UnQover,2,0,,,
+excluded,middle-aged man,SocialSent,4,6,83.33,66.67,100.0
+excluded,middle-aged man,VADER,4,20,50.0,29.65,100.0
+excluded,middle-aged man,UnQover,4,1,100.0,100.0,100.0
+excluded,old woman,SocialSent,17,42,50.0,36.64,60.0
+excluded,old woman,VADER,17,82,63.41,54.87,73.03
+excluded,old woman,UnQover,17,6,50.0,22.22,100.0
+excluded,old man,SocialSent,26,52,46.15,23.85,63.64
+excluded,old man,VADER,26,161,42.86,35.69,51.82
+excluded,old man,UnQover,26,11,63.64,2.81,97.95
+excluded,Jewish women,SocialSent,3,6,100.0,100.0,100.0
+excluded,Jewish women,VADER,3,36,80.56,50.0,87.5
+excluded,Jewish women,UnQover,3,1,100.0,100.0,100.0
+excluded,Jewish men,SocialSent,2,4,75.0,75.0,75.0
+excluded,Jewish men,VADER,2,9,77.78,77.78,77.78
+excluded,Jewish men,UnQover,2,0,,,
+excluded,Arab women,SocialSent,5,8,75.0,75.0,75.0
+excluded,Arab women,VADER,5,20,65.0,65.0,65.0
+excluded,Arab women,UnQover,5,0,,,
+excluded,Arab men,SocialSent,4,4,25.0,25.0,25.0
+excluded,Arab men,VADER,4,22,31.82,31.82,31.82
+excluded,Arab men,UnQover,4,7,42.86,42.86,42.86
+excluded,Black women,SocialSent,28,76,84.21,62.56,95.39
+excluded,Black women,VADER,28,202,70.79,55.94,81.35
+excluded,Black women,UnQover,28,17,88.24,50.0,100.0
+excluded,Black men,SocialSent,20,65,60.0,47.8,85.8
+excluded,Black men,VADER,20,263,60.84,48.6,79.78
+excluded,Black men,UnQover,20,10,60.0,21.12,76.49
+excluded,White women,SocialSent,14,16,31.25,0.0,53.52
+excluded,White women,VADER,14,84,67.86,52.94,87.98
+excluded,White women,UnQover,14,2,50.0,0.0,100.0
+excluded,White men,SocialSent,12,36,69.44,37.03,99.39
+excluded,White men,VADER,12,110,53.64,34.61,79.4
+excluded,White men,UnQover,12,7,57.14,4.0,97.5
+excluded,Asian women,SocialSent,15,32,87.5,67.32,94.14
+excluded,Asian women,VADER,15,91,78.02,51.75,84.53
+excluded,Asian women,UnQover,15,7,100.0,100.0,100.0
+excluded,Asian men,SocialSent,3,6,66.67,66.67,66.67
+excluded,Asian men,VADER,3,23,56.52,14.29,76.92
+excluded,Asian men,UnQover,3,1,0.0,0.0,0.0
+excluded,Hispanic women,SocialSent,0,0,,,
+excluded,Hispanic women,VADER,0,0,,,
+excluded,Hispanic women,UnQover,0,0,,,
+excluded,Hispanic men,SocialSent,1,1,0.0,0.0,0.0
+excluded,Hispanic men,VADER,1,3,33.33,33.33,33.33
+excluded,Hispanic men,UnQover,1,0,,,
+excluded,Latina/o women,SocialSent,3,9,77.78,66.67,100.0
+excluded,Latina/o women,VADER,3,21,71.43,64.29,98.06
+excluded,Latina/o women,UnQover,3,3,100.0,100.0,100.0
+excluded,Latina/o men,SocialSent,2,6,100.0,100.0,100.0
+excluded,Latina/o men,VADER,2,16,93.75,92.31,100.0
+excluded,Latina/o men,UnQover,2,2,100.0,100.0,100.0
+excluded,African American women,SocialSent,0,0,,,
+excluded,African American women,VADER,0,0,,,
+excluded,African American women,UnQover,0,0,,,
+excluded,African American men,SocialSent,3,8,37.5,0.0,62.1
+excluded,African American men,VADER,3,33,36.36,33.33,37.9
+excluded,African American men,UnQover,3,2,50.0,0.0,100.0
+excluded,Indian women,SocialSent,2,4,100.0,100.0,100.0
+excluded,Indian women,VADER,2,10,80.0,0.0,88.89
+excluded,Indian women,UnQover,2,1,100.0,100.0,100.0
+excluded,Indian men,SocialSent,1,0,,,
+excluded,Indian men,VADER,1,3,33.33,33.33,33.33
+excluded,Indian men,UnQover,1,0,,,
+excluded,European women,SocialSent,0,0,,,
+excluded,European women,VADER,0,0,,,
+excluded,European women,UnQover,0,0,,,
+excluded,European men,SocialSent,0,0,,,
+excluded,European men,VADER,0,0,,,
+excluded,European men,UnQover,0,0,,,
+excluded,Chinese women,SocialSent,4,10,90.0,0.0,100.0
+excluded,Chinese women,VADER,4,32,71.88,60.0,74.07
+excluded,Chinese women,UnQover,4,1,0.0,0.0,0.0
+excluded,Chinese men,SocialSent,2,0,,,
+excluded,Chinese men,VADER,2,4,100.0,100.0,100.0
+excluded,Chinese men,UnQover,2,0,,,
+excluded,Muslim women,SocialSent,2,2,0.0,0.0,0.0
+excluded,Muslim women,VADER,2,8,75.0,75.0,75.0
+excluded,Muslim women,UnQover,2,0,,,
+excluded,Muslim men,SocialSent,0,0,,,
+excluded,Muslim men,VADER,0,0,,,
+excluded,Muslim men,UnQover,0,0,,,
+excluded,Jewish (paper),SocialSent,116,206,69.9,63.97,77.19
+excluded,Jewish (paper),VADER,116,603,66.0,57.59,70.1
+excluded,Jewish (paper),UnQover,116,42,64.29,50.0,74.49
+excluded,Arab (paper),SocialSent,21,89,48.31,33.57,78.43
+excluded,Arab (paper),VADER,21,298,54.7,47.12,60.98
+excluded,Arab (paper),UnQover,21,21,33.33,11.55,51.85
