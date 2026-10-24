@@ -399,25 +399,29 @@ def figures(mk, det, score, corpus, sample, corpora, tone, A, dpi, plt, cs):
     from matplotlib.lines import Line2D
     legend = [Line2D([], [], color=colors[c], marker="o", linestyle="none", label=c) for c in corpora]
 
-    # marker words: document rate per word, every corpus
-    words = ["ANY MARKER"] + MARKERS + ["ANY CONTROL"] + CONTROLS
-    y = np.arange(len(words))[::-1]
+    # marker words and control words: document rate per word, every corpus (linear, so 0% stays visible)
     off = np.linspace(0.25, -0.25, len(corpora))
-    fig, ax = plt.subplots(figsize=(8, 0.28 * len(words) + 1.8), facecolor=cs.SURFACE)
-    cs.style(ax)
-    for c, dy in zip(corpora, off):
-        d = mk[mk.corpus == c].set_index("word").reindex(words)
-        v = d["doc_rate_pct"].to_numpy()
-        ax.errorbar(v, y + dy, xerr=[v - d["ci_lo"], d["ci_hi"] - v], fmt="o", color=colors[c], ms=4.5,
-                    mec=cs.SURFACE, mew=1, ecolor=colors[c], elinewidth=1, capsize=1.5, zorder=3)
-    ax.set_xscale("log")
-    ax.set_yticks(y, words, color=cs.INK, fontsize=8)
-    ax.set_xlabel(f"Documents containing the word in their first {WINDOW} words (%, log scale)", color=cs.INK2)
-    ax.legend(handles=legend, loc="lower left", bbox_to_anchor=(0, 1.0), ncol=len(corpora), frameon=False,
-              labelcolor=cs.INK2, fontsize=9)
-    ax.set_title("LLM marker words vs control words, by corpus (95% CIs, domain bootstrap)", color=cs.INK,
-                 loc="left", fontsize=11, pad=26)
-    fig.tight_layout()
+    panels = [("LLM marker words", ["ANY MARKER"] + MARKERS), ("Control words", ["ANY CONTROL"] + CONTROLS)]
+    fig, axes = plt.subplots(1, 2, figsize=(11, 0.28 * len(panels[0][1]) + 2), facecolor=cs.SURFACE,
+                             gridspec_kw={"height_ratios": [1]})
+    for ax, (title, words) in zip(axes, panels):
+        cs.style(ax)
+        y = np.arange(len(words))[::-1]
+        for c, dy in zip(corpora, off):
+            d = mk[mk.corpus == c].set_index("word").reindex(words)
+            v = d["doc_rate_pct"].to_numpy()
+            ax.errorbar(v, y + dy, xerr=[v - d["ci_lo"], d["ci_hi"] - v], fmt="o", color=colors[c], ms=4.5,
+                        mec=cs.SURFACE, mew=1, ecolor=colors[c], elinewidth=1, capsize=1.5, zorder=3)
+        ax.set_yticks(y, words, color=cs.INK, fontsize=8)
+        ax.set_ylim(-0.7, len(words) - 0.3)
+        ax.set_xlim(left=0)
+        ax.set_title(title, color=cs.INK, loc="left", fontsize=10)
+        ax.set_xlabel(f"Documents with the word in their first {WINDOW} words (%)", color=cs.INK2)
+    fig.legend(handles=legend, loc="lower left", bbox_to_anchor=(0.01, 0), ncol=len(corpora), frameon=False,
+               labelcolor=cs.INK2, fontsize=9)
+    fig.suptitle("LLM marker words vs control words, by corpus (95% CIs, domain bootstrap)", color=cs.INK,
+                 x=0.01, ha="left", fontsize=11)
+    fig.tight_layout(rect=(0, 0.03, 1, 0.97))
     fig.savefig(A("fig_marker_words.png"), dpi=dpi, facecolor=cs.SURFACE)
     plt.close(fig)
 
@@ -432,7 +436,7 @@ def figures(mk, det, score, corpus, sample, corpora, tone, A, dpi, plt, cs):
         for fpr in (1, 5):
             t = det[det.fpr_on_2019_pct == fpr].threshold.iloc[0]
             ax.axvline(t, color=cs.INK2, linewidth=1, linestyle=(0, (3, 3)))
-            ax.text(t, 101, f" {fpr}% of 2019", color=cs.INK2, fontsize=8, va="bottom")
+            ax.text(t, 97, f"{fpr}% of 2019 below ", color=cs.INK2, fontsize=8, rotation=90, ha="right", va="top")
         ax.set_xlabel("Binoculars score (lower = more machine-like)", color=cs.INK2)
         ax.set_ylabel("Documents at or below this score (%)", color=cs.INK2)
         ax.set_ylim(0, 108)

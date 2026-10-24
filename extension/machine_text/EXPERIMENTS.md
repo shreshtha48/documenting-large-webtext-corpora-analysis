@@ -6,5 +6,6 @@ Every run is kept, including the ones that fail or don't reproduce. Raw outputs 
 |---|---|---|---|---|
 | F0 | 2026-10-24 | Filter check: `filter_c4_pipeline.py` vs the TFDS v3.0.1 reference code on 5,000 pages of CC-MAIN-2024-10 shard 0 | local | Identical C4.EN (998) and C4.BLOCKLIST (79). Found and fixed: wrong LDNOOBW commit URL (404), `{`/javascript rule order, missing URL and line dedupe |
 | F1 | 2026-10-24 | Pilot shards: CC-MAIN-2024-10 shards 0 and 3, CC-MAIN-2024-51 shards 0 and 3 | Kaggle CPU | 9,496 / 9,510 / 7,769 / 7,813 C4.EN docs. Blocklist removes about 5% of `en.noblocklist` (2019: about 7.6%). Files in `../post-llm-crawl/` |
-| M0 | 2026-10-24 | Pipeline test of `machine_text.py`: all 4 shards for markers; Binoculars with the small Qwen2.5-0.5B pair on 150 docs per corpus | local CPU | Pipeline test only, not a result |
+| R0 | 2026-10-24 | `run_wet_shards.py` test: CC-MAIN-2024-10 shard 0 via the parallel runner, then re-run to check resume | local | Output identical to the F1 Kaggle run (9,496 / 514). Re-run skipped the finished shard |
+| M0 | 2026-10-24 | Pipeline test of `machine_text.py`: all 4 shards for markers; Binoculars with the small Qwen2.5-0.5B pair on 150 docs per corpus | local CPU | Pipeline works; Binoculars stopped at 108 docs (time cap) and resumes. Marker share 2.0% → 6.7% → 15.3% (2019 → Feb → Dec) on 150 docs per corpus. Pipeline test only, not a result |
 | M1 | — | Main run: 4 shards + 2019 control, Binoculars Qwen2.5-1.5B pair, RoBERTa | Kaggle T4 ×2 | not run yet |
