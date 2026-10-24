@@ -94,7 +94,7 @@ The paper compared the two most extreme demographic groups identified in Table 7
 3. **Tokenization & Normalization**: Paragraph text is whitespace-tokenized, stripped of punctuation, and converted to lowercase.
 4. **Sentiment Lexicons Applied**:
    * **SocialSent**: Reddit-induced word polarities (top 250 positive and 250 negative words).
-   * **VADER**: Sentiment lexicon filtered to terms with absolute valence score $\ge 1.0$.
+   * **VADER**: words with a mean valence above +1.0 count as positive, below −1.0 as negative (A.7).
    * **UnQover Lexicon**: Word list extracted from UnQover attribute adjectives.
 5. **Positivity Metric**:
    $$\text{Corpus Positivity}(G) = \frac{\text{Positive Sentiment Words in Paragraphs Mentioning } G}{\text{Total Positive + Negative Sentiment Words in Paragraphs Mentioning } G} \times 100\%$$
@@ -116,7 +116,7 @@ The original paper did not specify which size of UnifiedQA was evaluated in Tabl
 | **E4-Base** | `unifiedqa-t5-base` (220M) | 3,032 (Sample) | 26.2% | +0.03 | 45.3% | 55.6% | 21.7 pts |
 | **E4-Large** | `unifiedqa-t5-large` (770M) | 3,032 (Sample) | 30.1% | +0.48 | 54.7% | 43.1% | 35.9 pts |
 | **E6** | **`unifiedqa-t5-3b` (3B)** | **294,000 (Full)** | **50.4%** | **+0.844** | **65.7%** | **34.6%** | **43.4 pts** |
-| *Paper Target* | *UnifiedQA (Unstated)* | *294,000 (Full)* | *Not reported* | *1.000* | *67.1%* | *37.0%* | *30.5 pts* |
+| *Paper Target* | *UnifiedQA (Unstated)* | *294,000 (Full)* | *Not reported* | *—* | *67.1%* | *37.0%* | *30.5 pts* |
 
 #### Why Small Models Fail to Reproduce Table 7:
 * A model can only register sentiment bias if its choice **flips** when the question changes from negative (*"Who was barbarian?"*) to positive (*"Who was civilized?"*).
@@ -126,23 +126,25 @@ The original paper did not specify which size of UnifiedQA was evaluated in Tabl
 
 ### 4.2 Full Table 7 Reproduction Numbers (UnifiedQA-3B, Full 294,000 Questions)
 
-| Ethnicity | Paper Table 7 | Our Full Run (E6) | 95% Bootstrap CI | Difference |
+| Ethnicity | Paper Table 7 | Our Full Run (E6) | 95% Bootstrap CI | Difference (points) |
 |---|---|---|---|---|
-| **Jewish** | 67.1% | **65.7%** | [62.7%, 68.8%] | -1.4% (inside CI) |
-| **Asian** | 60.6% | **64.2%** | [61.1%, 67.3%] | +3.6% (inside CI) |
-| **Caucasian** | 60.5% | **63.4%** | [60.6%, 66.2%] | +2.9% |
-| **European** | 60.5% | **68.6%** | [65.4%, 71.7%] | +8.1% |
-| **White** | 56.5% | **58.7%** | [56.2%, 61.3%] | +2.2% |
-| **Alaskan** | 55.9% | **55.0%** | [52.1%, 58.0%] | -0.9% (inside CI) |
-| **Hispanic** | 50.8% | **51.2%** | [48.1%, 54.3%] | +0.4% (inside CI) |
-| **Native American** | 50.6% | **52.2%** | [49.3%, 55.1%] | +1.6% (inside CI) |
-| **South-American** | 44.4% | **38.8%** | [35.8%, 41.9%] | -5.6% |
-| **African-American** | 44.3% | **41.4%** | [38.3%, 44.6%] | -2.9% (inside CI) |
-| **Latino** | 43.1% | **56.0%** | [52.8%, 59.1%] | +12.9% |
-| **Middle-Eastern** | 42.6% | **38.7%** | [35.6%, 41.8%] | -3.9% |
-| **Black** | 39.3% | **25.2%** | [22.4%, 28.2%] | -14.1% |
-| **Arab** | 37.0% | **34.6%** | [31.8%, 37.5%] | -2.4% (inside CI) |
-| **African** | 36.6% | **35.7%** | [32.7%, 38.6%] | -0.9% (inside CI) |
+| **Jewish** | 67.1% | **65.7%** | [62.7%, 68.8%] | -1.4 (paper inside CI) |
+| **Asian** | 60.6% | **57.2%** | [54.7%, 59.6%] | -3.4 |
+| **European** | 60.5% | **68.6%** | [63.9%, 72.9%] | +8.1 |
+| **Caucasian** | 60.5% | **63.6%** | [59.6%, 67.8%] | +3.1 (paper inside CI) |
+| **White** | 56.5% | **55.3%** | [48.7%, 61.7%] | -1.2 (paper inside CI) |
+| **Alaskan** | 55.9% | **59.0%** | [54.3%, 63.7%] | +3.1 (paper inside CI) |
+| **Hispanic** | 50.8% | **46.6%** | [43.5%, 49.7%] | -4.2 |
+| **Native American** | 50.6% | **49.6%** | [44.9%, 54.4%] | -1.0 (paper inside CI) |
+| **South-American** | 44.4% | **40.1%** | [38.0%, 42.3%] | -4.3 |
+| **African-American** | 44.3% | **42.7%** | [40.0%, 45.4%] | -1.6 (paper inside CI) |
+| **Latino** | 43.1% | **56.0%** | [53.6%, 58.3%] | +12.9 |
+| **Middle-Eastern** | 42.6% | **44.8%** | [42.3%, 47.4%] | +2.2 (paper inside CI) |
+| **Black** | 39.3% | **25.2%** | [21.5%, 29.0%] | -14.1 |
+| **Arab** | 37.0% | **34.6%** | [31.8%, 37.5%] | -2.4 (paper inside CI) |
+| **African** | 36.6% | **41.1%** | [37.1%, 45.4%] | +4.5 |
+
+The paper's value is inside our 95% CI for 8 of 15 groups.
 
 * **Direct Jewish vs. Arab Matchup**: In 1,400 direct head-to-head questions between Jewish and Arab subjects, UnifiedQA-3B assigned the negative stereotype to the Arab subject in **84% of contexts**.
 
@@ -154,8 +156,8 @@ Using 12 randomly seeded shards of C4.EN (representing 4.28 million documents an
 * **VADER Sentiment Gap**: **+2.0 points** (95% CI: [0.9, 2.9]) vs. Paper **+2.0 points**.
 * **Robustness & Confounding Discovery**:
   * An audit revealed that **22% of all "Arab" occurrences** in C4 are the geopolitical entity `"United Arab Emirates"` (frequently appearing in neutral or positive financial, travel, and aviation news).
-  * When geopolitical phrases like "United Arab Emirates" are excluded, the VADER gap widens from **+2.0 to +7.3 points**, indicating that the true demographic sentiment gap in raw web text is even wider than Dodge et al. initially estimated.
-  * Removing religious terms (e.g. `blessed`, `faith`, `holy`) cuts the SocialSent gap in half, demonstrating that religious connotations significantly influence sentiment lexicon scores.
+  * When "United Arab Emirates" paragraphs are excluded, the VADER gap widens from **+2.0 to +7.3 points** (SocialSent: 7.1 → 10.2). Excluding all geopolitical "Arab" phrases (UAE, Arab League / Spring / world / countries / states / nations) gives a VADER gap of +6.0. So the paper's VADER match depends on UAE text, which is mostly upbeat commercial content.
+  * Removing religious terms (e.g. `blessed`, `faith`, `holy`) cuts the SocialSent gap in half (7.1 → 3.4) and the VADER gap to 0.4 [−0.7, 1.4]. Much of the gap therefore reflects vocabulary that is more common in "Jewish" paragraphs, not necessarily a more favourable tone towards the group. Full table: `EXPERIMENTS.md`, "Arm B audit fixes".
 
 ---
 
@@ -170,7 +172,7 @@ The end-to-end model evaluation notebook runs on Kaggle using free Dual Tesla T4
 * **Internet**: Turn **ON** in Kaggle settings (needed to download HuggingFace model weights and sentencepiece).
 * **Expected Runtime**:
   * E4 Sample Test (1,516 contexts across 4 model sizes): **~10–15 minutes**.
-  * E6 Full Run (UnifiedQA-3B across 147,000 contexts): **~3.5 to 4 hours**.
+  * E6 Full Run (UnifiedQA-3B across 147,000 contexts): **~5 hours** on 2 × T4 (about 4 contexts/s per GPU at batch size 16; use 8 if a GPU runs out of memory).
 * **Step-by-Step Instructions**:
   1. Create a zip archive of this folder named `demographic_bias.zip`.
   2. In Kaggle, go to **Datasets $\rightarrow$ New Dataset**, upload `demographic_bias.zip`, and name the dataset `demographic-bias`.
@@ -195,14 +197,9 @@ The corpus sentiment analysis notebook runs entirely on Google Colab's standard 
 
 ### 5.3 Local Execution & Rebuilding Notebooks
 
-If you modify any Python script inside `scripts/`, rebuild the corresponding notebooks before running:
-```bash
-# Rebuild Kaggle notebook
-python kaggle/build_notebook.py
-
-# Rebuild Colab notebook
-python colab/build_colab_notebook.py
-```
+The notebooks embed copies of the scripts as `%%writefile` cells. The builder scripts that generated them
+(`kaggle/build_notebook.py`, `colab/build_colab_notebook.py`) are not in the repository (see the root README), so
+if you change a script in `scripts/`, update the matching `%%writefile` cell as well.
 
 To run the pipeline locally (CPU or local GPU):
 ```bash

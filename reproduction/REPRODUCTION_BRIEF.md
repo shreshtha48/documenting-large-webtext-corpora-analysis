@@ -2,7 +2,8 @@
 
 We reproduced three of the paper's analyses of C4.EN: §4.2 (benchmark contamination), §4.3 (demographic bias) and
 §5 (what the blocklist excluded). Every number below has a 95% CI; the paper reports none. Full logs, including
-runs that failed: `f3_contamination/RESULTS.md`, `f4_demographic_bias/EXPERIMENTS.md`, `f5_excluded_data/RESULTS.md`.
+runs that failed: [benchmark-contamination/RESULTS.md](benchmark-contamination/RESULTS.md),
+[demographic_bias/EXPERIMENTS.md](demographic_bias/EXPERIMENTS.md), [excluded_data/RESULTS.md](excluded_data/RESULTS.md).
 
 ## §4.2 Benchmark contamination (Table 2)
 

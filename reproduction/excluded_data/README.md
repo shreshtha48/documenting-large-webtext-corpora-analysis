@@ -8,7 +8,7 @@ This folder reproduces and extends the findings of **Section 5 ("What Was Exclud
 
 ## 1. Executive Summary & Research Question
 
-When creating the **C4** dataset from raw Common Crawl web scrapes, Google applied aggressive heuristics that **discarded over 90% of the crawled web pages**. A major filter in this pipeline was the **LDNOOBW ("List of Dirty, Naughty, Obscene, and Otherwise Bad Words")** banlist: if a web document contained even a single word from this list, the entire document was permanently deleted.
+When creating the **C4** dataset from raw Common Crawl web scrapes, Google applied aggressive heuristics: of 1.1 billion English pages, 365 million (about a third) were kept, with about 11% of the tokens (Dodge et al. Table 1: 1.4T → 156B tokens). A major filter in this pipeline was the **LDNOOBW ("List of Dirty, Naughty, Obscene, and Otherwise Bad Words")** banlist: if a web document contained even a single word from this list, the entire document was permanently deleted.
 
 Section 5 evaluated the collateral damage of this crude filtering rule:
 1. **Content of Excluded Pages (§5.1, Figure 6)**: Did the blocklist only drop pornographic/offensive content, or did it inadvertently drop legitimate information?
@@ -20,12 +20,12 @@ Section 5 evaluated the collateral damage of this crude filtering rule:
 | Metric | Paper Finding | Our Replication (95% Bootstrap CI) | Status |
 |---|---|---|---|
 | **Identity PMI Ranking (Figure 5)** | Sexual orientation terms highest; European/White lowest | Spearman rank correlation **$\rho = 0.968$** with paper's bars | **Reproduced** |
-| **"Lesbian" Document Removal** | Highest exclusion (~83%) | **82.9%** excluded ($\text{PMI} = 2.438$ vs. paper ~2.44) | **Reproduced** |
-| **"Gay" Document Removal** | High exclusion (~65%) | **65.4%** excluded ($\text{PMI} = 2.200$ vs. paper ~2.34) | **Reproduced** |
+| **"Lesbian" Document Removal** | Highest PMI (Fig. 5 bar ~2.44; the paper gives no removal %) | **82.9%** excluded ($\text{PMI} = 2.438$ vs. paper ~2.44) | **Reproduced** |
+| **"Gay" Document Removal** | High PMI (Fig. 5 bar ~2.34; the paper gives no removal %) | **65.4%** excluded ($\text{PMI} = 2.200$ vs. paper ~2.34) | **Reproduced in direction** |
 | **African American English (AAE) Removal** | 42.0% | **35.8%** [33.7%, 38.1%] (~5x higher than WAE) | **Reproduced in direction & scale** |
-| **Hispanic-Aligned English Removal** | 32.0% | **34.0%** [32.3%, 36.1%] | **Reproduced** (inside CI) |
-| **White-Aligned English (WAE) Removal** | 6.2% | **7.2%** [7.1%, 7.3%] | **Reproduced** |
-| **C4.EN Dialect Composition** | 97.8% WAE, 0.07% AAE, 0.09% Hispanic | **98.0% WAE, 0.074% AAE, 0.065% Hispanic** | **Reproduced** |
+| **Hispanic-Aligned English Removal** | 32.0% | **34.0%** [32.3%, 36.1%] | **Reproduced in direction** (paper just outside our CI) |
+| **White-Aligned English (WAE) Removal** | 6.2% | **7.2%** [7.1%, 7.3%] | **Close** (paper outside our CI) |
+| **C4.EN Dialect Composition** | 97.8% WAE, 0.07% AAE, 0.09% Hispanic | **98.0% WAE, 0.074% AAE, 0.065% Hispanic** | **Reproduced** for WAE and AAE; Hispanic lower |
 | **Sexual Clusters in Excluded Data (Fig. 6)** | 16 of 50 clusters (31% of docs) | **15 of 50 clusters (30.8% of docs)** | **Reproduced** |
 
 ---
@@ -155,16 +155,22 @@ Sexual orientation terms cluster at the very top of the exclusion rankings. Docu
 
 Running $k$-Means with $k = 50$ on $100,000$ excluded documents yielded:
 * **Sexual / Adult Clusters**: **15 of 50 clusters** accounting for **$30.8\%$ of excluded documents** (Dodge et al. reported **16 of 50 clusters, 31% of documents**).
-* **Collateral Damage (The remaining ~70% of excluded text)**:
-  * **Medicine & Health**: e.g., clusters with top words `"patients cancer treatment clinical medical"` (banned due to anatomical terms or mentions of reproductive health).
-  * **Law & Court Proceedings**: e.g., `"court criminal case judge trial police"`.
-  * **Politics & News**: e.g., `"president trump election campaign government"`.
-  * **Religion & Culture**: Discussion of historical persecution or theological doctrines.
-  * **Sports, Cooking, Recipes**: Everyday text discarded because of colloquialisms matching profanity subwords.
+* **The remaining ~70% of excluded text** includes non-sexual clusters (seed 0; top words from `clusters.csv`):
+  * **Health:** #18 "body health treatment symptoms blood skin doctor cause pain help" (2.5% of excluded docs) and #35 "patients study disease clinical studies treatment risk associated et data" (1.3%).
+  * **Law:** #12 "court law rights legal state case federal laws supreme information" (1.2%), and #42, anti-discrimination text ("disability employment origin race discrimination ...", 0.4%).
+  * **Politics and news:** #5 "president government trump political people state country said obama election" (3.4%).
+  * **Religion:** #44 "god jesus christ church lord bible christian faith sin holy" (1.4%).
+  * **Sports and recipes:** #13 "team game season players league win ..." (1.7%) and #26 "food recipe eat delicious sauce cheese ..." (1.1%).
+  * **Education:** #43 "university laude cum graduated school degree ..." (0.8%): graduation notices removed because "cum" (as in *magna cum laude*) is on the blocklist.
+
+  The blocklist matches whole words, so each of these documents contains at least one listed word somewhere; the
+  cluster words describe the main topic, not why a document was removed.
 
 ---
 
 ### 4.4 Arm B Extension: Context-Aware Filtering with a Neural Toxicity Classifier
+
+> **Not run yet.** This section describes the planned comparison; there are no results for it in `results/`.
 
 To test whether the severe demographic censorship in §5.2 and §5.3 was caused by the crude lexical nature of the blocklist, **Arm B** replaces the LDNOOBW regular expression with a context-aware transformer classifier (`unitary/toxic-bert`):
 * Evaluates the exact same documents side-by-side using `scripts/scan_toxicity.py`.

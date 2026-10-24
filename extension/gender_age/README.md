@@ -6,7 +6,7 @@
 > — and then looks at how ethnicity, gender, and age interact together.
 
 **Extends:** Paper §4.3 (demographic bias, ethnicity) and §5 (excluded data)  
-**Status:** Two experiments have results (E6 gender split and BBQ validation). Three Kaggle runs are pending (the full probe and corpus scan).  
+**Status:** E6 gender split, BBQ validation and the UnifiedQA-3B probes P1a / P1b have results. BBQ on UnifiedQA-3B (P2) stopped part-way, and the corpus scan (C1) has not been run.  
 See [EXPERIMENTS.md](EXPERIMENTS.md) for the full chronological run log.
 
 ---
@@ -28,7 +28,7 @@ See [EXPERIMENTS.md](EXPERIMENTS.md) for the full chronological run log.
 
 ### Background: What the Paper Already Found
 
-The original paper (Dodge et al. 2021) tested whether a model trained on C4 associated **ethnic groups** with positive or negative contexts. They found large, systematic differences — for example, the model associated Jewish people with positive contexts far more often than Arab people (a gap of ~65 percentage points).
+The original paper (Dodge et al. 2021) tested whether a model trained on C4 associated **ethnic groups** with positive or negative contexts. They found large, systematic differences — for example, the model associated Jewish people with positive contexts far more often than Arab people (67.1% vs 37.0% in Table 7, a 30-point gap).
 
 ### What This Extension Asks
 
@@ -319,7 +319,7 @@ This required no new Kaggle run — it ran locally in 14 seconds using `analyze_
 
 **1. The ethnicity ranking is identical in men and women templates (Spearman rank correlation = 1.0).** Whatever order ethnicities fall in for "man" contexts, they fall in the exact same order for "woman" contexts. The bias structure is driven by *ethnicity*, not by *gender*.
 
-**2. The differences are tiny — all within 2.4 percentage points.** Even the "anomalous" differences (flagged by the statistical test) are small. The Jewish–Arab gap: 64.9 points in women templates vs 64.9 points in men templates — essentially unchanged.
+**2. The differences are tiny — all within 2.4 percentage points.** Even the "anomalous" differences (flagged by the statistical test) are small. The Jewish–Arab head-to-head gap: 65.7 points [57.3, 73.9] in women templates vs 64.9 [56.4, 72.4] in men templates, essentially unchanged.
 
 **3. Six ethnicities show a statistically significant but small gender interaction:** Jewish (−1.6 pp), European (+1.2 pp), Hispanic (−1.2 pp), Native American (−1.2 pp), South-American (+1.2 pp), Middle-Eastern (+2.4 pp). The Middle-Eastern group shows the largest shift: when the template uses "woman", it is rated slightly more positively than when it uses "man."
 
@@ -366,6 +366,8 @@ This is the key result: for pairs like "Black woman vs. Black man," which gender
 | Latino | 70.8% | [37.7, 93.3] | No |
 | White | 71.3% | [66.3, 100] | No |
 
+*Latino and White are listed, but the run's own summary marks them "too sparse to test" (few same-race female pairs; see `summary.json`); read them as descriptive only.*
+
 **Races with too few templates to test reliably:** Hispanic, Native American, Middle Eastern, Roma, Caucasian, European, South American — all listed but not formally tested.
 
 **Key findings:**
@@ -378,15 +380,22 @@ This is the key result: for pairs like "Black woman vs. Black man," which gender
 
 ---
 
-### 5.3 Pending Results (Kaggle runs not yet done)
+### 5.3 UnifiedQA-3B probes (P1a, P1b: done; `ga_probe_account1.zip`, `ga_probe_account2.zip`)
 
-| Run | Notebook | What it will show |
+Women are picked for the positive attribute more often than men in every probe, and in every age group and ethnicity:
+
+| Probe | Women | Men |
 |---|---|---|
-| P1a | `kaggle/ga_probe_account1.ipynb` | UnifiedQA-3B: gender_names, gender_names_ctrl, gender_nouns |
-| P1b | `kaggle/ga_probe_account2.ipynb` | UnifiedQA-3B: age, gender_age, gender_ethnicity, BBQ 3B |
-| C1 | `kaggle/ga_corpus.ipynb` | Corpus: 12 shards, exclusion by gender/age/ethnicity, sentiment, dialect |
+| First names (P1a) | 62.0% [57.1, 66.5] | 38.0% |
+| Nouns, e.g. sister / brother (P1a) | 65.9% [60.1, 71.2] | 34.1% |
+| Gender × age, same-age pairs (P1b) | 69.5% [63.5, 75.3]; 67.6–70.4% within each age group | 30.5% |
+| Gender × ethnicity, same-ethnicity pairs (P1b) | 70.1% pooled; 65.0% (White) to 76.3% (African-American) by ethnicity | — |
 
-Once P1a/P1b are run, we will be able to answer: *Does UnifiedQA-3B (trained on C4) show gender and age bias in the same direction as the ethnicity bias?*
+Age (P1b): teens 35.4% [31.4, 39.6], young adults 47.2%, elderly 51.4%, middle-aged 66.0% [61.9, 70.1].
+Among women, African-American (+6.2) and African (+4.5) are above the average woman, and White (−5.1) and Jewish (−3.1)
+below (Holm p < .05). Figures: `../results/gender_age/`.
+
+Still pending: BBQ on UnifiedQA-3B (P2, stopped at 8,000 of 12,648 items) and the corpus scan (C1).
 
 ---
 

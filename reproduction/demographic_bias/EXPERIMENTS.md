@@ -95,8 +95,8 @@ are split on whitespace, stripped of punctuation and lowercased (lowercasing is 
 
 | ID | What | Data | Outcome | Results |
 |---|---|---|---|---|
-| B0 | One-shard test | shard 00000 (356,317 docs; 2,939 Jewish / 1,384 Arab paragraphs) | **Reproduces.** SocialSent 71.8 vs 64.5 (paper 73.2 vs 65.7); gap 7.3 [2.5–11.9] (paper 7.5). VADER gap 1.8 [−1.4–4.8] (paper 2.0); UnQover gap 2.6 [−3.5–8.5] (paper 1.4). NYT / Al Jazeera: too few tokens (1–17) to compare | `results/B0_one_shard_00000/` |
-| B1 | 12 seeded shards (seed 0; listed in `shards.json`) | 12/1024 of C4.EN (4.28M docs, 18,893 domains; 32,562 Jewish / 17,175 Arab paragraphs) | **Reproduces; every paper value is inside our 95% CI.** SocialSent: Jewish 73.4 [72.4–74.3] (paper 73.2), Arab 66.2 [64.9–67.5] (65.7), gap 7.1 [5.6–8.7] (7.5). VADER gap 2.0 [0.9–2.9] (2.0). UnQover gap 3.0 [1.2–4.9] (1.4; our lexicon is a reconstruction). NYT 69.3 vs 67.4 (paper 74.0 vs 69.5) and Al Jazeera 46.7 vs 40.5 (42.5 vs 42.8), but only 30–101 tokens each, so these are not interpretable | `results/B1_c4_12_shards/` |
+| B0 | One-shard test | shard 00000 (356,317 docs; 2,939 Jewish / 1,384 Arab paragraphs) | **Reproduces.** SocialSent 71.8 vs 64.5 (paper 73.2 vs 65.7); gap 7.3 [2.5–11.9] (paper 7.5). VADER gap 1.8 [−1.4–4.8] (paper 2.0); UnQover gap 2.6 [−3.5–8.5] with the v1 lexicon (paper 1.4; 9.0 [1.4–15.7] with v2, see BA1). NYT / Al Jazeera: too few tokens (1–17) to compare | `results/B0_one_shard_00000/` |
+| B1 | 12 seeded shards (seed 0; listed in `shards.json`) | 12/1024 of C4.EN (4.28M docs, 18,893 domains; 32,562 Jewish / 17,175 Arab paragraphs) | **Reproduces; every paper SocialSent and VADER value is inside our 95% CI.** SocialSent: Jewish 73.4 [72.4–74.3] (paper 73.2), Arab 66.2 [64.9–67.5] (65.7), gap 7.1 [5.6–8.7] (7.5). VADER gap 2.0 [0.9–2.9] (2.0). UnQover gap 3.0 [1.2–4.9] with the v1 lexicon (1.4; our lexicon is a reconstruction; 5.7 [3.4–8.0] with v2, see BA1). NYT 69.3 vs 67.4 (paper 74.0 vs 69.5) and Al Jazeera 46.7 vs 40.5 (42.5 vs 42.8), but only 30–101 tokens each, so these are not interpretable | `results/B1_c4_12_shards/` |
 
 | B2 | **Extension** (not in the paper): all 15 Table 7 groups, matched by spelling variants | shard 00000 (19,581 domains) | Jewish/Arab point estimates identical to B0 (71.8 / 64.5); CIs shift slightly because the domain bootstrap now covers more sites. Across groups, SocialSent corpus positivity **does not track** the paper's Table 7 (Spearman −0.05). "Black" (83.1%) and "White" (81.7%) score as highly positive, consistent with the non-ethnic senses the paper warns about. One shard only | `results/B2_ext_all_groups_shard00000/` |
 | BA1 | Audit fixes (analysis only; same paragraphs) | B0, B1, B2 re-analysed | The paper-setting SocialSent and VADER numbers are **unchanged**. UnQover lexicon v2 moves the B1 UnQover gap 3.0 → **5.7 [3.4–8.0]**, further from the paper's 1.4. New robustness table: see "Arm B audit fixes" below | `results/B*/analysis/robustness.csv` |
@@ -148,9 +148,9 @@ Jewish 262k words (paper ≈ 244k) and 3,751 tokens (≈ 3,320); Arab 106k words
 
 **Deviations (ours, because the paper is silent or the resource is gone):**
 - The 250 SocialSent subreddit lexicons come from the copy bundled in shifterator (`8d74d74`); the Stanford page is unreachable.
-- The "overtly ethnic terms" removed from SocialSent are our list (31 found among the candidates; listed in MANIFEST.json).
+- The "overtly ethnic terms" removed from SocialSent are our list (36 found among the candidates; listed in MANIFEST.json).
   Non-ethnic identity words were left in, as the paper describes only an ethnic filter. Example: "gays" is in the top-250 negative words.
 - The UnQover lexicon was not released. Ours takes content words from UnQover's stereotype file and keeps those whose
-  sign agrees with VADER or the SocialSent aggregate (33 positive, 27 negative).
+  sign agrees with VADER or the SocialSent aggregate (v2: 33 positive, 25 negative; v1 had 33 / 27).
 - The NYT / Al Jazeera comparison needs the full corpus. The paper itself had only 1.6k–7.9k tokens per domain, which
   is about 2–8 per shard.

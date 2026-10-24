@@ -231,7 +231,7 @@ Wikipedia text has been crawled heavily into C4. QNLI sentences are extracted di
 
 **Implication:** Models trained on C4 and evaluated on QNLI have seen more than half the test sentences during training.
 
-#### TIFU-short (20.7% — inside paper's CI ✓)
+#### TIFU-short (20.7%; the paper's 24.9% is inside our CI ✓)
 Reddit post titles are short and casual. About 1 in 4 titles made it into C4. Our rate of 20.7% is consistent with the paper's 24.9% — the slight difference is normal sampling variation.
 
 **Implication:** Models have likely "seen" roughly 1 in 4 TIFU-short test titles during training.
@@ -241,15 +241,15 @@ The largest gap between our rates and the paper's. BBC journalism uses typograph
 
 **Evidence:** The positive control (see below) found 8 of the paper's 10 known matches. The 2 it missed differ from C4's copy only in punctuation marks. This suggests our XSum rate is really closer to 6.3% / 0.8 ≈ **~7.9%** true coverage.
 
-#### LAMA T-REx (3.3% — inside paper's CI ✓)
+#### LAMA T-REx (3.3%; the paper's value is inside our CI ✓)
 Factual probe sentences are short and structured. Our rate of 3.3% is consistent with the paper's 4.7%.
 
 **Implication:** Knowledge probes that appear in C4 could be answered from memorization rather than reasoning.
 
-#### TIFU-long (2.3% — inside paper's CI ✓)
+#### TIFU-long (2.3%; the paper's 1.9% is inside our CI ✓)
 Longer Reddit summaries (TL;DRs) are less likely to appear verbatim in C4. Our rate of 2.3% is consistent with the paper's 1.9%.
 
-#### QNLI question (1.0% — inside paper's CI ✓)
+#### QNLI question (1.0%; the paper's 1.8% is inside our CI ✓)
 Natural language questions rarely appear verbatim on the web. 1% is low but not zero.
 
 ---
@@ -261,7 +261,10 @@ The paper's Table 5 lists 10 specific XSum summaries it found in C4. Our `analyz
 - **8 of 10 found** ✓ — our pipeline is working.
 - **2 missed** — those 2 differ from C4's stored copy only in punctuation (e.g., a curly quote `'` in the benchmark vs a straight quote `'` in C4).
 
-**Key takeaway:** Exact matching recovers roughly **80% of the paper's normalized matches**. Our rates should be scaled up by ~1/0.8 = 1.25× to estimate what the paper would have found with our sample. Applying this correction to QNLI sentence: 41.3% × 1.25 ≈ 51.6% — very close to the paper's 53.6%.
+**Key takeaway:** on these 10 XSum summaries, exact matching found 8 of the paper's normalized matches. That is one
+field and 10 texts, so it does not give a reliable correction factor for the other fields: scaling XSum by 1/0.8
+still leaves 7.9% vs the paper's 15.5%. Treat our rates as lower bounds; the WIMBD index, which normalizes the way the
+paper did, is the way to close the gap (`scripts/query_wimbd.py`, keys pending).
 
 ---
 
