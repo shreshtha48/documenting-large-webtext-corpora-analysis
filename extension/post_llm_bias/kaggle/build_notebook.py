@@ -93,19 +93,38 @@ PAR = f"{{W}}/paragraphs"
 ANALYSIS = f"{{W}}/analysis"
 
 # Optional: pilot outputs uploaded as a Kaggle dataset (e.g. the post-llm-crawl folder) are copied in, so those
-# shards are not processed again.
-pilot = glob.glob("/kaggle/input/**/c4_*_CC-MAIN-*_shard*.jsonl.gz", recursive=True)
+# shards are not processed again. Kaggle unpacks .gz files in datasets; they are re-compressed here so every
+# shard in OUT_2024 is .jsonl.gz.
+import gzip
+pilot = glob.glob("/kaggle/input/**/c4_*_CC-MAIN-*_shard*.jsonl*", recursive=True)
 pilot += glob.glob("/kaggle/input/**/stats_CC-MAIN-*_shard*.json", recursive=True)
 for f in pilot:
-    crawl = next(c for c in CRAWLS if c in os.path.basename(f))
+    crawl = next((c for c in CRAWLS if c in os.path.basename(f)), None)
+    if crawl is None:
+        continue
     os.makedirs(f"{{OUT_2024}}/{{crawl}}", exist_ok=True)
-    dst = f"{{OUT_2024}}/{{crawl}}/{{os.path.basename(f)}}"
+    name = os.path.basename(f) + (".gz" if f.endswith(".jsonl") else "")
+    dst = f"{{OUT_2024}}/{{crawl}}/{{name}}"
+    if os.path.isdir(f):        # Kaggle may unpack x.jsonl.gz into a folder named x.jsonl holding the file
+        f = next(os.path.join(r, x) for r, _, xs in os.walk(f) for x in xs)
     if not os.path.exists(dst):
-        shutil.copy(f, dst); print("reused", dst)
+        if not f.endswith(".gz"):
+            with open(f, "rb") as a, gzip.open(dst, "wb") as b:
+                shutil.copyfileobj(a, b)
+        else:
+            shutil.copy(f, dst)
+        print("reused", dst)
 """),
     md("## Scripts and lexicons (embedded from the repo)"),
     *[embed(s, f"{W}/scripts/{os.path.basename(s)}") for s in SCRIPTS],
     *[embed(f"reproduction/demographic_bias/data/lexicons/{l}", f"{W}/data/lexicons/{l}") for l in LEXICONS],
+    code(f"""
+# Check that every cell above ran (Kaggle wipes /kaggle/working when a new session starts)
+need = {[f"scripts/{os.path.basename(s)}" for s in SCRIPTS] + [f"data/lexicons/{l}" for l in LEXICONS]}
+missing = [p for p in need if not os.path.exists(f"{{W}}/{{p}}")]
+assert not missing, f"run the %%writefile cells above again; missing: {{missing}}"
+print("all scripts and lexicons in place")
+"""),
     md("""
 ## 1. Build post-LLM C4 from 2024 WET shards (CPU)
 

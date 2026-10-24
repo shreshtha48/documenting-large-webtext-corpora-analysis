@@ -78,7 +78,7 @@ os.makedirs(f"{{W}}/scripts", exist_ok=True); os.makedirs(f"{{W}}/data/lexicons"
 os.chdir(W)
 print("GPUs:", torch.cuda.device_count())
 
-INPUT_GLOB = "/kaggle/input/**/c4_*_CC-MAIN-*_shard*.jsonl.gz"
+INPUT_GLOB = "/kaggle/input/**/c4_*_CC-MAIN-*_shard*.jsonl*"   # Kaggle unpacks .gz, so .jsonl or .jsonl.gz
 print(len(glob.glob(INPUT_GLOB, recursive=True)), "input files (expect 8: 4 shards x C4.EN / blocklist)")
 OUT = f"{{W}}/work"
 # Binoculars pair (observer = base, performer = instruct, same tokenizer).

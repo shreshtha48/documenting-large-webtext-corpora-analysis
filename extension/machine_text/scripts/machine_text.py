@@ -20,7 +20,7 @@ group-mentioning paragraphs inside them. 4 shards give wide CIs; they are report
 All CIs: 95% percentile, web-domain bootstrap (B=1000).
 
 Steps (each resumable; run in order):
-    python machine_text.py docs --c4_files "post-llm-crawl/*/c4_*.jsonl.gz" --out work      # + 2019 shard 00000
+    python machine_text.py docs --c4_files "post-llm-crawl/*/c4_*.jsonl*" --out work        # + 2019 shard 00000
     python machine_text.py detect --out work            # GPU: Binoculars
     python machine_text.py classify --out work          # GPU: RoBERTa sentiment (optional)
     python machine_text.py analyze --out work
@@ -81,12 +81,17 @@ def cmd_docs(args):
     pats = _groups()
     n = defaultdict(int)
     with gzip.open(path + ".tmp", "wt", encoding="utf-8") as g:
-        files = sorted(glob.glob(args.c4_files, recursive=True))
+        # Kaggle unpacks x.jsonl.gz in uploaded datasets, sometimes into a folder named x.jsonl holding the file;
+        # the matched name (not the inner file's) gives the crawl and split
+        files = []
+        for p in sorted(glob.glob(args.c4_files, recursive=True)):
+            inner = [p] if os.path.isfile(p) else sorted(os.path.join(r, x) for r, _, xs in os.walk(p) for x in xs)
+            files += [(p, q) for q in inner]
         if not files:
             raise SystemExit(f"no files match {args.c4_files}")
-        for f in files:
-            corpus, split = crawl_of(f), ("blocklist" if "c4_blocklist_" in os.path.basename(f) else "en")
-            for line in gzip.open(f, "rt", encoding="utf-8"):
+        for name, f in files:
+            corpus, split = crawl_of(name), ("blocklist" if "c4_blocklist_" in os.path.basename(name) else "en")
+            for line in (gzip.open if f.endswith(".gz") else open)(f, "rt", encoding="utf-8"):
                 d = json.loads(line)
                 if len(d["text"].split()) < MIN_WORDS:
                     n[(corpus, "too_short")] += 1

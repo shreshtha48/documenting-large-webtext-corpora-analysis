@@ -13,7 +13,7 @@ import json, os
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 SCRIPTS = ["build_lexicons.py", "scan_c4_paragraphs.py", "count_sentiment.py"]
-W = "/content/f4"   # working copy of reproduction/f4_demographic_bias
+W = "/content/f4"   # working copy of reproduction/demographic_bias
 
 
 def md(text):
@@ -59,7 +59,7 @@ is v2 (tokenised like the corpus; v1 split hyphenated words and counted "well" /
 ## 1. Get the project
 
 Either set `REPO_URL` to your GitHub repository, or leave it empty and upload a zip of the
-`reproduction/f4_demographic_bias` folder when asked.
+`reproduction/demographic_bias` folder when asked.
 """),
     code(f"""
 import os, shutil, subprocess, zipfile
@@ -68,10 +68,10 @@ W = "{W}"
 if not os.path.isdir(f"{{W}}/scripts"):
     if REPO_URL:
         subprocess.run(["git", "clone", "--depth", "1", REPO_URL, "/content/repo"], check=True)
-        shutil.copytree("/content/repo/reproduction/f4_demographic_bias", W)
+        shutil.copytree("/content/repo/reproduction/demographic_bias", W)
     else:
         from google.colab import files
-        up = files.upload()                      # choose the zip of reproduction/f4_demographic_bias
+        up = files.upload()                      # choose the zip of reproduction/demographic_bias
         name = next(iter(up))
         zipfile.ZipFile(name).extractall("/content/_upload")
         src = next(r for r, d, f in os.walk("/content/_upload") if "scripts" in d and "third_party" in d)

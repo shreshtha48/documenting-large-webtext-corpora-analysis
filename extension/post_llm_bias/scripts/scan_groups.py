@@ -41,7 +41,8 @@ def scan(path, shard, out_dir, every=BASELINE_EVERY):
     stats = {"shard": shard, "source": os.path.basename(path), "baseline_every": every, "documents": 0,
              "paragraphs": 0, "matched_paragraphs": {t: 0 for t in list(pats) + [BASELINE]}}
     tmp = os.path.join(out_dir, f"paragraphs_{shard}.jsonl.gz.tmp")
-    with gzip.open(path, "rt", encoding="utf-8") as f, gzip.open(tmp, "wt", encoding="utf-8") as g:
+    opener = gzip.open if path.endswith(".gz") else open      # Kaggle unpacks .gz files in uploaded datasets
+    with opener(path, "rt", encoding="utf-8") as f, gzip.open(tmp, "wt", encoding="utf-8") as g:
         for line in f:
             d = json.loads(line)
             stats["documents"] += 1
@@ -79,7 +80,7 @@ def main():
     ap.add_argument("--out_dir", required=True)
     src = ap.add_mutually_exclusive_group(required=True)
     src.add_argument("--c4_2019", type=int, metavar="N", help="N seeded allenai/c4 en shards (12 = Arm B's B1)")
-    src.add_argument("--c4_files", help="glob of post-LLM c4_en_*.jsonl.gz files")
+    src.add_argument("--c4_files", help="glob of post-LLM c4_en_*.jsonl(.gz) files")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--workers", type=int, default=3)
     ap.add_argument("--cache_dir", default=None)
@@ -92,7 +93,7 @@ def main():
         files = sorted(glob.glob(args.c4_files))
         if not files:
             raise SystemExit(f"no files match {args.c4_files}")
-        jobs = [(re.sub(r"^c4_en_|\.jsonl\.gz$", "", os.path.basename(p)), p) for p in files]
+        jobs = [(re.sub(r"^c4_en_|\.jsonl(\.gz)?$", "", os.path.basename(p)), p) for p in files]
     todo = [(s, p) for s, p in jobs if not os.path.exists(os.path.join(args.out_dir, f"stats_{s}.json"))]
     print(f"{len(jobs)} shards, {len(jobs) - len(todo)} done already, {len(todo)} to scan", flush=True)
 
