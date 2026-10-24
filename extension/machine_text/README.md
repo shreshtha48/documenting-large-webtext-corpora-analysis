@@ -13,7 +13,7 @@ This module provides tools to stream C4 / Common Crawl shards, apply the exact C
 
 ## Filter Hierarchy (TFDS v3.0.1 `c4.py`, same order)
 
-1. **WET split + length**: page text $\le 1.9 	imes 10^5$ characters.
+1. **WET split + length**: page text $\le 1.9 \times 10^5$ characters.
 2. **URL dedupe**: URLs normalised (`http(s)://`, `www.`, `?utm_/ref/feed…`, trailing `/` removed); one page per URL (max md5 of text).
 3. **`clean_page`** (per line, in this order):
    - drop line if any word is > 1000 characters;
