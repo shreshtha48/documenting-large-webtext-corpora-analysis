@@ -1,0 +1,31 @@
+{
+  "source": "commoncrawl",
+  "crawl_or_shard": "CC-MAIN-2024-10",
+  "wet_url_or_file": "https://data.commoncrawl.org/crawl-data/CC-MAIN-2024-10/segments/1707947473347.0/wet/CC-MAIN-20240220211055-20240221001055-00003.warc.wet.gz",
+  "total_documents_scanned": 34551,
+  "noblocklist_docs": 10042,
+  "c4_en_kept": 9510,
+  "c4_en_rate": 0.2752,
+  "blocklist_excluded": 532,
+  "blocklist_rate_of_all": 0.0154,
+  "blocklist_rate_of_noblocklist": 0.053,
+  "breakdown": {
+    "total_input": 34551,
+    "dropped_too_long": 76,
+    "dropped_url_duplicate": 2,
+    "dropped_too_few_sentences": 10837,
+    "dropped_loremipsum": 110,
+    "dropped_curly_bracket": 384,
+    "passed_clean": 23142,
+    "lines_removed_global_duplicate": 30290,
+    "lines_removed_local_duplicate": 18472,
+    "dropped_dedupe_too_few_sentences": 1191,
+    "dropped_dedupe_empty": 744,
+    "passed_dedupe": 21207,
+    "passed_langdetect_noblocklist": 10042,
+    "c4_en_kept": 9510,
+    "dropped_langdetect": 11165,
+    "blocklist_excluded": 532
+  },
+  "elapsed_seconds": 286.46
+}

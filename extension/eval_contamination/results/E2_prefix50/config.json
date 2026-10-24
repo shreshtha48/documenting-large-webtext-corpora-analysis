@@ -1,0 +1,12 @@
+{
+ "index": "v4_c4train_llama",
+ "api": "https://api.infini-gram.io/",
+ "sample": 200,
+ "seed": 0,
+ "fields": [
+  "ethics_commonsense",
+  "mmlu_question",
+  "hellaswag_ctx"
+ ],
+ "max_words": 50
+}

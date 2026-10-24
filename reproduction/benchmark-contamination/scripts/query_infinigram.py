@@ -55,8 +55,23 @@ def wait_turn():
         PACE["requests"] += 1
 
 
+MAX = {"words": 0, "chars": 1000}   # --max_words; the API refuses queries over 1,000 characters
+
+
+def prefix(text):
+    """With --max_words N, a longer text is queried by its first N words, cut in the original string (newlines and
+    spacing kept), and never past the API's character limit. Off by default (the reproduction queries full texts)."""
+    if not MAX["words"]:
+        return text
+    m = re.match(r"\s*(?:\S+\s+){%d}" % (MAX["words"] - 1) + r"\S+", text)
+    t = m.group(0) if m else text
+    if len(t) > MAX["chars"]:
+        t = t[:MAX["chars"]].rsplit(None, 1)[0]
+    return t
+
+
 def variants(text):
-    v = TRAIL.sub("", text.strip())
+    v = TRAIL.sub("", prefix(text).strip())
     out = [v] if v else []
     if v and not re.search(r"[A-Z]", v):
         out.append(v[0].upper() + v[1:])
@@ -95,8 +110,12 @@ def count(query, retries=6, blocks=12):
 
 
 def result(row, counts, err, via="single"):
-    return {"id": row["id"], "counts": counts, "matched": bool(any(counts)) if err is None else None,
-            "error": err, "text": row["text"], "via": via}
+    q = prefix(row["text"])
+    out = {"id": row["id"], "counts": counts, "matched": bool(any(counts)) if err is None else None,
+           "error": err, "text": row["text"], "via": via}
+    if q != row["text"]:
+        out["queried_prefix"] = q
+    return out
 
 
 def unqueryable(row):
@@ -141,8 +160,8 @@ def score(row):
     return result(row, counts, err)
 
 
-def load(field):
-    with gzip.open(os.path.join(BENCH, f"{field}.jsonl.gz"), "rt", encoding="utf-8") as f:
+def load(field, bench=None):
+    with gzip.open(os.path.join(bench or BENCH, f"{field}.jsonl.gz"), "rt", encoding="utf-8") as f:
         return [json.loads(l) for l in f]
 
 
@@ -155,14 +174,20 @@ def main():
     ap.add_argument("--rate", type=float, default=0.2, help="requests per second (one at a time)")
     ap.add_argument("--no_group", action="store_true", help="query every text on its own")
     ap.add_argument("--block_pause", type=int, default=600, help="seconds to pause after HTTP 403 / 429")
+    ap.add_argument("--bench_dir", default=BENCH, help="folder of <field>.jsonl.gz (default: the Table 4 fields)")
+    ap.add_argument("--group_size", type=int, default=0, help="texts per group test (default: from the paper's rate)")
+    ap.add_argument("--max_words", type=int, default=0,
+                    help="query only the first N words of longer texts (0 = full texts, as in the reproduction)")
     args = ap.parse_args()
+    MAX["words"] = args.max_words
     PACE["interval"], PACE["block_pause"] = 1.0 / args.rate, args.block_pause
     os.makedirs(args.out_dir, exist_ok=True)
-    fields = args.fields or sorted(os.path.basename(p)[:-9] for p in glob.glob(os.path.join(BENCH, "*.jsonl.gz")))
+    fields = args.fields or sorted(os.path.basename(p)[:-9] for p in glob.glob(os.path.join(args.bench_dir, "*.jsonl.gz")))
     with open(os.path.join(args.out_dir, "config.json"), "w") as f:
-        json.dump({"index": INDEX, "api": API, "sample": args.sample, "seed": args.seed, "fields": fields}, f, indent=1)
+        json.dump({"index": INDEX, "api": API, "sample": args.sample, "seed": args.seed, "fields": fields,
+                   "max_words": args.max_words}, f, indent=1)
     for field in fields:
-        rows = load(field)
+        rows = load(field, args.bench_dir)
         if args.sample and len(rows) > args.sample:
             rows = random.Random(f"{args.seed}-{field}").sample(rows, args.sample)
         path = os.path.join(args.out_dir, f"counts_{field}.jsonl")
@@ -170,7 +195,7 @@ def main():
         if os.path.exists(path):
             done = {json.loads(l)["id"] for l in open(path, encoding="utf-8")}
         todo = [r for r in rows if r["id"] not in done]
-        g = 1 if args.no_group else group_size(field)
+        g = 1 if args.no_group else (args.group_size or group_size(field))
         t0, r0, n = time.time(), PACE["requests"], 0
         print(f"{field}: {len(todo)} texts to query, group size {g}", flush=True)
         with open(path, "a", encoding="utf-8") as out:

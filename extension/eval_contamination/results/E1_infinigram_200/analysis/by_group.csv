@@ -1,0 +1,7 @@
+group,texts,matched,n,rate_%,ci_lo,ci_hi
+"web text, before Apr 2019",all,33,889,3.71,2.66,5.17
+written after Apr 2019 (negative control),all,56,2200,2.55,1.97,3.29
+written before Apr 2019,all,6,400,1.5,0.69,3.23
+"web text, before Apr 2019",8+ words,30,867,3.46,2.43,4.9
+written after Apr 2019 (negative control),8+ words,12,1855,0.65,0.37,1.13
+written before Apr 2019,8+ words,2,387,0.52,0.14,1.86
