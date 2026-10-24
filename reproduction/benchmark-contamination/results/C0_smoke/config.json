@@ -1,0 +1,9 @@
+{
+ "index": "v4_c4train_llama",
+ "api": "https://api.infini-gram.io/",
+ "sample": 5,
+ "seed": 0,
+ "fields": [
+  "qnli_question"
+ ]
+}

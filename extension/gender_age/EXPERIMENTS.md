@@ -91,10 +91,13 @@ Every run, including smoke tests and dead ends, with what it showed.
 - Re-running the E6 split with the new anomaly columns: `analyze_probe.py --e6`.
 - Corpus scan with the race-zoom tables.
 
-## Pending (Kaggle)
+## Kaggle runs (2026-10-24)
 
-| ID | Notebook | What |
-|---|---|---|
-| P1a | ga_probe_account1 | UnifiedQA-3B, gender_names (+ control) + gender_nouns |
-| P1b | ga_probe_account2 | UnifiedQA-3B, age + gender_age + gender_ethnicity; BBQ (3B, plus 11B published) |
-| C1 | ga_corpus | 12 noblocklist shards: exclusion, dialect × gender, sentiment, URL year, classifier |
+| ID | Notebook | What | Outcome |
+|---|---|---|---|
+| P1a | ga_probe_account1 | UnifiedQA-3B, gender_names (+ control) + gender_nouns | Done (`ga_probe_account1.zip`). Women picked for the positive attribute 62.0% (names; same-gender control 50.0) and 65.9% (nouns) |
+| P1b | ga_probe_account2 | UnifiedQA-3B, age + gender_age + gender_ethnicity | Done (`ga_probe_account2.zip`). Women 69.5% (with age), 70.1% (with ethnicity). Age: teens 35.4%, young adults 47.2%, elderly 51.4%, middle-aged 66.0%. Among women, African-American (+6.2) and African (+4.5) sit above the average woman, White (−5.1) and Jewish (−3.1) below (Holm p < .05) |
+| P2 | ga_probe_account2 | BBQ on UnifiedQA-3B | Incomplete: scoring stopped at 8,000 / 12,648 items (`logs_bbq_*.txt`); no analysis. Partial scores kept in the zip |
+| C1 | ga_corpus | 12 noblocklist shards: exclusion, dialect × gender, sentiment, URL year, classifier | Not run |
+
+Figures and tables: `../results/gender_age/` (from `../extension_results.ipynb`).

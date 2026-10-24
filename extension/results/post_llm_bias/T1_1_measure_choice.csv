@@ -1,0 +1,5 @@
+measure,"spread between groups, 2019 (pp)","spread, 2024 (pp)",same group ranking 2019 vs 2024 (Spearman)
+RoBERTa,9.225,7.136,0.755
+UnQover,6.576,6.717,0.678
+SocialSent,5.082,3.534,0.79
+VADER,4.068,2.743,0.888

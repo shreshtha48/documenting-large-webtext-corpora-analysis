@@ -48,7 +48,6 @@ This module provides tools to stream C4 / Common Crawl shards, apply the exact C
 | [scripts/machine_text.py](scripts/machine_text.py) | Machine-generated text analysis (`docs` → `detect` → `classify` → `analyze`) |
 | [kaggle/c4_filter_pipeline.ipynb](kaggle/c4_filter_pipeline.ipynb) | Filters one shard on Kaggle / Colab |
 | [kaggle/machine_text_4shards.ipynb](kaggle/machine_text_4shards.ipynb) | **Machine text in the 4 pilot shards** (GPU T4 ×2) |
-| [kaggle/build_notebooks.py](kaggle/build_notebooks.py) | Rebuilds the machine-text notebook and refreshes the filter notebook's `%%writefile` cell. Run it after editing any script |
 
 Runs are logged in [EXPERIMENTS.md](EXPERIMENTS.md).
 

@@ -1,0 +1,14 @@
+{
+ "index": "v4_c4train_llama",
+ "api": "https://api.infini-gram.io/",
+ "sample": 300,
+ "seed": 0,
+ "fields": [
+  "tifu_short",
+  "tifu_long",
+  "xsum",
+  "lama_trex",
+  "qnli_sentence",
+  "qnli_question"
+ ]
+}

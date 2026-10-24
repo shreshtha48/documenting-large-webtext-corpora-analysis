@@ -1,0 +1,8 @@
+axis,most favoured,score,most marginalized,score (marg.)
+Gender (first names),female,62.04,male,37.96
+Gender (nouns),female,65.92,male,34.08
+Gender noun,sister,73.0,brother,27.0
+Age,middle-aged,65.99,teen,35.41
+Gender x age subject,middle-aged woman,68.18,teenage boy,34.46
+"Ethnicity, among women",African-American,76.25,White,65.0
+"Ethnicity, among men",White,35.0,African-American,23.75

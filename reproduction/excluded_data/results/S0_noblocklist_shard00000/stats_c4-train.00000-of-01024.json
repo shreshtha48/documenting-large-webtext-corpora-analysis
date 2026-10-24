@@ -1,0 +1,14 @@
+{
+ "shard": "c4-train.00000-of-01024",
+ "documents": 384171,
+ "excluded": 27675,
+ "excluded_rate": 0.0720382329743786,
+ "hosts": 286507,
+ "excluded_sampled": 10000,
+ "inspect_docs": {
+  "lesbian": 500,
+  "gay": 500
+ },
+ "dialect_fast_vs_exact_agreement": 0.993,
+ "dialect_validated_docs": 1000
+}

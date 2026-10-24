@@ -1,0 +1,29 @@
+crawl,group,measure,shift vs 2019 (pp),CI low,CI high,direction
+2024 (Feb+Dec),African,RoBERTa,3.329,1.157,5.425,more positive
+Feb 2024,African,RoBERTa,3.979,1.529,6.416,more positive
+2024 (Feb+Dec),African-American,RoBERTa,7.718,3.595,11.889,more positive
+Dec 2024,African-American,RoBERTa,8.068,2.342,13.686,more positive
+Feb 2024,African-American,RoBERTa,7.543,2.054,12.226,more positive
+2024 (Feb+Dec),Arab,RoBERTa,11.452,6.554,15.929,more positive
+2024 (Feb+Dec),Arab,VADER,3.978,0.119,7.768,more positive
+Dec 2024,Arab,RoBERTa,8.15,1.853,14.497,more positive
+Feb 2024,Arab,RoBERTa,13.89,7.286,19.959,more positive
+2024 (Feb+Dec),Arab (non-geopolitical),RoBERTa,11.18,4.483,16.88,more positive
+Dec 2024,Arab (non-geopolitical),RoBERTa,9.829,1.368,18.578,more positive
+Feb 2024,Arab (non-geopolitical),RoBERTa,12.276,3.526,20.316,more positive
+2024 (Feb+Dec),Black,RoBERTa,-1.991,-3.311,-0.573,more negative
+2024 (Feb+Dec),Black,VADER,-2.859,-4.948,-0.986,more negative
+Dec 2024,Black,SocialSent,-3.279,-6.068,-0.309,more negative
+Dec 2024,Black,VADER,-2.759,-5.134,-0.439,more negative
+Feb 2024,Black,RoBERTa,-2.611,-4.39,-0.893,more negative
+Feb 2024,Black,VADER,-2.99,-5.512,-0.659,more negative
+2024 (Feb+Dec),Jewish,RoBERTa,6.341,1.853,10.552,more positive
+Dec 2024,Jewish,RoBERTa,8.763,3.652,13.564,more positive
+2024 (Feb+Dec),Latino,RoBERTa,-8.981,-16.686,-1.203,more negative
+Feb 2024,Latino,UnQover,21.224,7.756,29.004,more positive
+2024 (Feb+Dec),Middle-Eastern,RoBERTa,7.716,1.673,12.881,more positive
+Dec 2024,Middle-Eastern,RoBERTa,9.89,2.446,15.295,more positive
+2024 (Feb+Dec),Native American,RoBERTa,5.126,1.145,8.905,more positive
+Dec 2024,Native American,RoBERTa,6.523,1.894,10.568,more positive
+2024 (Feb+Dec),White,VADER,-2.675,-4.989,-0.449,more negative
+Dec 2024,White,RoBERTa,2.395,0.035,4.734,more positive

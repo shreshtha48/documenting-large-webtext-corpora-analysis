@@ -19,33 +19,16 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Run outputs: kept on disk, added to git later on purpose (Kaggle / Colab results, plots)
-reproduction/**/results/
-reproduction/paper_figures/*.png
-logs_*.txt
-# ...except demographic bias (§4.3), whose runs are final: scores, analyses, figures, Kaggle logs
-!reproduction/demographic_bias/results/
-!reproduction/demographic_bias/results/**/logs/logs_*.txt
-# ...and the summary figures for the brief (reproduction/results/ is caught by the rule above)
-!reproduction/results/
-
-# Upload bundles for Colab / Kaggle (rebuilt from the folders)
-*.zip
+# Notebook builders: the notebooks they generate are committed, the generators are not
+build_*notebook*.py
 
 # Downloaded at run time from slanglab/twitteraae (pinned commit, see scripts/dialect.py)
 reproduction/excluded_data/data/twitteraae_model/
-
-# Contamination: downloaded benchmark sources and built text files (rebuilt by scripts/benchmarks.py)
-reproduction/benchmark-contamination/data/
+extension/gender_age/data/twitteraae_model/
 
 # Local-only notes (kept on disk, not in the repo)
 PWT_Research.pdf
 findings.md
-paper-ideas-extension.md
 
 # WIMBD Elasticsearch keys (secret)
 es_config.yml
-
-# Extension (gender / age): smoke runs and run-time downloads
-extension/**/results/smoke/
-extension/gender_age/data/twitteraae_model/

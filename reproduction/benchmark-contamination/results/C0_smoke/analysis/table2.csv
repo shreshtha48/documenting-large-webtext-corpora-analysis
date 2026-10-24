@@ -1,0 +1,5 @@
+field,dataset,part,texts_in_dataset,queried,errors,matched,matched_%,ci_lo,ci_hi,paper_%,paper_matched/total,diff_vs_paper
+lama_google_re,LAMA Google-RE,label,5528,30,0,0,0.0,-0.0,11.352,5.68,314/5528,-5.68
+xsum,XSum,label,11334,30,0,1,3.333,0.591,16.671,15.493,1756/11334,-12.16
+tifu_short,TIFU-short,label,79740,30,0,6,20.0,9.505,37.306,24.885,19843/79740,-4.885
+cola,CoLA,input,1063,30,0,3,10.0,3.46,25.621,14.393,153/1063,-4.393

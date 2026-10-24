@@ -1,0 +1,7 @@
+field,dataset,part,texts_in_dataset,queried,errors,matched,matched_%,ci_lo,ci_hi,paper_%,paper_matched/total,diff_vs_paper
+lama_trex,LAMA T-REx,label,34039,300,0,10,3.333,1.82,6.026,4.66,1585/34014,-1.327
+xsum,XSum,label,11334,300,0,19,6.333,4.092,9.679,15.493,1756/11334,-9.16
+tifu_short,TIFU-short,label,79740,300,0,62,20.667,16.469,25.606,24.885,19843/79740,-4.218
+tifu_long,TIFU-long,label,42139,300,0,7,2.333,1.135,4.737,1.875,790/42139,0.459
+qnli_sentence,QNLI sentence,input,5463,300,0,124,41.333,35.905,46.981,53.652,2931/5463,-12.319
+qnli_question,QNLI question,input,5463,300,0,3,1.0,0.341,2.898,1.776,97/5463,-0.776

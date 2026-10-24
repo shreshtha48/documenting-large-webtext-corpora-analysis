@@ -26,7 +26,7 @@ For all 15 Table 7 groups, using Arm B's exact matching and counting:
 
 | Path | What |
 |---|---|
-| `kaggle/post_llm_bias.ipynb` | **The notebook to run** (Kaggle, GPU T4 ×2, internet on). Built by `kaggle/build_notebook.py`; rebuild after editing any embedded script |
+| `kaggle/post_llm_bias.ipynb` | **The notebook to run** (Kaggle, GPU T4 ×2, internet on). Its scripts are embedded as `%%writefile` cells |
 | `scripts/scan_groups.py` | Group paragraphs plus the random baseline, for 2019 HF shards or our 2024 C4.EN files |
 | `scripts/classify_sentiment.py` | RoBERTa (`cardiffnlp/twitter-roberta-base-sentiment-latest`) probabilities per paragraph, on GPU |
 | `scripts/compare_years.py` | All the tables, figures and `summary.md` |
